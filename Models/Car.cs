@@ -10,5 +10,5 @@ namespace Car_rental.Models;
         [DataType(DataType.Date)]
         public DateTime ReleaseDate { get; set; }
         public string? Type { get; set; }
-        public decimal Price { get; set; }
+        public double Price { get; set; }
     }

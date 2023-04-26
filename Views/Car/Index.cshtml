@@ -7,7 +7,8 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a onclick="showInPopup('@Url.Action("Create","Car",null,Context.Request.Scheme)','Create New Car')" class="btn btn-success text-white"><i class="fas fa-random"></i> Create new car</a>
+            
 </p>
 <table class="table">
     <thead>
@@ -24,7 +25,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.Price)
             </th>
-            <th></th>
+            <th>
+                </th>
         </tr>
     </thead>
     <tbody>
@@ -43,9 +45,12 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <div class="btn-group" role="group" >
+                    <a onclick="showInPopup('@Url.Action("Edit","Car",new {id=item.Id},Context.Request.Scheme)','Edit')" class="btn btn-warning text-white">Edit</a>
+                    <a onclick="showInPopup('@Url.Action("Details","Car",new {id=item.Id},Context.Request.Scheme)','Details')" class="btn btn-primary text-white">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    
+                </div>
             </td>
         </tr>
 }
