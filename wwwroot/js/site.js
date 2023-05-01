@@ -24,6 +24,22 @@ showInPopup = (url, title) => {
             $('.modal-dialog').draggable({
                 handle: ".modal-header"
             });
+            // $(function() {
+            //     $(".modal-dialog").mousedown(function(e) {
+            //         var offset = $(this).offset();
+            //         var xPos = e.pageX - offset.left;
+            //         var yPos = e.pageY - offset.top;
+            //         $(document).mousemove(function(e) {
+            //             var newX = e.pageX - xPos;
+            //             var newY = e.pageY - yPos;
+            //             $(".modal-dialog").css("left", newX + "px");
+            //             $(".modal-dialog").css("top", newY + "px");
+            //         });
+            //     });
+            //     $(document).mouseup(function() {
+            //         $(document).unbind("mousemove");
+            //     });
+            // });
         }
     })
 }
