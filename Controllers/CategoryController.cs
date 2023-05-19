@@ -10,87 +10,87 @@ using Car_rental.Models;
 
 namespace Car_rental.Controllers
 {
-    public class CarController : Controller
+    public class CategoryController : Controller
     {
         private readonly Car_rentalContext _context;
 
-        public CarController(Car_rentalContext context)
+        public CategoryController(Car_rentalContext context)
         {
             _context = context;
         }
 
-        // GET: Car
+        // GET: Category
         public async Task<IActionResult> Index()
         {
-              return _context.Car != null ? 
-                          View(await _context.Car.ToListAsync()) :
-                          Problem("Entity set 'Car_rentalContext.Car'  is null.");
+              return _context.category != null ? 
+                          View(await _context.category.ToListAsync()) :
+                          Problem("Entity set 'Car_rentalContext.category'  is null.");
         }
 
-        // GET: Car/Details/5
+        // GET: Category/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Car == null)
+            if (id == null || _context.category == null)
             {
                 return NotFound();
             }
 
-            var car = await _context.Car
+            var category = await _context.category
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (car == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(car);
+            return View(category);
         }
 
-        // GET: Car/Create
+        // GET: Category/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Car/Create
+        // POST: Category/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,model,brand,seat,color,address,available,ReleaseDate,Type,Price,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Create([Bind("id,type,Status,Deleted_Status")] category category)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(car);
+                _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(car);
+            return View(category);
         }
 
-        // GET: Car/Edit/5
+        // GET: Category/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Car == null)
+            if (id == null || _context.category == null)
             {
                 return NotFound();
             }
 
-            var car = await _context.Car.FindAsync(id);
-            if (car == null)
+            var category = await _context.category.FindAsync(id);
+            if (category == null)
             {
                 return NotFound();
             }
-            return View(car);
+            return View(category);
         }
 
-        // POST: Car/Edit/5
+        // POST: Category/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,model,brand,seat,color,address,available,ReleaseDate,Type,Price,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Edit(int id, [Bind("id,type,Status,Deleted_Status")] category category)
         {
-            if (id != car.id)
+            if (id != category.id)
             {
                 return NotFound();
             }
@@ -99,12 +99,12 @@ namespace Car_rental.Controllers
             {
                 try
                 {
-                    _context.Update(car);
+                    _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!carExists(car.id))
+                    if (!categoryExists(category.id))
                     {
                         return NotFound();
                     }
@@ -115,49 +115,49 @@ namespace Car_rental.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(car);
+            return View(category);
         }
 
-        // GET: Car/Delete/5
+        // GET: Category/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Car == null)
+            if (id == null || _context.category == null)
             {
                 return NotFound();
             }
 
-            var car = await _context.Car
+            var category = await _context.category
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (car == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(car);
+            return View(category);
         }
 
-        // POST: Car/Delete/5
+        // POST: Category/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Car == null)
+            if (_context.category == null)
             {
-                return Problem("Entity set 'Car_rentalContext.Car'  is null.");
+                return Problem("Entity set 'Car_rentalContext.category'  is null.");
             }
-            var car = await _context.Car.FindAsync(id);
-            if (car != null)
+            var category = await _context.category.FindAsync(id);
+            if (category != null)
             {
-                _context.Car.Remove(car);
+                _context.category.Remove(category);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool carExists(int id)
+        private bool categoryExists(int id)
         {
-          return (_context.Car?.Any(e => e.id == id)).GetValueOrDefault();
+          return (_context.category?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }

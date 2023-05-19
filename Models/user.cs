@@ -33,9 +33,10 @@ public class user
     [Display(Name = "Flag")]
     public int flag { get; set; } = 0;
 
-    public ICollection<userRole>? userRoles { get; set; }
+    public ICollection<userRole> userRoles { get; } = new List<userRole>();
 
-    public ICollection<rating>? ratings { get; set; }
+    public ICollection<rating>? ratings { get; } = new List<rating>();
+    public ICollection<bookings>? bookings { get; } = new List<bookings>();
 
-    public ICollection<Car>? cars { get; set; }
+    public ICollection<car>? cars { get; } = new List<car>();
 }

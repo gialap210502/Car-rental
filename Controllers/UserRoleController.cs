@@ -10,87 +10,94 @@ using Car_rental.Models;
 
 namespace Car_rental.Controllers
 {
-    public class CarController : Controller
+    public class UserRoleController : Controller
     {
         private readonly Car_rentalContext _context;
 
-        public CarController(Car_rentalContext context)
+        public UserRoleController(Car_rentalContext context)
         {
             _context = context;
         }
 
-        // GET: Car
+        // GET: UserRole
         public async Task<IActionResult> Index()
         {
-              return _context.Car != null ? 
-                          View(await _context.Car.ToListAsync()) :
-                          Problem("Entity set 'Car_rentalContext.Car'  is null.");
+            var car_rentalContext = _context.userRole.Include(u => u.role).Include(u => u.user);
+            return View(await car_rentalContext.ToListAsync());
         }
 
-        // GET: Car/Details/5
+        // GET: UserRole/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Car == null)
+            if (id == null || _context.userRole == null)
             {
                 return NotFound();
             }
 
-            var car = await _context.Car
+            var userRole = await _context.userRole
+                .Include(u => u.role)
+                .Include(u => u.user)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (car == null)
+            if (userRole == null)
             {
                 return NotFound();
             }
 
-            return View(car);
+            return View(userRole);
         }
 
-        // GET: Car/Create
+        // GET: UserRole/Create
         public IActionResult Create()
         {
+            ViewData["roleId"] = new SelectList(_context.roles, "id", "role");
+            ViewData["userId"] = new SelectList(_context.user, "id", "email");
             return View();
         }
 
-        // POST: Car/Create
+        // POST: UserRole/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,model,brand,seat,color,address,available,ReleaseDate,Type,Price,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Create([Bind("id,userId,roleId")] userRole userRole)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(car);
+                _context.Add(userRole);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(car);
+            ViewData["roleId"] = new SelectList(_context.roles, "id", "role", userRole.roleId);
+            ViewData["userId"] = new SelectList(_context.user, "id", "email", userRole.userId);
+            return View(userRole);
         }
 
-        // GET: Car/Edit/5
+        // GET: UserRole/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Car == null)
+            if (id == null || _context.userRole == null)
             {
                 return NotFound();
             }
 
-            var car = await _context.Car.FindAsync(id);
-            if (car == null)
+            var userRole = await _context.userRole.FindAsync(id);
+            if (userRole == null)
             {
                 return NotFound();
             }
-            return View(car);
+            ViewData["roleId"] = new SelectList(_context.roles, "id", "role", userRole.roleId);
+            ViewData["userId"] = new SelectList(_context.user, "id", "email", userRole.userId);
+            return View(userRole);
         }
 
-        // POST: Car/Edit/5
+        // POST: UserRole/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,model,brand,seat,color,address,available,ReleaseDate,Type,Price,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Edit(int id, [Bind("id,userId,roleId")] userRole userRole)
         {
-            if (id != car.id)
+            if (id != userRole.id)
             {
                 return NotFound();
             }
@@ -99,12 +106,12 @@ namespace Car_rental.Controllers
             {
                 try
                 {
-                    _context.Update(car);
+                    _context.Update(userRole);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!carExists(car.id))
+                    if (!userRoleExists(userRole.id))
                     {
                         return NotFound();
                     }
@@ -115,49 +122,53 @@ namespace Car_rental.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(car);
+            ViewData["roleId"] = new SelectList(_context.roles, "id", "role", userRole.roleId);
+            ViewData["userId"] = new SelectList(_context.user, "id", "email", userRole.userId);
+            return View(userRole);
         }
 
-        // GET: Car/Delete/5
+        // GET: UserRole/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Car == null)
+            if (id == null || _context.userRole == null)
             {
                 return NotFound();
             }
 
-            var car = await _context.Car
+            var userRole = await _context.userRole
+                .Include(u => u.role)
+                .Include(u => u.user)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (car == null)
+            if (userRole == null)
             {
                 return NotFound();
             }
 
-            return View(car);
+            return View(userRole);
         }
 
-        // POST: Car/Delete/5
+        // POST: UserRole/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Car == null)
+            if (_context.userRole == null)
             {
-                return Problem("Entity set 'Car_rentalContext.Car'  is null.");
+                return Problem("Entity set 'Car_rentalContext.userRole'  is null.");
             }
-            var car = await _context.Car.FindAsync(id);
-            if (car != null)
+            var userRole = await _context.userRole.FindAsync(id);
+            if (userRole != null)
             {
-                _context.Car.Remove(car);
+                _context.userRole.Remove(userRole);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool carExists(int id)
+        private bool userRoleExists(int id)
         {
-          return (_context.Car?.Any(e => e.id == id)).GetValueOrDefault();
+          return (_context.userRole?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }

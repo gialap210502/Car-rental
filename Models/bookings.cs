@@ -9,15 +9,8 @@ public class bookings
     public DateTime? startDate { get; set; }
     [Required]
     public DateTime? endDate { get; set; }
-
     public double? totalAmount { get; set; }
-
-    public int carId { get; set; }
-
-    public Car? car { get; set; }
-
     public int userId { get; set; }
-
     public user? user { get; set; }
-    public payment? payment { get; set; }
+    public ICollection<payment>? payments { get; } = new List<payment>();
 }

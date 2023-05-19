@@ -10,87 +10,94 @@ using Car_rental.Models;
 
 namespace Car_rental.Controllers
 {
-    public class CarController : Controller
+    public class RatingController : Controller
     {
         private readonly Car_rentalContext _context;
 
-        public CarController(Car_rentalContext context)
+        public RatingController(Car_rentalContext context)
         {
             _context = context;
         }
 
-        // GET: Car
+        // GET: Rating
         public async Task<IActionResult> Index()
         {
-              return _context.Car != null ? 
-                          View(await _context.Car.ToListAsync()) :
-                          Problem("Entity set 'Car_rentalContext.Car'  is null.");
+            var car_rentalContext = _context.rating.Include(r => r.car).Include(r => r.user);
+            return View(await car_rentalContext.ToListAsync());
         }
 
-        // GET: Car/Details/5
+        // GET: Rating/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Car == null)
+            if (id == null || _context.rating == null)
             {
                 return NotFound();
             }
 
-            var car = await _context.Car
+            var rating = await _context.rating
+                .Include(r => r.car)
+                .Include(r => r.user)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (car == null)
+            if (rating == null)
             {
                 return NotFound();
             }
 
-            return View(car);
+            return View(rating);
         }
 
-        // GET: Car/Create
+        // GET: Rating/Create
         public IActionResult Create()
         {
+            ViewData["carId"] = new SelectList(_context.Car, "id", "id");
+            ViewData["userId"] = new SelectList(_context.user, "id", "email");
             return View();
         }
 
-        // POST: Car/Create
+        // POST: Rating/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,model,brand,seat,color,address,available,ReleaseDate,Type,Price,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Create([Bind("id,dateRating,Status,Star,comment,carId,userId")] rating rating)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(car);
+                _context.Add(rating);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(car);
+            ViewData["carId"] = new SelectList(_context.Car, "id", "id", rating.carId);
+            ViewData["userId"] = new SelectList(_context.user, "id", "email", rating.userId);
+            return View(rating);
         }
 
-        // GET: Car/Edit/5
+        // GET: Rating/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Car == null)
+            if (id == null || _context.rating == null)
             {
                 return NotFound();
             }
 
-            var car = await _context.Car.FindAsync(id);
-            if (car == null)
+            var rating = await _context.rating.FindAsync(id);
+            if (rating == null)
             {
                 return NotFound();
             }
-            return View(car);
+            ViewData["carId"] = new SelectList(_context.Car, "id", "id", rating.carId);
+            ViewData["userId"] = new SelectList(_context.user, "id", "email", rating.userId);
+            return View(rating);
         }
 
-        // POST: Car/Edit/5
+        // POST: Rating/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,model,brand,seat,color,address,available,ReleaseDate,Type,Price,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Edit(int id, [Bind("id,dateRating,Status,Star,comment,carId,userId")] rating rating)
         {
-            if (id != car.id)
+            if (id != rating.id)
             {
                 return NotFound();
             }
@@ -99,12 +106,12 @@ namespace Car_rental.Controllers
             {
                 try
                 {
-                    _context.Update(car);
+                    _context.Update(rating);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!carExists(car.id))
+                    if (!ratingExists(rating.id))
                     {
                         return NotFound();
                     }
@@ -115,49 +122,53 @@ namespace Car_rental.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(car);
+            ViewData["carId"] = new SelectList(_context.Car, "id", "id", rating.carId);
+            ViewData["userId"] = new SelectList(_context.user, "id", "email", rating.userId);
+            return View(rating);
         }
 
-        // GET: Car/Delete/5
+        // GET: Rating/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Car == null)
+            if (id == null || _context.rating == null)
             {
                 return NotFound();
             }
 
-            var car = await _context.Car
+            var rating = await _context.rating
+                .Include(r => r.car)
+                .Include(r => r.user)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (car == null)
+            if (rating == null)
             {
                 return NotFound();
             }
 
-            return View(car);
+            return View(rating);
         }
 
-        // POST: Car/Delete/5
+        // POST: Rating/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Car == null)
+            if (_context.rating == null)
             {
-                return Problem("Entity set 'Car_rentalContext.Car'  is null.");
+                return Problem("Entity set 'Car_rentalContext.rating'  is null.");
             }
-            var car = await _context.Car.FindAsync(id);
-            if (car != null)
+            var rating = await _context.rating.FindAsync(id);
+            if (rating != null)
             {
-                _context.Car.Remove(car);
+                _context.rating.Remove(rating);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool carExists(int id)
+        private bool ratingExists(int id)
         {
-          return (_context.Car?.Any(e => e.id == id)).GetValueOrDefault();
+          return (_context.rating?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }

@@ -10,87 +10,90 @@ using Car_rental.Models;
 
 namespace Car_rental.Controllers
 {
-    public class CarController : Controller
+    public class PaymentController : Controller
     {
         private readonly Car_rentalContext _context;
 
-        public CarController(Car_rentalContext context)
+        public PaymentController(Car_rentalContext context)
         {
             _context = context;
         }
 
-        // GET: Car
+        // GET: Payment
         public async Task<IActionResult> Index()
         {
-              return _context.Car != null ? 
-                          View(await _context.Car.ToListAsync()) :
-                          Problem("Entity set 'Car_rentalContext.Car'  is null.");
+            var car_rentalContext = _context.payment.Include(p => p.car);
+            return View(await car_rentalContext.ToListAsync());
         }
 
-        // GET: Car/Details/5
+        // GET: Payment/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Car == null)
+            if (id == null || _context.payment == null)
             {
                 return NotFound();
             }
 
-            var car = await _context.Car
+            var payment = await _context.payment
+                .Include(p => p.car)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (car == null)
+            if (payment == null)
             {
                 return NotFound();
             }
 
-            return View(car);
+            return View(payment);
         }
 
-        // GET: Car/Create
+        // GET: Payment/Create
         public IActionResult Create()
         {
+            ViewData["carId"] = new SelectList(_context.Car, "id", "id");
             return View();
         }
 
-        // POST: Car/Create
+        // POST: Payment/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,model,brand,seat,color,address,available,ReleaseDate,Type,Price,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Create([Bind("id,amount,paymentDate,paymentMethod,carId,booking_id")] payment payment)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(car);
+                _context.Add(payment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(car);
+            ViewData["carId"] = new SelectList(_context.Car, "id", "id", payment.carId);
+            return View(payment);
         }
 
-        // GET: Car/Edit/5
+        // GET: Payment/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Car == null)
+            if (id == null || _context.payment == null)
             {
                 return NotFound();
             }
 
-            var car = await _context.Car.FindAsync(id);
-            if (car == null)
+            var payment = await _context.payment.FindAsync(id);
+            if (payment == null)
             {
                 return NotFound();
             }
-            return View(car);
+            ViewData["carId"] = new SelectList(_context.Car, "id", "id", payment.carId);
+            return View(payment);
         }
 
-        // POST: Car/Edit/5
+        // POST: Payment/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,model,brand,seat,color,address,available,ReleaseDate,Type,Price,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Edit(int id, [Bind("id,amount,paymentDate,paymentMethod,carId,booking_id")] payment payment)
         {
-            if (id != car.id)
+            if (id != payment.id)
             {
                 return NotFound();
             }
@@ -99,12 +102,12 @@ namespace Car_rental.Controllers
             {
                 try
                 {
-                    _context.Update(car);
+                    _context.Update(payment);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!carExists(car.id))
+                    if (!paymentExists(payment.id))
                     {
                         return NotFound();
                     }
@@ -115,49 +118,51 @@ namespace Car_rental.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(car);
+            ViewData["carId"] = new SelectList(_context.Car, "id", "id", payment.carId);
+            return View(payment);
         }
 
-        // GET: Car/Delete/5
+        // GET: Payment/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Car == null)
+            if (id == null || _context.payment == null)
             {
                 return NotFound();
             }
 
-            var car = await _context.Car
+            var payment = await _context.payment
+                .Include(p => p.car)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (car == null)
+            if (payment == null)
             {
                 return NotFound();
             }
 
-            return View(car);
+            return View(payment);
         }
 
-        // POST: Car/Delete/5
+        // POST: Payment/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Car == null)
+            if (_context.payment == null)
             {
-                return Problem("Entity set 'Car_rentalContext.Car'  is null.");
+                return Problem("Entity set 'Car_rentalContext.payment'  is null.");
             }
-            var car = await _context.Car.FindAsync(id);
-            if (car != null)
+            var payment = await _context.payment.FindAsync(id);
+            if (payment != null)
             {
-                _context.Car.Remove(car);
+                _context.payment.Remove(payment);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool carExists(int id)
+        private bool paymentExists(int id)
         {
-          return (_context.Car?.Any(e => e.id == id)).GetValueOrDefault();
+          return (_context.payment?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }

@@ -11,7 +11,7 @@ public class rating
 
     public int carId { get; set; }
 
-    public Car? car { get; set; }
+    public car? car { get; set; }
 
     public int userId { get; set; }
 

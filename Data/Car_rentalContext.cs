@@ -14,6 +14,22 @@ namespace Car_rental.Data
         {
         }
 
-        public DbSet<Car_rental.Models.Car> Car { get; set; } = default!;
+        public DbSet<Car_rental.Models.car> Car { get; set; } = default!;
+
+        public DbSet<Car_rental.Models.roles> roles { get; set; } = default!;
+
+        public DbSet<Car_rental.Models.userRole> userRole { get; set; } = default!;
+
+        public DbSet<Car_rental.Models.user> user { get; set; } = default!;
+
+        public DbSet<Car_rental.Models.payment> payment { get; set; } = default!;
+
+        public DbSet<Car_rental.Models.bookings> bookings { get; set; } = default!;
+
+        public DbSet<Car_rental.Models.rating> rating { get; set; } = default!;
+
+        public DbSet<Car_rental.Models.discount> discount { get; set; } = default!;
+
+        public DbSet<Car_rental.Models.category> category { get; set; } = default!;
     }
 }

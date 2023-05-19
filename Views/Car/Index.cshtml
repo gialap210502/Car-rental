@@ -1,21 +1,34 @@
-@model IEnumerable<Car_rental.Models.Car>
+@model IEnumerable<Car_rental.Models.car>
 
 @{
     ViewData["Title"] = "Index";
-    
 }
 
 <h1>Index</h1>
 
 <p>
-    <a onclick="showInPopup('@Url.Action("Create","Car",null,Context.Request.Scheme)','Create New Car')" class="btn btn-success text-white"><i class="fas fa-random"></i> Create new car</a>
-            
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.model)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.brand)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.seat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.color)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.available)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ReleaseDate)
@@ -27,14 +40,37 @@
                 @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
-                </th>
+                @Html.DisplayNameFor(model => model.discount_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.user_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.category_id)
+            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.model)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.brand)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.seat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.color)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.available)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ReleaseDate)
@@ -46,12 +82,18 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                <div class="btn-group" role="group" >
-                    <a onclick="showInPopup('@Url.Action("Edit","Car",new {id=item.Id},Context.Request.Scheme)','Edit')" class="btn btn-warning text-white">Edit</a>
-                    <a onclick="showInPopup('@Url.Action("Details","Car",new {id=item.Id},Context.Request.Scheme)','Details')" class="btn btn-primary text-white">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-                    
-                </div>
+                @Html.DisplayFor(modelItem => item.discount_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.user_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.category_id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
             </td>
         </tr>
 }
