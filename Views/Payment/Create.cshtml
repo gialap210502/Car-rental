@@ -33,8 +33,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="booking_id" class="control-label"></label>
-                <input asp-for="booking_id" class="form-control" />
-                <span asp-validation-for="booking_id" class="text-danger"></span>
+                <select asp-for="booking_id" class ="form-control" asp-items="ViewBag.booking_id"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

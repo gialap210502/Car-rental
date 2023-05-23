@@ -59,18 +59,15 @@
             </div>
             <div class="form-group">
                 <label asp-for="discount_id" class="control-label"></label>
-                <input asp-for="discount_id" class="form-control" />
-                <span asp-validation-for="discount_id" class="text-danger"></span>
+                <select asp-for="discount_id" class ="form-control" asp-items="ViewBag.discount_id"></select>
             </div>
             <div class="form-group">
                 <label asp-for="user_id" class="control-label"></label>
-                <input asp-for="user_id" class="form-control" />
-                <span asp-validation-for="user_id" class="text-danger"></span>
+                <select asp-for="user_id" class ="form-control" asp-items="ViewBag.user_id"></select>
             </div>
             <div class="form-group">
                 <label asp-for="category_id" class="control-label"></label>
-                <input asp-for="category_id" class="form-control" />
-                <span asp-validation-for="category_id" class="text-danger"></span>
+                <select asp-for="category_id" class ="form-control" asp-items="ViewBag.category_id"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

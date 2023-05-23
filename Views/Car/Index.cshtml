@@ -40,13 +40,13 @@
                 @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.discount_id)
+                @Html.DisplayNameFor(model => model.Discount)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.user_id)
+                @Html.DisplayNameFor(model => model.user)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.category_id)
+                @Html.DisplayNameFor(model => model.category)
             </th>
             <th></th>
         </tr>
@@ -82,13 +82,13 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.discount_id)
+                @Html.DisplayFor(modelItem => item.Discount.code)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.user_id)
+                @Html.DisplayFor(modelItem => item.user.email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.category_id)
+                @Html.DisplayFor(modelItem => item.category.type)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |

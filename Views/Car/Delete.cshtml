@@ -66,22 +66,22 @@
             @Html.DisplayFor(model => model.Price)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.discount_id)
+            @Html.DisplayNameFor(model => model.Discount)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.discount_id)
+            @Html.DisplayFor(model => model.Discount.code)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.user_id)
+            @Html.DisplayNameFor(model => model.user)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.user_id)
+            @Html.DisplayFor(model => model.user.email)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.category_id)
+            @Html.DisplayNameFor(model => model.category)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.category_id)
+            @Html.DisplayFor(model => model.category.type)
         </dd>
     </dl>
     

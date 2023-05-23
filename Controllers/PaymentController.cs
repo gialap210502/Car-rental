@@ -22,7 +22,7 @@ namespace Car_rental.Controllers
         // GET: Payment
         public async Task<IActionResult> Index()
         {
-            var car_rentalContext = _context.payment.Include(p => p.car);
+            var car_rentalContext = _context.payment.Include(p => p.booking).Include(p => p.car);
             return View(await car_rentalContext.ToListAsync());
         }
 
@@ -35,6 +35,7 @@ namespace Car_rental.Controllers
             }
 
             var payment = await _context.payment
+                .Include(p => p.booking)
                 .Include(p => p.car)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (payment == null)
@@ -48,6 +49,7 @@ namespace Car_rental.Controllers
         // GET: Payment/Create
         public IActionResult Create()
         {
+            ViewData["booking_id"] = new SelectList(_context.bookings, "id", "id");
             ViewData["carId"] = new SelectList(_context.Car, "id", "id");
             return View();
         }
@@ -65,6 +67,7 @@ namespace Car_rental.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["booking_id"] = new SelectList(_context.bookings, "id", "id", payment.booking_id);
             ViewData["carId"] = new SelectList(_context.Car, "id", "id", payment.carId);
             return View(payment);
         }
@@ -82,6 +85,7 @@ namespace Car_rental.Controllers
             {
                 return NotFound();
             }
+            ViewData["booking_id"] = new SelectList(_context.bookings, "id", "id", payment.booking_id);
             ViewData["carId"] = new SelectList(_context.Car, "id", "id", payment.carId);
             return View(payment);
         }
@@ -118,6 +122,7 @@ namespace Car_rental.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["booking_id"] = new SelectList(_context.bookings, "id", "id", payment.booking_id);
             ViewData["carId"] = new SelectList(_context.Car, "id", "id", payment.carId);
             return View(payment);
         }
@@ -131,6 +136,7 @@ namespace Car_rental.Controllers
             }
 
             var payment = await _context.payment
+                .Include(p => p.booking)
                 .Include(p => p.car)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (payment == null)

@@ -22,9 +22,8 @@ namespace Car_rental.Controllers
         // GET: Car
         public async Task<IActionResult> Index()
         {
-              return _context.Car != null ? 
-                          View(await _context.Car.ToListAsync()) :
-                          Problem("Entity set 'Car_rentalContext.Car'  is null.");
+            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user);
+            return View(await car_rentalContext.ToListAsync());
         }
 
         // GET: Car/Details/5
@@ -36,6 +35,9 @@ namespace Car_rental.Controllers
             }
 
             var car = await _context.Car
+                .Include(c => c.Discount)
+                .Include(c => c.category)
+                .Include(c => c.user)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (car == null)
             {
@@ -48,6 +50,9 @@ namespace Car_rental.Controllers
         // GET: Car/Create
         public IActionResult Create()
         {
+            ViewData["discount_id"] = new SelectList(_context.discount, "id", "code");
+            ViewData["category_id"] = new SelectList(_context.category, "id", "type");
+            ViewData["user_id"] = new SelectList(_context.user, "id", "email");
             return View();
         }
 
@@ -64,6 +69,9 @@ namespace Car_rental.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["discount_id"] = new SelectList(_context.discount, "id", "code", car.discount_id);
+            ViewData["category_id"] = new SelectList(_context.category, "id", "type", car.category_id);
+            ViewData["user_id"] = new SelectList(_context.user, "id", "email", car.user_id);
             return View(car);
         }
 
@@ -80,6 +88,9 @@ namespace Car_rental.Controllers
             {
                 return NotFound();
             }
+            ViewData["discount_id"] = new SelectList(_context.discount, "id", "code", car.discount_id);
+            ViewData["category_id"] = new SelectList(_context.category, "id", "type", car.category_id);
+            ViewData["user_id"] = new SelectList(_context.user, "id", "email", car.user_id);
             return View(car);
         }
 
@@ -115,6 +126,9 @@ namespace Car_rental.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["discount_id"] = new SelectList(_context.discount, "id", "code", car.discount_id);
+            ViewData["category_id"] = new SelectList(_context.category, "id", "type", car.category_id);
+            ViewData["user_id"] = new SelectList(_context.user, "id", "email", car.user_id);
             return View(car);
         }
 
@@ -127,6 +141,9 @@ namespace Car_rental.Controllers
             }
 
             var car = await _context.Car
+                .Include(c => c.Discount)
+                .Include(c => c.category)
+                .Include(c => c.user)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (car == null)
             {
