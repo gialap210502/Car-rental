@@ -9,9 +9,76 @@ namespace Car_rental.Data
 {
     public class Car_rentalContext : DbContext
     {
-        public Car_rentalContext (DbContextOptions<Car_rentalContext> options)
+        public Car_rentalContext(DbContextOptions<Car_rentalContext> options)
             : base(options)
         {
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<user>()
+                .HasMany(u => u.userRoles)
+                .WithOne(c => c.user)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey(c => c.userId);
+
+            modelBuilder.Entity<roles>()
+                .HasMany(u => u.userRoles)
+                .WithOne(c => c.role)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey(c => c.roleId);
+
+            modelBuilder.Entity<user>()
+                .HasMany(u => u.cars)
+                .WithOne(r => r.user)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey(c => c.user_id);
+
+            modelBuilder.Entity<user>()
+                .HasMany(u => u.bookings)
+                .WithOne(r => r.user)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey(c => c.userId);
+
+            modelBuilder.Entity<car>()
+                .HasMany(u => u.payments)
+                .WithOne(r => r.car)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<car>()
+                .HasMany(u => u.ratings)
+                .WithOne(r => r.car)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey(c => c.carId);
+
+            modelBuilder.Entity<category>()
+                .HasMany(c => c.cars)
+                .WithOne(r => r.category)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey(c => c.category_id);
+
+            modelBuilder.Entity<discount>()
+                .HasMany(d => d.cars)
+                .WithOne(r => r.Discount)
+                .HasForeignKey(r => r.discount_id);
+
+            modelBuilder.Entity<user>()
+                .HasMany(u => u.ratings)
+                .WithOne(r => r.user)
+                .HasForeignKey(r => r.userId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // modelBuilder.Entity<bookings>()
+            //     .HasMany(u => u.payments)
+            //     .WithOne(r => r.booking)
+            //     .HasForeignKey(r => r.booking_id)
+            //     .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<payment>()
+                .HasOne(r => r.booking)
+                .WithMany(u => u.payments)
+                .HasForeignKey(r => r.booking_id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
         }
 
         public DbSet<Car_rental.Models.car> Car { get; set; } = default!;

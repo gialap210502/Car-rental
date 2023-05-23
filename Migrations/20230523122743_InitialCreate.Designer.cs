@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Car_rental.Migrations
 {
     [DbContext(typeof(Car_rentalContext))]
-    [Migration("20230519171754_InitialCreate")]
+    [Migration("20230523122743_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -62,9 +62,6 @@ namespace Car_rental.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int?>("Discountid")
-                        .HasColumnType("int");
-
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
@@ -86,9 +83,6 @@ namespace Car_rental.Migrations
                     b.Property<int>("category_id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("categoryid")
-                        .HasColumnType("int");
-
                     b.Property<string>("color")
                         .HasColumnType("nvarchar(max)");
 
@@ -104,16 +98,13 @@ namespace Car_rental.Migrations
                     b.Property<int>("user_id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("userid")
-                        .HasColumnType("int");
-
                     b.HasKey("id");
 
-                    b.HasIndex("Discountid");
+                    b.HasIndex("category_id");
 
-                    b.HasIndex("categoryid");
+                    b.HasIndex("discount_id");
 
-                    b.HasIndex("userid");
+                    b.HasIndex("user_id");
 
                     b.ToTable("Car");
                 });
@@ -157,6 +148,7 @@ namespace Car_rental.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("percentage")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("startDate")
@@ -181,9 +173,6 @@ namespace Car_rental.Migrations
                     b.Property<int>("booking_id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("bookingid")
-                        .HasColumnType("int");
-
                     b.Property<int>("carId")
                         .HasColumnType("int");
 
@@ -191,11 +180,12 @@ namespace Car_rental.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("paymentMethod")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");
 
-                    b.HasIndex("bookingid");
+                    b.HasIndex("booking_id");
 
                     b.HasIndex("carId");
 
@@ -223,6 +213,7 @@ namespace Car_rental.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("dateRating")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("userId")
@@ -331,17 +322,23 @@ namespace Car_rental.Migrations
 
             modelBuilder.Entity("Car_rental.Models.car", b =>
                 {
-                    b.HasOne("Car_rental.Models.discount", "Discount")
-                        .WithMany("cars")
-                        .HasForeignKey("Discountid");
-
                     b.HasOne("Car_rental.Models.category", "category")
                         .WithMany("cars")
-                        .HasForeignKey("categoryid");
+                        .HasForeignKey("category_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Car_rental.Models.discount", "Discount")
+                        .WithMany("cars")
+                        .HasForeignKey("discount_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Car_rental.Models.user", "user")
                         .WithMany("cars")
-                        .HasForeignKey("userid");
+                        .HasForeignKey("user_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Discount");
 
@@ -354,7 +351,9 @@ namespace Car_rental.Migrations
                 {
                     b.HasOne("Car_rental.Models.bookings", "booking")
                         .WithMany("payments")
-                        .HasForeignKey("bookingid");
+                        .HasForeignKey("booking_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Car_rental.Models.car", "car")
                         .WithMany("payments")
@@ -378,7 +377,7 @@ namespace Car_rental.Migrations
                     b.HasOne("Car_rental.Models.user", "user")
                         .WithMany("ratings")
                         .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("car");

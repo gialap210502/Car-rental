@@ -33,7 +33,7 @@ namespace Car_rental.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    percentage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    percentage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     startDate = table.Column<int>(type: "int", nullable: false),
                     endDate = table.Column<int>(type: "int", nullable: false)
                 },
@@ -113,30 +113,30 @@ namespace Car_rental.Migrations
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<double>(type: "float", nullable: false),
                     discount_id = table.Column<int>(type: "int", nullable: false),
-                    Discountid = table.Column<int>(type: "int", nullable: true),
                     user_id = table.Column<int>(type: "int", nullable: false),
-                    userid = table.Column<int>(type: "int", nullable: true),
-                    category_id = table.Column<int>(type: "int", nullable: false),
-                    categoryid = table.Column<int>(type: "int", nullable: true)
+                    category_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Car", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Car_category_categoryid",
-                        column: x => x.categoryid,
+                        name: "FK_Car_category_category_id",
+                        column: x => x.category_id,
                         principalTable: "category",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Car_discount_Discountid",
-                        column: x => x.Discountid,
+                        name: "FK_Car_discount_discount_id",
+                        column: x => x.discount_id,
                         principalTable: "discount",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Car_user_userid",
-                        column: x => x.userid,
+                        name: "FK_Car_user_user_id",
+                        column: x => x.user_id,
                         principalTable: "user",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -173,10 +173,9 @@ namespace Car_rental.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     amount = table.Column<double>(type: "float", nullable: false),
                     paymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    paymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    paymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     carId = table.Column<int>(type: "int", nullable: false),
-                    booking_id = table.Column<int>(type: "int", nullable: false),
-                    bookingid = table.Column<int>(type: "int", nullable: true)
+                    booking_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -188,10 +187,11 @@ namespace Car_rental.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_payment_bookings_bookingid",
-                        column: x => x.bookingid,
+                        name: "FK_payment_bookings_booking_id",
+                        column: x => x.booking_id,
                         principalTable: "bookings",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -200,7 +200,7 @@ namespace Car_rental.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    dateRating = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    dateRating = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Star = table.Column<int>(type: "int", nullable: false),
                     comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -221,7 +221,7 @@ namespace Car_rental.Migrations
                         column: x => x.userId,
                         principalTable: "user",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -230,24 +230,24 @@ namespace Car_rental.Migrations
                 column: "userId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Car_categoryid",
+                name: "IX_Car_category_id",
                 table: "Car",
-                column: "categoryid");
+                column: "category_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Car_Discountid",
+                name: "IX_Car_discount_id",
                 table: "Car",
-                column: "Discountid");
+                column: "discount_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Car_userid",
+                name: "IX_Car_user_id",
                 table: "Car",
-                column: "userid");
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_payment_bookingid",
+                name: "IX_payment_booking_id",
                 table: "payment",
-                column: "bookingid");
+                column: "booking_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_payment_carId",

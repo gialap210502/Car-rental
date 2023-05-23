@@ -7,6 +7,7 @@ public class discount
     public int id { get; set; }
     [Required]
     public string? code { get; set; }
+    [Required]
     public string? percentage { get; set; }
     [Required]
     public int startDate { get; set; }

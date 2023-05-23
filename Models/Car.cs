@@ -16,13 +16,14 @@ public class car
     public DateTime ReleaseDate { get; set; }
     public string? Type { get; set; }
     public double Price { get; set; }
-   
-    public ICollection<payment>? payments { get; } = new List<payment>(); 
+    public ICollection<payment>? payments { get; } = new List<payment>();
     public ICollection<rating>? ratings { get; } = new List<rating>();
     public int discount_id { get; set; }
     public discount? Discount { get; set; }
+    [Required]
     public int user_id { get; set; }
     public user? user { get; set; }
+    [Required]
     public int category_id { get; set; }
     public category? category { get; set; }
 }
