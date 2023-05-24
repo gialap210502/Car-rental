@@ -33,6 +33,8 @@ public class user
     [Display(Name = "Flag")]
     public int flag { get; set; } = 0;
 
+    public string? image { get; set; }
+
     public ICollection<userRole> userRoles { get; } = new List<userRole>();
 
     public ICollection<rating>? ratings { get; } = new List<rating>();

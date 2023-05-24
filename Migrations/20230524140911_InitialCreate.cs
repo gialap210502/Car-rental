@@ -68,7 +68,8 @@ namespace Car_rental.Migrations
                     dob = table.Column<DateTime>(type: "datetime2", nullable: true),
                     email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    flag = table.Column<int>(type: "int", nullable: false)
+                    flag = table.Column<int>(type: "int", nullable: false),
+                    image = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

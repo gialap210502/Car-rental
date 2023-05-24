@@ -7,24 +7,31 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Car_rental.Data;
 using Car_rental.Models;
+using System.IO.Compression;
+using System.Drawing;
+using System.Drawing.Imaging;
+
+
 
 namespace Car_rental.Controllers
 {
     public class UserController : Controller
     {
+        private IWebHostEnvironment _hostEnvironment;
         private readonly Car_rentalContext _context;
 
-        public UserController(Car_rentalContext context)
+        public UserController(IWebHostEnvironment hostEnvironment, Car_rentalContext context)
         {
+            _hostEnvironment = hostEnvironment;
             _context = context;
         }
 
         // GET: User
         public async Task<IActionResult> Index()
         {
-              return _context.user != null ? 
-                          View(await _context.user.ToListAsync()) :
-                          Problem("Entity set 'Car_rentalContext.user'  is null.");
+            return _context.user != null ?
+                        View(await _context.user.ToListAsync()) :
+                        Problem("Entity set 'Car_rentalContext.user'  is null.");
         }
 
         // GET: User/Details/5
@@ -56,12 +63,26 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag")] user user)
+        public async Task<IActionResult> Create(IFormFile myfile, [Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag,image")] user user)
         {
+            Console.WriteLine("-----------1------------");
             if (ModelState.IsValid)
             {
+                string filename = Path.GetFileName(myfile.FileName);
+                var filePath = Path.Combine(_hostEnvironment.WebRootPath, "ImageUser");
+                string fullPath = filePath + "\\" + filename;
+                // Copy files to FileSystem using Streams
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await myfile.CopyToAsync(stream);
+                }
+                Console.WriteLine("------------6-----------");
+                user.image = filename;
+                Console.WriteLine("--------------7---------");
                 _context.Add(user);
+                Console.WriteLine("---------------8--------");
                 await _context.SaveChangesAsync();
+                Console.WriteLine("--------------9---------");
                 return RedirectToAction(nameof(Index));
             }
             return View(user);
@@ -88,7 +109,7 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag")] user user)
+        public async Task<IActionResult> Edit(int id, [Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag,image")] user user)
         {
             if (id != user.id)
             {
@@ -150,14 +171,14 @@ namespace Car_rental.Controllers
             {
                 _context.user.Remove(user);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool userExists(int id)
         {
-          return (_context.user?.Any(e => e.id == id)).GetValueOrDefault();
+            return (_context.user?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }

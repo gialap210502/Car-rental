@@ -266,6 +266,9 @@ namespace Car_rental.Migrations
                     b.Property<int>("flag")
                         .HasColumnType("int");
 
+                    b.Property<string>("image")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

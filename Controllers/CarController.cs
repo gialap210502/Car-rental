@@ -30,7 +30,7 @@ namespace Car_rental.Controllers
         // GET: Car/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            ViewBag.Layout = "_AdminLayout";
+            ViewBag.Layout = "_Layout";
             if (id == null || _context.Car == null)
             {
                 return NotFound();
