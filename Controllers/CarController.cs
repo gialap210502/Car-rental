@@ -22,7 +22,7 @@ namespace Car_rental.Controllers
         // GET: Car
         public async Task<IActionResult> Index()
         {
-            ViewBag.Layout = "_AdminLayout";
+            
             var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user);
             return View(await car_rentalContext.ToListAsync());
         }
