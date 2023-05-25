@@ -22,9 +22,9 @@ namespace Car_rental.Controllers
         // GET: Roles
         public async Task<IActionResult> Index()
         {
-              return _context.roles != null ? 
-                          View(await _context.roles.ToListAsync()) :
-                          Problem("Entity set 'Car_rentalContext.roles'  is null.");
+            return _context.roles != null ?
+                        View(await _context.roles.ToListAsync()) :
+                        Problem("Entity set 'Car_rentalContext.roles'  is null.");
         }
 
         // GET: Roles/Details/5
@@ -150,14 +150,27 @@ namespace Car_rental.Controllers
             {
                 _context.roles.Remove(roles);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool rolesExists(int id)
         {
-          return (_context.roles?.Any(e => e.id == id)).GetValueOrDefault();
+            return (_context.roles?.Any(e => e.id == id)).GetValueOrDefault();
+        }
+
+        public async Task<IActionResult> CreateRole()
+        {
+            if (!_context.roles.Any())
+            {
+                _context.roles.Add(new roles { role = "Admin" });
+                _context.roles.Add(new roles { role = "Owner" });
+                _context.roles.Add(new roles { role = "User" });
+                await _context.SaveChangesAsync();
+                return RedirectToAction("index", "roles");
+            }
+            return View();
         }
     }
 }
