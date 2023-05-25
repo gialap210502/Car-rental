@@ -65,7 +65,6 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IFormFile myfile, [Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag,image")] user user)
         {
-            Console.WriteLine("-----------1------------");
             if (ModelState.IsValid)
             {
                 string filename = Path.GetFileName(myfile.FileName);
@@ -76,13 +75,10 @@ namespace Car_rental.Controllers
                 {
                     await myfile.CopyToAsync(stream);
                 }
-                Console.WriteLine("------------6-----------");
+                user.flag = 0;
                 user.image = filename;
-                Console.WriteLine("--------------7---------");
                 _context.Add(user);
-                Console.WriteLine("---------------8--------");
                 await _context.SaveChangesAsync();
-                Console.WriteLine("--------------9---------");
                 return RedirectToAction(nameof(Index));
             }
             return View(user);
@@ -109,7 +105,7 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag,image")] user user)
+        public async Task<IActionResult> Edit(int id, IFormFile myfile,  [Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag,image")] user user)
         {
             if (id != user.id)
             {
@@ -120,6 +116,15 @@ namespace Car_rental.Controllers
             {
                 try
                 {
+                    string filename = Path.GetFileName(myfile.FileName);
+                var filePath = Path.Combine(_hostEnvironment.WebRootPath, "ImageUser");
+                string fullPath = filePath + "\\" + filename;
+                // Copy files to FileSystem using Streams
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await myfile.CopyToAsync(stream);
+                }
+                user.image = filename;
                     _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
