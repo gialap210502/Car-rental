@@ -58,6 +58,11 @@ namespace Car_rental.Controllers
         {
             return View();
         }
+        public IActionResult Register()
+        {
+            ViewBag.Layout = "_Layout";
+            return View();
+        }
 
         // POST: User/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -108,6 +113,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag,image")] user user, String repassword)
         {
+            ViewBag.Layout = "_Layout";
             var UserExists = _context.user.FirstOrDefault(u => u.email == user.email);
             TimeSpan time = (TimeSpan)(DateTime.Now - user.dob);
             int yearGap = (int)(time.TotalDays / 365.25);
@@ -160,47 +166,47 @@ namespace Car_rental.Controllers
             return View();
         }
 
-        // [HttpPost]
-        // public async Task<IActionResult> Login(String UserName, String Password)
-        // {
-        //     var Encode = new Encode();
-        //     if (!String.IsNullOrEmpty(UserName) && !String.IsNullOrEmpty(Password))
-        //     {
-        //         var en_password = Encode.encode(Password);
-        //         var user = await _context.User.FirstOrDefaultAsync(u => u.email == UserName && u.password == en_password);
+        [HttpPost]
+        public async Task<IActionResult> Login(String UserName, String Password)
+        {
+            var Encode = new Encode();
+            if (!String.IsNullOrEmpty(UserName) && !String.IsNullOrEmpty(Password))
+            {
+                var en_password = Encode.encode(Password);
+                var user = await _context.user.FirstOrDefaultAsync(u => u.email == UserName && u.password == en_password);
 
 
-        //         if (user != null && user.flag == 1)
-        //         {
-        //             var userRole = _context.UserRole.Include(u => u.roles).FirstOrDefault(u => u.userId == user.id);
-        //             HttpContext.Session.SetString(SessionName, user.name);
-        //             HttpContext.Session.SetInt32(SessionId, user.id);
-        //             HttpContext.Session.SetString(SessionRole, userRole.roles.name);
+                if (user != null && user.flag == 1)
+                {
+                    var userRole = _context.userRole.Include(u => u.role).FirstOrDefault(u => u.userId == user.id);
+                    HttpContext.Session.SetString(SessionName, user.name);
+                    HttpContext.Session.SetInt32(SessionId, user.id);
+                    HttpContext.Session.SetString(SessionRole, userRole.roles.name);
 
-        //             if (userRole.roles.name == "Admin" || userRole.roles.name == "Manager")
-        //             {
-        //                 return RedirectToAction("loginSucessAdmin", "User");
-        //             }
-        //             else
-        //             {
-        //                 return RedirectToAction("loginSuccess", "User");
-        //             }
-        //         }
-        //         else if (user == null)
-        //         {
-        //             ViewBag.ErrorMessage = "Your username or password is incorrect !";
-        //         }
-        //         else if (user != null && user.flag == 0)
-        //         {
-        //             ViewBag.ErrorMessage = "Your are not yet confirm your email, please Confirm Your email !";
-        //         }
-        //     }
-        //     else
-        //     {
-        //         ViewBag.ErrorMessage = "Username or Password cannot be empty";
-        //     }
-        //     return View();
-        // }
+                    // if (userRole.role == "Admin" || userRole.roles.name == "Manager")
+                    // {
+                    //     return RedirectToAction("loginSucessAdmin", "User");
+                    // }
+                    // else
+                    // {
+                        return RedirectToAction("loginSuccess", "User");
+                    //}
+                }
+                else if (user == null)
+                {
+                    ViewBag.ErrorMessage = "Your username or password is incorrect !";
+                }
+                else if (user != null && user.flag == 0)
+                {
+                    ViewBag.ErrorMessage = "Your are not yet confirm your email, please Confirm Your email !";
+                }
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Username or Password cannot be empty";
+            }
+            return View();
+        }
 
         // GET: User/Edit/5
         public async Task<IActionResult> Edit(int? id)
