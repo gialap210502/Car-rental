@@ -119,7 +119,7 @@ namespace Car_rental.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag,image")] user user, String repassword)
+        public async Task<IActionResult> Register(IFormFile myfile, [Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag,image")] user user, String repassword)
         {
             ViewBag.Layout = "_Layout";
             var UserExists = _context.user.FirstOrDefault(u => u.email == user.email);
@@ -146,8 +146,19 @@ namespace Car_rental.Controllers
             {
                 if (ModelState.IsValid)
                 {
+
                     user.password = en_password;
                     Send send = new Send();
+                    string filename = Path.GetFileName(myfile.FileName);
+                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "ImageUser");
+                    string fullPath = filePath + "\\" + filename;
+                    // Copy files to FileSystem using Streams
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await myfile.CopyToAsync(stream);
+                    }
+
+                    user.image = filename;
                     _context.Add(user);
                     await _context.SaveChangesAsync();
                     var users = _context.user.FirstOrDefault(p => p.id == user.id);
@@ -190,7 +201,7 @@ namespace Car_rental.Controllers
                 var user = await _context.user.FirstOrDefaultAsync(u => u.email == UserName && u.password == en_password);
 
 
-                 if (user != null /*&& user.flag == 1*/)
+                if (user != null /*&& user.flag == 1*/)
                 {
                     var userRole = _context.userRole.Include(u => u.role).FirstOrDefault(u => u.userId == user.id);
                     var userRoleName = _context.roles.FirstOrDefault(i => i.id == userRole.roleId);
