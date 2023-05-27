@@ -20,6 +20,9 @@ namespace Car_rental.Controllers
     {
         private IWebHostEnvironment _hostEnvironment;
         private readonly Car_rentalContext _context;
+        const string SessionName = "_Name";
+        const string SessionId = "_ID";
+        const string SessionRole = "_Role";
 
         public UserController(IWebHostEnvironment hostEnvironment, Car_rentalContext context)
         {
@@ -59,6 +62,11 @@ namespace Car_rental.Controllers
             return View();
         }
         public IActionResult Register()
+        {
+            ViewBag.Layout = "_Layout";
+            return View();
+        }
+        public IActionResult Login()
         {
             ViewBag.Layout = "_Layout";
             return View();
@@ -154,7 +162,7 @@ namespace Car_rental.Controllers
                     }
                     var email = user.email.ToString();
                     var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
-                    string body = "Please click the link below to confirm your account: " + "\n\n" + "https://ideaweb.azurewebsites.net/User/ConfirmAccount?email=" + email;;
+                    string body = "Please click the link below to confirm your account: " + "\n\n" + "https://ideaweb.azurewebsites.net/User/ConfirmAccount?email=" + email; ;
                     send.SendEmail(email, subject, body);
                     return RedirectToAction(nameof(Index));
                 }
@@ -165,10 +173,16 @@ namespace Car_rental.Controllers
             }
             return View();
         }
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login", "user");
+        }
 
         [HttpPost]
         public async Task<IActionResult> Login(String UserName, String Password)
         {
+            ViewBag.Layout = "_Layout";
             var Encode = new Encode();
             if (!String.IsNullOrEmpty(UserName) && !String.IsNullOrEmpty(Password))
             {
@@ -176,21 +190,22 @@ namespace Car_rental.Controllers
                 var user = await _context.user.FirstOrDefaultAsync(u => u.email == UserName && u.password == en_password);
 
 
-                if (user != null && user.flag == 1)
+                 if (user != null /*&& user.flag == 1*/)
                 {
                     var userRole = _context.userRole.Include(u => u.role).FirstOrDefault(u => u.userId == user.id);
+                    var userRoleName = _context.roles.FirstOrDefault(i => i.id == userRole.roleId);
                     HttpContext.Session.SetString(SessionName, user.name);
                     HttpContext.Session.SetInt32(SessionId, user.id);
-                    HttpContext.Session.SetString(SessionRole, userRole.roles.name);
+                    HttpContext.Session.SetString(SessionRole, userRole.role.role);
 
-                    // if (userRole.role == "Admin" || userRole.roles.name == "Manager")
-                    // {
-                    //     return RedirectToAction("loginSucessAdmin", "User");
-                    // }
-                    // else
-                    // {
-                        return RedirectToAction("loginSuccess", "User");
-                    //}
+                    if (userRole.role.role == "Admin" || userRole.role.role == "Owner")
+                    {
+                        return RedirectToAction("Index", "User");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 else if (user == null)
                 {
@@ -318,7 +333,7 @@ namespace Car_rental.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-                [HttpGet]
+        [HttpGet]
         public async Task<IActionResult> ConfirmAccount(String email)
         {
             var user = await _context.user.FirstOrDefaultAsync(u => u.email == email);

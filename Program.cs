@@ -11,6 +11,14 @@ builder.Services.AddDbContext<Car_rentalContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSession(options =>
+{   
+    options.Cookie.Name = ".CarRental";
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -29,7 +37,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
+app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
