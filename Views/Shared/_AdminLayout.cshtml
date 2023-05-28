@@ -1,3 +1,8 @@
+@{
+  var name = Context.Session.GetString("_Name") != null ? Context.Session.GetString("_Name") : null;
+  var imageUser = Context.Session.GetString("_Image") != null ? Context.Session.GetString("_Image") : null;
+  var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
+}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,15 +39,18 @@
         <ul class="navbar-nav mr-lg-2">
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link" href="#" data-toggle="dropdown" id="profileDropdown">
-              <img href="https://scontent.fvca1-4.fna.fbcdn.net/v/t39.30808-6/348634261_644308597604619_999269321214992962_n.jpg?stp=cp6_dst-jpg_p843x403&_nc_cat=108&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=2Cqz8d7YitQAX9JicXC&_nc_ht=scontent.fvca1-4.fna&oh=00_AfBfXQ9AAIRTXyfSJTj6Y96i-1x5qk3LsAoNA-5Frtobog&oe=647332E7" alt="profile"/>
-              <span class="nav-profile-name">Eugenia Mullins</span>
+              @* @if(imageUser == null){
+                
+              } *@
+              <img src="~/ImageUser/@imageUser" alt="profile"/>
+              <span class="nav-profile-name">@name</span>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
               <a class="dropdown-item">
                 <i class="typcn typcn-cog-outline text-primary"></i>
                 Settings
               </a>
-              <a class="dropdown-item">
+              <a asp-controller="User" asp-action="Logout" class="dropdown-item">
                 <i class="typcn typcn-eject text-primary"></i>
                 Logout
               </a>
@@ -68,7 +76,7 @@
               <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
               <a class="dropdown-item preview-item">
                 <div class="preview-thumbnail">
-                    <img src="images/faces/face4.jpg" alt="image" class="profile-pic">
+                    <img src="~/admin/images/faces/face4.jpg" alt="image" class="profile-pic">
                 </div>
                 <div class="preview-item-content flex-grow">
                   <h6 class="preview-subject ellipsis font-weight-normal">David Grey
@@ -80,7 +88,7 @@
               </a>
               <a class="dropdown-item preview-item">
                 <div class="preview-thumbnail">
-                    <img src="images/faces/face2.jpg" alt="image" class="profile-pic">
+                    <img src="~/admin/images/faces/face2.jpg" alt="image" class="profile-pic">
                 </div>
                 <div class="preview-item-content flex-grow">
                   <h6 class="preview-subject ellipsis font-weight-normal">Tim Cook
@@ -92,7 +100,7 @@
               </a>
               <a class="dropdown-item preview-item">
                 <div class="preview-thumbnail">
-                    <img src="images/faces/face3.jpg" alt="image" class="profile-pic">
+                    <img src="~/admin/images/faces/face3.jpg" alt="image" class="profile-pic">
                 </div>
                 <div class="preview-item-content flex-grow">
                   <h6 class="preview-subject ellipsis font-weight-normal"> Johnson
@@ -315,7 +323,7 @@
             </div>
             <ul class="chat-list">
               <li class="list active">
-                <div class="profile"><img src="images/faces/face1.jpg" alt="image"><span class="online"></span></div>
+                <div class="profile"><img src="~/admin/images/faces/face1.jpg" alt="image"><span class="online"></span></div>
                 <div class="info">
                   <p>Thomas Douglas</p>
                   <p>Available</p>
@@ -323,7 +331,7 @@
                 <small class="text-muted my-auto">19 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="images/faces/face2.jpg" alt="image"><span class="offline"></span></div>
+                <div class="profile"><img src="~/admin/images/faces/face2.jpg" alt="image"><span class="offline"></span></div>
                 <div class="info">
                   <div class="wrapper d-flex">
                     <p>Catherine</p>
@@ -334,7 +342,7 @@
                 <small class="text-muted my-auto">23 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="images/faces/face3.jpg" alt="image"><span class="online"></span></div>
+                <div class="profile"><img src="~/admin/images/faces/face3.jpg" alt="image"><span class="online"></span></div>
                 <div class="info">
                   <p>Daniel Russell</p>
                   <p>Available</p>
@@ -342,7 +350,7 @@
                 <small class="text-muted my-auto">14 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="images/faces/face4.jpg" alt="image"><span class="offline"></span></div>
+                <div class="profile"><img src="~/admin/images/faces/face4.jpg" alt="image"><span class="offline"></span></div>
                 <div class="info">
                   <p>James Richardson</p>
                   <p>Away</p>
@@ -350,7 +358,7 @@
                 <small class="text-muted my-auto">2 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="images/faces/face5.jpg" alt="image"><span class="online"></span></div>
+                <div class="profile"><img src="~/admin/images/faces/face5.jpg" alt="image"><span class="online"></span></div>
                 <div class="info">
                   <p>Madeline Kennedy</p>
                   <p>Available</p>
@@ -358,7 +366,7 @@
                 <small class="text-muted my-auto">5 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="images/faces/face6.jpg" alt="image"><span class="online"></span></div>
+                <div class="profile"><img src="~/admin/images/faces/face6.jpg" alt="image"><span class="online"></span></div>
                 <div class="info">
                   <p>Sarah Graves</p>
                   <p>Available</p>
@@ -504,20 +512,20 @@
   <!-- container-scroller -->
 
   <!-- base:js -->
-  <script src="vendors/js/vendor.bundle.base.js"></script>
+  <script src="~/admin/vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->
   <!-- Plugin js for this page-->
-  <script src="vendors/chart.js/Chart.min.js"></script>
+  <script src="~/admin/vendors/chart.js/Chart.min.js"></script>
   <!-- End plugin js for this page-->
   <!-- inject:js -->
-  <script src="js/off-canvas.js"></script>
-  <script src="js/hoverable-collapse.js"></script>
-  <script src="js/template.js"></script>
-  <script src="js/settings.js"></script>
-  <script src="js/todolist.js"></script>
+  <script src="~/admin/js/off-canvas.js"></script>
+  <script src="~/admin/js/hoverable-collapse.js"></script>
+  <script src="~/admin/js/template.js"></script>
+  <script src="~/admin/js/settings.js"></script>
+  <script src="~/admin/js/todolist.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
-  <script src="js/dashboard.js"></script>
+  <script src="~/admin/js/dashboard.js"></script>
   <!-- End custom js for this page-->
 </body>
 

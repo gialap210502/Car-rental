@@ -48,7 +48,11 @@
                         @foreach (var item in Model) {
                             <tr>
                                 <td class="py-1">
-                                    <img src="~/ImageUser/@Html.DisplayFor(modelItem => item.image)" alt="" />
+                                    @if(item.image == null) {
+                                        <img src="~/ImageUser/@@@@@@@@.png" alt="" />
+                                    }else{
+                                        <img src="~/ImageUser/@Html.DisplayFor(modelItem => item.image)" alt="" />
+                                    }
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.name)

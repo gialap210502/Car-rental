@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+  var name = Context.Session.GetString("_Name") != null ? Context.Session.GetString("_Name") : null;
+  var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
+}
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Car Rental</title>
@@ -43,7 +47,31 @@
 	          <li class="nav-item"><a href="pricing.html" class="nav-link">Pricing</a></li>
 	          <li class="nav-item"><a href="car.html" class="nav-link">Cars</a></li>
 	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-	          <li class="nav-item"><a asp-controller="User" asp-action="Logout" class="nav-link">Logout</a></li>
+                @{
+              if (name != null)
+              {
+                    <li class="nav-item dropdown">
+                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Hi @name
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background: rgb(0 0 0 / 50%);">
+                  @if(role == "Admin"){
+                        <a class="dropdown-item" href="/user">Admin</a>
+                  }
+                  @if(role == "Owner"){
+                        <a class="dropdown-item" href="/user">Manager</a>
+                  }
+                        <a class="dropdown-item" href="#">Profile</a>
+                        <a class="dropdown-item" asp-controller="User" asp-action="Logout">Log out</a>
+                      </div>
+                    </li>
+              }
+              else
+              {
+                    <li class="nav-item active"><a class="nav-link" asp-controller="User" asp-action="Login">Login</a></li>
+              }
+            }
 	        </ul>
 	      </div>
 	    </div>

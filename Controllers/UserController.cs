@@ -21,6 +21,7 @@ namespace Car_rental.Controllers
         private IWebHostEnvironment _hostEnvironment;
         private readonly Car_rentalContext _context;
         const string SessionName = "_Name";
+        const string SessionImage = "_Image";
         const string SessionId = "_ID";
         const string SessionRole = "_Role";
 
@@ -86,16 +87,22 @@ namespace Car_rental.Controllers
             {
                 user.password = en_password;
                 Send send = new Send();
-                string filename = Path.GetFileName(myfile.FileName);
-                var filePath = Path.Combine(_hostEnvironment.WebRootPath, "ImageUser");
-                string fullPath = filePath + "\\" + filename;
-                // Copy files to FileSystem using Streams
-                using (var stream = new FileStream(fullPath, FileMode.Create))
+                if (myfile == null)
                 {
-                    await myfile.CopyToAsync(stream);
+                    user.image = null;
                 }
-
-                user.image = filename;
+                else
+                {
+                    string filename = Path.GetFileName(myfile.FileName);
+                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "ImageUser");
+                    string fullPath = filePath + "\\" + filename;
+                    // Copy files to FileSystem using Streams
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await myfile.CopyToAsync(stream);
+                    }
+                    user.image = filename;
+                }
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 var users = _context.user.FirstOrDefault(p => p.id == user.id);
@@ -146,19 +153,24 @@ namespace Car_rental.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
                     user.password = en_password;
                     Send send = new Send();
-                    string filename = Path.GetFileName(myfile.FileName);
-                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "ImageUser");
-                    string fullPath = filePath + "\\" + filename;
-                    // Copy files to FileSystem using Streams
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    if (myfile == null)
                     {
-                        await myfile.CopyToAsync(stream);
+                        user.image = null;
                     }
-
-                    user.image = filename;
+                    else
+                    {
+                        string filename = Path.GetFileName(myfile.FileName);
+                        var filePath = Path.Combine(_hostEnvironment.WebRootPath, "ImageUser");
+                        string fullPath = filePath + "\\" + filename;
+                        // Copy files to FileSystem using Streams
+                        using (var stream = new FileStream(fullPath, FileMode.Create))
+                        {
+                            await myfile.CopyToAsync(stream);
+                        }
+                        user.image = filename;
+                    }
                     _context.Add(user);
                     await _context.SaveChangesAsync();
                     var users = _context.user.FirstOrDefault(p => p.id == user.id);
@@ -206,6 +218,14 @@ namespace Car_rental.Controllers
                     var userRole = _context.userRole.Include(u => u.role).FirstOrDefault(u => u.userId == user.id);
                     var userRoleName = _context.roles.FirstOrDefault(i => i.id == userRole.roleId);
                     HttpContext.Session.SetString(SessionName, user.name);
+                    if (user.image != null)
+                    {
+                        HttpContext.Session.SetString(SessionImage, user.image);
+                    }
+                    else
+                    {
+                        HttpContext.Session.SetString(SessionImage, "@@@@.png");
+                    }
                     HttpContext.Session.SetInt32(SessionId, user.id);
                     HttpContext.Session.SetString(SessionRole, userRole.role.role);
 
