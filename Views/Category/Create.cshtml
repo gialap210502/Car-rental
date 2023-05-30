@@ -12,20 +12,11 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <span class="text-danger">@ViewBag.ErrorMessage</span>
             <div class="form-group">
-                <label asp-for="type" class="control-label"></label>
+                Vehicle Type
                 <input asp-for="type" class="form-control" />
                 <span asp-validation-for="type" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Deleted_Status" class="control-label"></label>
-                <input asp-for="Deleted_Status" class="form-control" />
-                <span asp-validation-for="Deleted_Status" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

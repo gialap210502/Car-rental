@@ -141,15 +141,17 @@ namespace Car_rental.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("endDate")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("endDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("percentage")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("startDate")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("startDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
 
                     b.HasKey("id");
 

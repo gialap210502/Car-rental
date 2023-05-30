@@ -22,9 +22,7 @@ namespace Car_rental.Controllers
         // GET: Discount
         public async Task<IActionResult> Index()
         {
-              return _context.discount != null ? 
-                          View(await _context.discount.ToListAsync()) :
-                          Problem("Entity set 'Car_rentalContext.discount'  is null.");
+              return View(await _context.discount.ToListAsync());
         }
 
         // GET: Discount/Details/5
@@ -157,7 +155,7 @@ namespace Car_rental.Controllers
 
         private bool discountExists(int id)
         {
-          return (_context.discount?.Any(e => e.id == id)).GetValueOrDefault();
+          return _context.discount.Any(e => e.id == id);
         }
     }
 }

@@ -34,8 +34,8 @@ namespace Car_rental.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     percentage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    startDate = table.Column<int>(type: "int", nullable: false),
-                    endDate = table.Column<int>(type: "int", nullable: false)
+                    startDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    endDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -10,9 +10,11 @@ public class discount
     [Required]
     public string? percentage { get; set; }
     [Required]
-    public int startDate { get; set; }
+    [DataType(DataType.Date)]
+    public DateTime? startDate { get; set; }
     [Required]
-    public int endDate { get; set; }
+    [DataType(DataType.Date)]
+    public DateTime? endDate { get; set; }
     public ICollection<car>? cars { get; set; }
 
 }

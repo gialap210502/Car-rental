@@ -14,19 +14,23 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="id" />
             <div class="form-group">
-                <label asp-for="type" class="control-label"></label>
+                Type
                 <input asp-for="type" class="form-control" />
                 <span asp-validation-for="type" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
+            @{
+                if(Model.Status == 1){
+                    @Html.Raw("Status : <span class='badge badge-success'>Available</span>")
+                }else{
+                    @Html.Raw("Status : <span class='badge badge-danger'>Unavailable</span>")
+                }
+            }
             </div>
             <div class="form-group">
-                <label asp-for="Deleted_Status" class="control-label"></label>
-                <input asp-for="Deleted_Status" class="form-control" />
-                <span asp-validation-for="Deleted_Status" class="text-danger"></span>
+                <input type="checkbox" name="updateCheckBox" value="true">
+                <label for="updateCheckBox">Turn it into available</label>
+                <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

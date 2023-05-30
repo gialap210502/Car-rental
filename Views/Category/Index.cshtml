@@ -13,13 +13,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.type)
+                Type
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Deleted_Status)
             </th>
             <th></th>
         </tr>
@@ -31,15 +28,17 @@
                 @Html.DisplayFor(modelItem => item.type)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
+            @{
+                if(item.Status == 1){
+                    @Html.Raw("<span class='badge badge-success'>Available</span>")
+                }else{
+                    @Html.Raw("<span class='badge badge-danger'>Unavailable</span>")
+                }
+            }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Deleted_Status)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                <a class="badge badge-warning" asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                <a class="badge badge-danger" asp-action="Delete" asp-route-id="@item.id">Delete</a>
             </td>
         </tr>
 }
