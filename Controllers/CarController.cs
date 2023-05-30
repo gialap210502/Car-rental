@@ -22,7 +22,6 @@ namespace Car_rental.Controllers
         // GET: Car
         public async Task<IActionResult> Index()
         {
-            
             var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user);
             return View(await car_rentalContext.ToListAsync());
         }
@@ -30,7 +29,6 @@ namespace Car_rental.Controllers
         // GET: Car/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            ViewBag.Layout = "_Layout";
             if (id == null || _context.Car == null)
             {
                 return NotFound();
@@ -52,7 +50,6 @@ namespace Car_rental.Controllers
         // GET: Car/Create
         public IActionResult Create()
         {
-            ViewBag.Layout = "_AdminLayout";
             ViewData["discount_id"] = new SelectList(_context.discount, "id", "code");
             ViewData["category_id"] = new SelectList(_context.category, "id", "type");
             ViewData["user_id"] = new SelectList(_context.user, "id", "email");
@@ -64,12 +61,27 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,model,brand,seat,color,address,available,ReleaseDate,Type,Price,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Create(IFormFile myfile, [Bind("id,model,brand,seat,color,address,available,ReleaseDate,Type,Price,discount_id,user_id,category_id")] car car)
         {
-            ViewBag.Layout = "_AdminLayout";
             if (ModelState.IsValid)
             {
                 _context.Add(car);
+                // if (myfile == null)
+                //     {
+                //         user.image = null;
+                //     }
+                //     else
+                //     {
+                //         string filename = Path.GetFileName(myfile.FileName);
+                //         var filePath = Path.Combine(_hostEnvironment.WebRootPath, "ImageUser");
+                //         string fullPath = filePath + "\\" + filename;
+                //         // Copy files to FileSystem using Streams
+                //         using (var stream = new FileStream(fullPath, FileMode.Create))
+                //         {
+                //             await myfile.CopyToAsync(stream);
+                //         }
+                //         user.image = filename;
+                //     }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -82,7 +94,6 @@ namespace Car_rental.Controllers
         // GET: Car/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            ViewBag.Layout = "_AdminLayout";
             if (id == null || _context.Car == null)
             {
                 return NotFound();
@@ -106,7 +117,6 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,model,brand,seat,color,address,available,ReleaseDate,Type,Price,discount_id,user_id,category_id")] car car)
         {
-            ViewBag.Layout = "_AdminLayout";
             if (id != car.id)
             {
                 return NotFound();
@@ -141,7 +151,6 @@ namespace Car_rental.Controllers
         // GET: Car/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            ViewBag.Layout = "_AdminLayout";
             if (id == null || _context.Car == null)
             {
                 return NotFound();
@@ -165,7 +174,6 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            ViewBag.Layout = "_AdminLayout";
             if (_context.Car == null)
             {
                 return Problem("Entity set 'Car_rentalContext.Car'  is null.");
@@ -182,8 +190,7 @@ namespace Car_rental.Controllers
 
         private bool carExists(int id)
         {
-        ViewBag.Layout = "_AdminLayout";
-          return (_context.Car?.Any(e => e.id == id)).GetValueOrDefault();
+          return _context.Car.Any(e => e.id == id);
         }
     }
 }

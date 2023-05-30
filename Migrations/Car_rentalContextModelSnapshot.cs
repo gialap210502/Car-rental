@@ -22,6 +22,27 @@ namespace Car_rental.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Car_rental.Models.Images", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("carId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("nameFile")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("carId");
+
+                    b.ToTable("Images");
+                });
+
             modelBuilder.Entity("Car_rental.Models.bookings", b =>
                 {
                     b.Property<int>("id")
@@ -311,6 +332,17 @@ namespace Car_rental.Migrations
                     b.ToTable("userRole");
                 });
 
+            modelBuilder.Entity("Car_rental.Models.Images", b =>
+                {
+                    b.HasOne("Car_rental.Models.car", "car")
+                        .WithMany("images")
+                        .HasForeignKey("carId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("car");
+                });
+
             modelBuilder.Entity("Car_rental.Models.bookings", b =>
                 {
                     b.HasOne("Car_rental.Models.user", "user")
@@ -413,6 +445,8 @@ namespace Car_rental.Migrations
 
             modelBuilder.Entity("Car_rental.Models.car", b =>
                 {
+                    b.Navigation("images");
+
                     b.Navigation("payments");
 
                     b.Navigation("ratings");

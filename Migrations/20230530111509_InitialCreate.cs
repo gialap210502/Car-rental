@@ -167,6 +167,26 @@ namespace Car_rental.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    nameFile = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    carId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Images_Car_carId",
+                        column: x => x.carId,
+                        principalTable: "Car",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "payment",
                 columns: table => new
                 {
@@ -246,6 +266,11 @@ namespace Car_rental.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Images_carId",
+                table: "Images",
+                column: "carId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_payment_booking_id",
                 table: "payment",
                 column: "booking_id");
@@ -279,6 +304,9 @@ namespace Car_rental.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Images");
+
             migrationBuilder.DropTable(
                 name: "payment");
 

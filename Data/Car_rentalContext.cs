@@ -98,5 +98,7 @@ namespace Car_rental.Data
         public DbSet<Car_rental.Models.discount> discount { get; set; } = default!;
 
         public DbSet<Car_rental.Models.category> category { get; set; } = default!;
+
+        public DbSet<Car_rental.Models.Images> Images { get; set; }
     }
 }
