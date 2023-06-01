@@ -95,63 +95,69 @@ namespace Car_rental.Controllers
                 }
                 if (myfile1 != null)
                 {
+
                     string filename = Path.GetFileName(myfile1.FileName);
+                    string replacedString = filename.Replace(" ", "");
                     var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
-                    string fullPath = filePath + "\\" + filename;
+                    string fullPath = filePath + "\\" + replacedString;
                     // Copy files to FileSystem using Streams
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         await myfile1.CopyToAsync(stream);
                     }
-                    _context.Images.Add(new Images { nameFile = filename, carId = car.id });
+                    _context.Images.Add(new Images { nameFile = replacedString, carId = car.id });
                 }
                 if (myfile2 != null)
                 {
                     string filename = Path.GetFileName(myfile2.FileName);
+                    string replacedString = filename.Replace(" ", "");
                     var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
-                    string fullPath = filePath + "\\" + filename;
+                    string fullPath = filePath + "\\" + replacedString;
                     // Copy files to FileSystem using Streams
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         await myfile2.CopyToAsync(stream);
                     }
-                    _context.Images.Add(new Images { nameFile = filename, carId = car.id });
+                    _context.Images.Add(new Images { nameFile = replacedString, carId = car.id });
                 }
                 if (myfile3 != null)
                 {
                     string filename = Path.GetFileName(myfile3.FileName);
+                    string replacedString = filename.Replace(" ", "");
                     var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
-                    string fullPath = filePath + "\\" + filename;
+                    string fullPath = filePath + "\\" + replacedString;
                     // Copy files to FileSystem using Streams
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         await myfile3.CopyToAsync(stream);
                     }
-                    _context.Images.Add(new Images { nameFile = filename, carId = car.id });
+                    _context.Images.Add(new Images { nameFile = replacedString, carId = car.id });
                 }
                 if (myfile4 != null)
                 {
                     string filename = Path.GetFileName(myfile4.FileName);
+                    string replacedString = filename.Replace(" ", "");
                     var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
-                    string fullPath = filePath + "\\" + filename;
+                    string fullPath = filePath + "\\" + replacedString;
                     // Copy files to FileSystem using Streams
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         await myfile4.CopyToAsync(stream);
                     }
-                    _context.Images.Add(new Images { nameFile = filename, carId = car.id });
+                    _context.Images.Add(new Images { nameFile = replacedString, carId = car.id });
                 }
                 if (myfile5 != null)
                 {
                     string filename = Path.GetFileName(myfile5.FileName);
+                    string replacedString = filename.Replace(" ", "");
                     var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
-                    string fullPath = filePath + "\\" + filename;
+                    string fullPath = filePath + "\\" + replacedString;
                     // Copy files to FileSystem using Streams
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         await myfile5.CopyToAsync(stream);
                     }
-                    _context.Images.Add(new Images { nameFile = filename, carId = car.id });
+                    _context.Images.Add(new Images { nameFile = replacedString, carId = car.id });
                 }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

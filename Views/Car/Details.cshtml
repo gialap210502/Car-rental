@@ -22,69 +22,47 @@
       	<div class="row justify-content-center">
       		<div class="col-md-12">
       			<div class="car-details">
-                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                        <!-- Indicators -->
-                        <ul class="carousel-indicators">
-                        @{
-                            for (var i = 0; i < ViewBag.imgCount - (ViewBag.imgCount -1); i++)
-                            {
-                                <li data-target="#myCarousel" data-slide-to="@i" class="active"></li>
-                                for (var j = 1; j < ViewBag.imgCount; j++)
-                                {
-                                    <li data-target="#myCarousel" data-slide-to="@j"></li>
-                                }
-                            }
-                        }
-                        </ul>
+                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  						<ol class="carousel-indicators">
+                        	@{
+                        	   			// Check if there are any images
+    							if (ViewBag.listImages != null && ViewBag.listImages.Count > 0)
+    							{
+    						    	// The first image will have 'active' class
+                        	        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active" style="background-color: black;"></li>
+                        	        for (var j = 1; j < ViewBag.imgCount; j++)
+                        	        {
+                        	        	<li data-target="#carouselExampleIndicators" data-slide-to="@j" style="background-color: black;"></li>
+                        	        }
+                        	    }
+                        	}
+                        </ol>
                         <!-- The slideshow -->
                         <div class="carousel-inner">
-							                                    @* <div class="carousel-item active">
-                                        <div class="img rounded" style="background-image: url( /images/@item.nameFile);"></div>
-                                    </div> *@
                         @{
-                            @* foreach(var item in ViewBag.listImages)
-                            {
-                                foreach (var i = 0; i < ViewBag.imgCount; i++)
-                                {
+							// Check if there are any images
+    						if (ViewBag.listImages != null && ViewBag.listImages.Count > 0)
+    						{
+    						    // The first image will have 'active' class
+    						    <div class="carousel-item active">
+    						        <div class="img rounded d-block w-100" style="background-image: url( /images/@ViewBag.listImages[0].nameFile);"></div>
+    						    </div>
 
-                                    if (i == 0)
-                                    {
-                                        <div class="carousel-item active">
-                                            <div class="img rounded" style="background-image: url( /images/@ViewBag.listImages[i].nameFile);"></div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="carousel-item">
-                                            <div class="img rounded" style="background-image: url( /images/@ViewBag.listImages[i].nameFile);"></div>
-                                        </div>
-                                    }
-                                }
-                            } *@
-
-							    // Check if there are any images
-    if (ViewBag.listImages != null && ViewBag.listImages.Count > 0)
-    {
-        // The first image will have 'active' class
-        <div class="carousel-item active">
-            <div class="img rounded" style="background-image: url( /images/@ViewBag.listImages[0].nameFile);"></div>
-        </div>
-
-        // Start looping from second image onwards
-        for (int i = 1; i < ViewBag.listImages.Count; i++)
-        {
-            <div class="carousel-item">
-                <div class="img rounded" style="background-image: url( /images/@ViewBag.listImages[i].nameFile);"></div>
-            </div>
-        }
-    }
+    						    // Start looping from second image onwards
+    						    for (int i = 1; i < ViewBag.listImages.Count; i++)
+    						    {
+    						        <div class="carousel-item">
+    						            <div class="img rounded d-block w-100" style="background-image: url( /images/@ViewBag.listImages[i].nameFile);"></div>
+    						        </div>
+    						    }
+    						}
                         }
                         </div>
                           <!-- Left and right controls -->
-                        <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" data-slide="prev">
                           <span class="carousel-control-prev-icon"></span>
                         </a>
-                        <a class="carousel-control-next" href="#myCarousel" data-slide="next">
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" data-slide="next">
                           <span class="carousel-control-next-icon"></span>
                         </a>
 
