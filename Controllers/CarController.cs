@@ -67,31 +67,25 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormFile myfile1, IFormFile myfile2, IFormFile myfile3, IFormFile myfile4, IFormFile myfile5, [Bind("id,model,brand,seat,color,address,available,ReleaseDate,Type,Price,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Create(IFormFile myVideoFile, IFormFile myfile1, IFormFile myfile2, IFormFile myfile3, IFormFile myfile4, IFormFile myfile5, [Bind("id,model,brand,seat,color,address,available,ReleaseDate,Type,Price,discount_id,user_id,category_id")] car car)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(car);
                 await _context.SaveChangesAsync();
-                if (myfile1 == null)
+                if (myVideoFile != null)
                 {
-                    _context.Images.Add(new Images { nameFile = null, carId = car.id });
-                }
-                if (myfile2 == null)
-                {
-                    _context.Images.Add(new Images { nameFile = null, carId = car.id });
-                }
-                if (myfile3 == null)
-                {
-                    _context.Images.Add(new Images { nameFile = null, carId = car.id });
-                }
-                if (myfile4 == null)
-                {
-                    _context.Images.Add(new Images { nameFile = null, carId = car.id });
-                }
-                if (myfile5 == null)
-                {
-                    _context.Images.Add(new Images { nameFile = null, carId = car.id });
+
+                    string filename = Path.GetFileName(myVideoFile.FileName);
+                    string replacedString = filename.Replace(" ", "");
+                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                    string fullPath = filePath + "\\" + replacedString;
+                    // Copy files to FileSystem using Streams
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await myVideoFile.CopyToAsync(stream);
+                    }
+                    _context.Images.Add(new Images { nameFile = replacedString, carId = car.id });
                 }
                 if (myfile1 != null)
                 {

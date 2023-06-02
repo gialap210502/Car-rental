@@ -21,7 +21,7 @@
       <div class="container">
       	<div class="row justify-content-center">
       		<div class="col-md-12">
-      			<div class="car-details">
+      			<div class="car-details" style="background-color: black;">
                     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
   						<ol class="carousel-indicators">
                         	@{
@@ -29,10 +29,15 @@
     							if (ViewBag.listImages != null && ViewBag.listImages.Count > 0)
     							{
     						    	// The first image will have 'active' class
-                        	        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active" style="background-color: black;"></li>
+                        	        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active" style="background-color: white;"></li>
+									var slideIndex = 1; // Initialize the slide index with 1
                         	        for (var j = 1; j < ViewBag.imgCount; j++)
                         	        {
-                        	        	<li data-target="#carouselExampleIndicators" data-slide-to="@j" style="background-color: black;"></li>
+										if(ViewBag.listImages[j].nameFile != "null" || ViewBag.listImages[j].nameFile != null)
+										{
+											<li data-target="#carouselExampleIndicators" data-slide-to="@slideIndex" style="background-color: white;"></li>
+											slideIndex++;
+										}
                         	        }
                         	    }
                         	}
@@ -40,22 +45,60 @@
                         <!-- The slideshow -->
                         <div class="carousel-inner">
                         @{
+
 							// Check if there are any images
     						if (ViewBag.listImages != null && ViewBag.listImages.Count > 0)
     						{
-    						    // The first image will have 'active' class
-    						    <div class="carousel-item active">
-    						        <div class="img rounded d-block w-100" style="background-image: url( /images/@ViewBag.listImages[0].nameFile);"></div>
-    						    </div>
+								// Find the index of the first video file (if any)
+        						int firstVideoIndex = -1;
+        						for (int i = 0; i < ViewBag.listImages.Count; i++)
+        						{
+        						    if (IsVideoFile(ViewBag.listImages[i].nameFile))
+        						    {
+        						        firstVideoIndex = i;
+        						        break;
+        						    }
+        						}
+								if (firstVideoIndex != -1)
+        							{
+        							    <div class="carousel-item active">
+        							        <div class="video-container">
+        							            <video controls>
+        							                <source src="/images/@ViewBag.listImages[firstVideoIndex].nameFile" type="video/mp4">
+        							                Your browser does not support the video tag.
+        							            </video>
+        							        </div>
+        							    </div>
+        							}
+									else
+									{
+										// The first image will have 'active' class
+    						    		<div class="carousel-item active">
+    						    		    <div class="img rounded d-block w-100" style="background-image: url( /images/@ViewBag.listImages[0].nameFile);"></div>
+    						    		</div>
+									}
+
 
     						    // Start looping from second image onwards
     						    for (int i = 1; i < ViewBag.listImages.Count; i++)
     						    {
-    						        <div class="carousel-item">
-    						            <div class="img rounded d-block w-100" style="background-image: url( /images/@ViewBag.listImages[i].nameFile);"></div>
-    						        </div>
+									@if (ViewBag.listImages[i].nameFile != "null" || ViewBag.listImages[i].nameFile != null)
+   								 	{
+    						        	<div class="carousel-item">
+    						        	    <div class="img rounded d-block w-100" style="background-image: url( /images/@ViewBag.listImages[i].nameFile);"></div>
+    						        	</div>
+									}
     						    }
     						}
+								@functions {
+    								bool IsVideoFile(string fileName)
+    								{
+        								// Check if the file extension indicates a video file
+        								string extension = System.IO.Path.GetExtension(fileName);
+    								    string[] videoExtensions = { ".mp4", ".avi", ".mov" }; // Add more video extensions if needed
+    								    return videoExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase);
+    								}
+								}
                         }
                         </div>
                           <!-- Left and right controls -->
