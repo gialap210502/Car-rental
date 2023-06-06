@@ -80,14 +80,65 @@ namespace Car_rental.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<bool>("AirConditioning")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AudioInput")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Bluetooth")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CarKit")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ChildSeat")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ClimateControl")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("GPS")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LongTermTrips")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Luggage")
+                        .HasColumnType("bit");
+
+                    b.Property<long?>("Mileage")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("Music")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("OnboardComputer")
+                        .HasColumnType("bit");
+
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("RemoteCentralLocking")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SeatBelt")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SleepingBed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Transmission")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Water")
+                        .HasColumnType("bit");
 
                     b.Property<string>("address")
                         .HasColumnType("nvarchar(max)");
