@@ -12,10 +12,12 @@ namespace Car_rental.Controllers
 {
     public class CarController : Controller
     {
+        private IWebHostEnvironment _hostEnvironment;
         private readonly Car_rentalContext _context;
 
-        public CarController(Car_rentalContext context)
+        public CarController(IWebHostEnvironment hostEnvironment, Car_rentalContext context)
         {
+            _hostEnvironment = hostEnvironment;
             _context = context;
         }
 
@@ -26,9 +28,24 @@ namespace Car_rental.Controllers
             return View(await car_rentalContext.ToListAsync());
         }
 
+
         // GET: Car/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            
+            ViewBag.Layout = "_Layout";
+            var listImages = _context.Images.Where(i => i.carId == id).ToList();
+            ViewBag.listImages = listImages;
+
+            //random related cars base on category 
+            // Random random = new Random();
+            var carid = _context.Car.Find(id);
+            var relatedCars = _context.Car.Include(c => c.category).Where(i => i.category_id == carid.category_id);
+            ViewBag.relatedCars = relatedCars.ToList();
+            // var shuffledList = relatedCars.OrderBy(x => random.Next()).ToList();
+            // var randomObjects = shuffledList.Take(3).ToList();
+            
+
             if (id == null || _context.Car == null)
             {
                 return NotFound();
@@ -61,11 +78,92 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Create(IFormFile myVideoFile, IFormFile myfile1, IFormFile myfile2, IFormFile myfile3, IFormFile myfile4, IFormFile myfile5, [Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(car);
+                await _context.SaveChangesAsync();
+                if (myVideoFile != null)
+                {
+
+                    string filename = Path.GetFileName(myVideoFile.FileName);
+                    string replacedString = filename.Replace(" ", "");
+                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                    string fullPath = filePath + "\\" + replacedString;
+                    // Copy files to FileSystem using Streams
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await myVideoFile.CopyToAsync(stream);
+                    }
+                    _context.Images.Add(new Images { nameFile = replacedString, carId = car.id });
+                }
+                if (myfile1 != null)
+                {
+
+                    string filename = Path.GetFileName(myfile1.FileName);
+                    string replacedString = filename.Replace(" ", "");
+                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                    string fullPath = filePath + "\\" + replacedString;
+                    // Copy files to FileSystem using Streams
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await myfile1.CopyToAsync(stream);
+                    }
+                    _context.Images.Add(new Images { nameFile = replacedString, carId = car.id });
+                }
+                if (myfile2 != null)
+                {
+                    string filename = Path.GetFileName(myfile2.FileName);
+                    string replacedString = filename.Replace(" ", "");
+                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                    string fullPath = filePath + "\\" + replacedString;
+                    // Copy files to FileSystem using Streams
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await myfile2.CopyToAsync(stream);
+                    }
+                    _context.Images.Add(new Images { nameFile = replacedString, carId = car.id });
+                }
+                if (myfile3 != null)
+                {
+                    string filename = Path.GetFileName(myfile3.FileName);
+                    string replacedString = filename.Replace(" ", "");
+                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                    string fullPath = filePath + "\\" + replacedString;
+                    // Copy files to FileSystem using Streams
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await myfile3.CopyToAsync(stream);
+                    }
+                    _context.Images.Add(new Images { nameFile = replacedString, carId = car.id });
+                }
+                if (myfile4 != null)
+                {
+                    string filename = Path.GetFileName(myfile4.FileName);
+                    string replacedString = filename.Replace(" ", "");
+                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                    string fullPath = filePath + "\\" + replacedString;
+                    // Copy files to FileSystem using Streams
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await myfile4.CopyToAsync(stream);
+                    }
+                    _context.Images.Add(new Images { nameFile = replacedString, carId = car.id });
+                }
+                if (myfile5 != null)
+                {
+                    string filename = Path.GetFileName(myfile5.FileName);
+                    string replacedString = filename.Replace(" ", "");
+                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                    string fullPath = filePath + "\\" + replacedString;
+                    // Copy files to FileSystem using Streams
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await myfile5.CopyToAsync(stream);
+                    }
+                    _context.Images.Add(new Images { nameFile = replacedString, carId = car.id });
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -167,14 +265,14 @@ namespace Car_rental.Controllers
             {
                 _context.Car.Remove(car);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool carExists(int id)
         {
-          return _context.Car.Any(e => e.id == id);
+            return _context.Car.Any(e => e.id == id);
         }
     }
 }

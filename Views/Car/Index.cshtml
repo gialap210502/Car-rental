@@ -4,200 +4,159 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.model)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.brand)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.seat)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Mileage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Transmission)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.color)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.available)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReleaseDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AirConditioning)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ChildSeat)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GPS)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Luggage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Music)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SeatBelt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SleepingBed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Water)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Bluetooth)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OnboardComputer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AudioInput)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LongTermTrips)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CarKit)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RemoteCentralLocking)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClimateControl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Discount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.user)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.category)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.model)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.brand)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.seat)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Mileage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Transmission)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.color)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.available)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReleaseDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AirConditioning)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ChildSeat)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GPS)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Luggage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Music)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SeatBelt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SleepingBed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Water)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Bluetooth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OnboardComputer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AudioInput)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LongTermTrips)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CarKit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RemoteCentralLocking)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClimateControl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Discount.code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.user.email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.category.type)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Car Table</h4>
+            <p class="card-description">
+                <a asp-action="Create">Create New</a>
+            </p>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.model)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.brand)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.seat)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Mileage)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Transmission)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.color)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.address)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.available)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ReleaseDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Type)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Price)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AirConditioning)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ChildSeat)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.GPS)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Luggage)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Music)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SeatBelt)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SleepingBed)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Water)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Bluetooth)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.OnboardComputer)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AudioInput)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.LongTermTrips)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CarKit)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.RemoteCentralLocking)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ClimateControl)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Discount.code)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.user.email)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.category.type)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model) {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.model)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.brand)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.seat)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Mileage)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Transmission)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.color)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.address)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.available)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Type)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Price)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Discount.code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.user.email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.category.type)
+                                </td>
+                                <td>
+                                    <a class="badge badge-warning" asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                                    <a class="badge badge-info" asp-action="Details" asp-route-id="@item.id">Details</a> |
+                                    <a class="badge badge-danger" asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

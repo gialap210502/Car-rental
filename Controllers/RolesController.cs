@@ -164,9 +164,38 @@ namespace Car_rental.Controllers
         {
             if (!_context.roles.Any())
             {
+                var user1 = new user
+                {
+                    name = "John Doe",
+                    citizen_identification = "123456789",
+                    driver_license = "ABC123",
+                    phone = "123456789",
+                    dob = new DateTime(1990, 1, 1),
+                    email = "johndoe@example.com",
+                    password = "password123",
+                    flag = 0,
+                    image = "@@@@.png"
+                };
+                var discount1 = new discount
+                {
+                    code = "SUMMER2023",
+                    percentage = "10%",
+                    startDate = new DateTime(2023, 6, 1),
+                    endDate = new DateTime(2023, 8, 31)
+                };
+                var category1 = new category
+                {
+                    type = "Sedan",
+                    Status = 1,
+                    Deleted_Status = 0
+                };
                 _context.roles.Add(new roles { role = "Admin" });
                 _context.roles.Add(new roles { role = "Owner" });
                 _context.roles.Add(new roles { role = "User" });
+                _context.user.Add(user1);
+
+                _context.category.Add(category1);
+                _context.discount.Add(discount1);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("index", "roles");
             }
