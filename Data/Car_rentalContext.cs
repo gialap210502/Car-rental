@@ -100,5 +100,7 @@ namespace Car_rental.Data
         public DbSet<Car_rental.Models.category> category { get; set; } = default!;
 
         public DbSet<Car_rental.Models.Images> Images { get; set; }
+
+        public DbSet<Car_rental.Models.VideoCar> VideoCar { get; set; }
     }
 }

@@ -1,7 +1,9 @@
 @model Car_rental.Models.car
-
 @{
     ViewData["Title"] = "Details";
+	@using Car_rental.Data;
+
+	@inject  Car_rentalContext _context
 }
 
     <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url(' /user/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
@@ -31,13 +33,10 @@
     						    	// The first image will have 'active' class
                         	        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active" style="background-color: #01d28e;"></li>
 									var slideIndex = 1; // Initialize the slide index with 1
-                        	        for (var j = 1; j < ViewBag.imgCount; j++)
+                        	        for (var j = 1; j < ViewBag.listImages.Count + 1; j++)
                         	        {
-										if(ViewBag.listImages[j].nameFile != "null" || ViewBag.listImages[j].nameFile != null)
-										{
 											<li data-target="#carouselExampleIndicators" data-slide-to="@slideIndex" style="background-color: #01d28e;"></li>
 											slideIndex++;
-										}
                         	        }
                         	    }
                         	}
@@ -45,42 +44,32 @@
                         <!-- The slideshow -->
                         <div class="carousel-inner" style="width: 1109px; height: 638px">
                         @{
-
+							if (ViewBag.Video != null)
+							{
+								<div class="carousel-item active">
+        						    <div class="video-container" style="width: 1109px; height: 600px;">
+        						        <video controls style="border: 1px solid #01d28e; ">
+        						            <source src="/Video/@ViewBag.Video" type="video/mp4">
+        						            Your browser does not support the video tag.
+        						        </video>
+        						    </div>
+        						</div>
+							}
 							// Check if there are any images
     						if (ViewBag.listImages != null && ViewBag.listImages.Count > 0)
     						{
-								// Find the index of the first video file (if any)
-        						int firstVideoIndex = -1;
-        						for (int i = 0; i < ViewBag.listImages.Count; i++)
-        						{
-        						    if (IsVideoFile(ViewBag.listImages[i].nameFile))
-        						    {
-        						        firstVideoIndex = i;
-        						        break;
-        						    }
-        						}
-								if (firstVideoIndex != -1)
-        							{
-        							    <div class="carousel-item active">
-        							        <div class="video-container" style="width: 1109px; height: 600px;">
-        							            <video controls style="border: 1px solid #01d28e; ">
-        							                <source src="/images/@ViewBag.listImages[firstVideoIndex].nameFile" type="video/mp4">
-        							                Your browser does not support the video tag.
-        							            </video>
-        							        </div>
-        							    </div>
-        							}
-									else
-									{
-										// The first image will have 'active' class
-    						    		<div class="carousel-item active">
-    						    		    <div class="img rounded d-block w-100" style="background-image: url( /images/@ViewBag.listImages[0].nameFile);"></div>
-    						    		</div>
-									}
-
+								int j = 1;
+								// The first image will have 'active' class
+								if(ViewBag.Video == null){
+    						    	<div class="carousel-item active">
+    						    	   <div class="img rounded d-block w-100" style="background-image: url( /images/@ViewBag.listImages[0].nameFile);"></div>
+    						    	</div>
+								}else{
+									j = 0;
+								}
 
     						    // Start looping from second image onwards
-    						    for (int i = 1; i < ViewBag.listImages.Count; i++)
+    						    for (var i = j; i < ViewBag.listImages.Count; i++)
     						    {
 									@if (ViewBag.listImages[i].nameFile != "null" || ViewBag.listImages[i].nameFile != null)
    								 	{
@@ -90,15 +79,6 @@
 									}
     						    }
     						}
-								@functions {
-    								bool IsVideoFile(string fileName)
-    								{
-        								// Check if the file extension indicates a video file
-        								string extension = System.IO.Path.GetExtension(fileName);
-    								    string[] videoExtensions = { ".mp4", ".avi", ".mov" }; // Add more video extensions if needed
-    								    return videoExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase);
-    								}
-								}
                         }
                         </div>
                           <!-- Left and right controls -->
@@ -448,26 +428,34 @@
         <div class="row">
 				@for (var i = 0; i < ViewBag.relatedCars.Count; i++)
 				{
-					var images = ViewBag.relatedCars[i].images;
-					var showImg = images.Count > 0 ? images[0] : null;
-				    	<div class="col-md-4">
-				    	    <div class="car-wrap rounded ftco-animate">
-				    	        <div class="img rounded d-flex align-items-end" style="background-image: url(/images/@(showImg != null ? showImg.nameFile : ""));"></div>
-				    	        <div class="text">
-				    	            <h2 class="mb-0"><a href="car-single.html">@ViewBag.relatedCars[i].model</a></h2>
-				    	            <div class="d-flex mb-3">
-				    	                <span class="cat">@ViewBag.relatedCars[i].brand</span>
-				    	                <p class="price ml-auto">$300 <span>/day</span></p>
-				    	            </div>
-				    	            <p class="d-flex mb-0 d-block">
-				    	                <a href="#" class="btn btn-primary py-2 mr-1">Book now</a>
-				    	                <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a>
-				    	            </p>
-				    	        </div>
-				    	    </div>
-				    	</div>
-					
+					var carListId = _context.Car.Find(ViewBag.relatedCars[i].id);
+					var backgroundImage = "";
+					foreach (var image in carListId.images)
+					{
+						if (image.carId == ViewBag.relatedCars[i].id)
+						{
+							backgroundImage = image.nameFile;
+							break;
+						}
+					}
+				    <div class="col-md-4">
+				        <div class="car-wrap rounded ftco-animate">
+				            <div class="img rounded d-flex align-items-end" style="background-image: url(/images/@backgroundImage"></div>
+				            <div class="text">
+				                <h2 class="mb-0"><a href="car-single.html">@ViewBag.relatedCars[i].model</a></h2>
+				                <div class="d-flex mb-3">
+				                    <span class="cat">@ViewBag.relatedCars[i].brand</span>
+				                    <p class="price ml-auto">$300 <span>/day</span></p>
+				                </div>
+				                <p class="d-flex mb-0 d-block">
+				                    <a href="#" class="btn btn-primary py-2 mr-1">Book now</a>
+				                    <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a>
+				                </p>
+				            </div>
+				        </div>
+				    </div>
 				}
+
         </div>
     	</div>
     </section>

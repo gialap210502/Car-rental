@@ -1,0 +1,30 @@
+@model Car_rental.Models.VideoCar
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>VideoCar</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.nameFile)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.nameFile)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.car)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.car.id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

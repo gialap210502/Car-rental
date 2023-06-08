@@ -32,19 +32,23 @@ namespace Car_rental.Controllers
         // GET: Car/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            
+
             ViewBag.Layout = "_Layout";
             var listImages = _context.Images.Where(i => i.carId == id).ToList();
             ViewBag.listImages = listImages;
+            var Video = _context.VideoCar.FirstOrDefault(i => i.carId == id).nameFile;
+            ViewBag.Video = Video;
 
             //random related cars base on category 
             // Random random = new Random();
             var carid = _context.Car.Find(id);
-            var relatedCars = _context.Car.Include(c => c.category).Where(i => i.category_id == carid.category_id);
+            var relatedCars = _context.Car.Include(c => c.category).Where(i => i.category_id == carid.category_id && i.id != carid.id);
             ViewBag.relatedCars = relatedCars.ToList();
-            // var shuffledList = relatedCars.OrderBy(x => random.Next()).ToList();
-            // var randomObjects = shuffledList.Take(3).ToList();
-            
+
+            foreach(var carList in relatedCars){
+                var carListId = _context.Car.Find(carList.id);
+                var img = _context.Images.FirstOrDefault(i => i.carId == carListId.id);
+            }
 
             if (id == null || _context.Car == null)
             {
@@ -89,14 +93,14 @@ namespace Car_rental.Controllers
 
                     string filename = Path.GetFileName(myVideoFile.FileName);
                     string replacedString = filename.Replace(" ", "");
-                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "Video");
                     string fullPath = filePath + "\\" + replacedString;
                     // Copy files to FileSystem using Streams
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         await myVideoFile.CopyToAsync(stream);
                     }
-                    _context.Images.Add(new Images { nameFile = replacedString, carId = car.id });
+                    _context.VideoCar.Add(new VideoCar { nameFile = replacedString, carId = car.id });
                 }
                 if (myfile1 != null)
                 {
