@@ -1,0 +1,81 @@
+@model IEnumerable<Car_rental.ViewModels.CarViewModel>
+@{
+    Pager pager = new Pager();
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+    
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/user/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+          <div class="col-md-9 ftco-animate pb-5">
+          	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Cars <i class="ion-ios-arrow-forward"></i></span></p>
+            <h1 class="mb-3 bread">Choose Your Car</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+		
+
+		<section class="ftco-section bg-light">
+    	<div class="container">
+    		<div class="row">
+                @foreach (var item in Model)
+				{
+                    <div class="col-md-4">
+    			    	<div class="car-wrap rounded ftco-animate">
+    			    		<div class="img rounded d-flex align-items-end" style="background-image: url(/images/@item.ImageName);">
+    			    		</div>
+    			    		<div class="text">
+    			    			<h2 class="mb-0"><a href="car-single.html">@item.Model</a></h2>
+    			    			<div class="d-flex mb-3">
+	    		    				<span class="cat">@item.Brand</span>
+	    		    				<p class="price ml-auto">$@item.Price <span>/day</span></p>
+    			    			</div>
+    			    			<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a></p>
+    			    		</div>
+    			    	</div>
+    			    </div>
+                }
+    		</div>
+    		<div class="row mt-5">
+          <div class="col text-center">
+                @if (pager.TotalPages > 0)
+                {
+                    var pre = 1;
+                    var next = 0;
+                  <div class="block-27">
+                    <ul>
+                        <li><a type="button" class="button break-page" asp-controller="Car" asp-action="Cars" asp-route-pg="@pre">&lt;</a></li>
+                        @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                        {
+                        
+                            <li><a type="button" class="button break-page" asp-controller="Car" asp-action="Cars" asp-route-pg="@pge">@pge</a></li>
+                            pre = pge - 1;
+                            if(pre == 1 || pre == 0){
+                                pre = 1;
+                            }
+                            if(next < pager.EndPage){
+                                next = pge + 1;
+                            }
+                            
+                            if(next >= pager.EndPage){
+                                next = pager.EndPage;
+                            }
+                        }
+                        <li><a type="button" class="button break-page" asp-controller="Car" asp-action="Cars" asp-route-pg="@next">&gt;</a></li>
+                    </ul>
+                  </div>
+                }
+          </div>
+        </div>
+    	</div>
+    </section>
+    

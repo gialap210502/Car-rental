@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Car_rental.Data;
 using Car_rental.Models;
+using Car_rental.ViewModels;
 
 namespace Car_rental.Controllers
 {
@@ -27,7 +28,88 @@ namespace Car_rental.Controllers
             var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user);
             return View(await car_rentalContext.ToListAsync());
         }
+        public async Task<IActionResult> Home()
+        {
+            ViewBag.Layout = "_Layout";
+            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Include(c => c.images).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
+            {
+                Id = c.id,
+                Model = c.model,
+                Brand = c.brand,
+                Price = c.Price,
+                ImageName = c.images.FirstOrDefault(i => i.carId == c.id) != null ? c.images.FirstOrDefault(i => i.carId == c.id).nameFile : null // Lấy nameFile đầu tiên từ images
+            }); ;
+            return View(await car_rentalContext.ToListAsync());
+        }
 
+        public async Task<IActionResult> Cars(int pg = 1)
+        {
+            ViewBag.Layout = "_Layout";
+            const int pageSize = 12;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = _context.Car.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Include(c => c.images).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
+            {
+                Id = c.id,
+                Model = c.model,
+                Brand = c.brand,
+                Price = c.Price,
+                ImageName = c.images.FirstOrDefault(i => i.carId == c.id) != null ? c.images.FirstOrDefault(i => i.carId == c.id).nameFile : null 
+            }).Skip(recSkip).Take(pager.PageSize).ToList(); ;
+            this.ViewBag.Pager = pager;
+            return View(car_rentalContext);
+        }
+
+        public async Task<IActionResult> CreateCar()
+        {
+            var cars = new List<car>();
+
+            for (int i = 0; i < 15; i++)
+            {
+                var car = new car
+                {
+                    model = "Model " + i,
+                    brand = "Brand " + i,
+                    seat = i,
+                    Mileage = 1000 * i,
+                    Transmission = "Transmission " + i,
+                    color = "Color " + i,
+                    address = "Address " + i,
+                    available = 1,
+                    ReleaseDate = DateTime.Now.AddDays(i),
+                    Type = "Type " + i,
+                    Price = 10000 * i,
+                    AirConditioning = i % 2 == 0,
+                    ChildSeat = i % 2 == 0,
+                    GPS = i % 2 == 0,
+                    Luggage = i % 2 == 0,
+                    Music = i % 2 == 0,
+                    SeatBelt = i % 2 == 0,
+                    SleepingBed = i % 2 == 0,
+                    Water = i % 2 == 0,
+                    Bluetooth = i % 2 == 0,
+                    OnboardComputer = i % 2 == 0,
+                    AudioInput = i % 2 == 0,
+                    LongTermTrips = i % 2 == 0,
+                    CarKit = i % 2 == 0,
+                    RemoteCentralLocking = i % 2 == 0,
+                    ClimateControl = i % 2 == 0,
+                    user_id = 1, // Set the appropriate user ID
+                    category_id = 1,
+                    discount_id = 1,
+
+                };
+
+                cars.Add(car);
+            }
+
+            _context.Car.AddRange(cars);
+            _context.SaveChanges();
+            return RedirectToAction("index");
+        }
 
         // GET: Car/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -45,7 +127,8 @@ namespace Car_rental.Controllers
             var relatedCars = _context.Car.Include(c => c.category).Where(i => i.category_id == carid.category_id && i.id != carid.id);
             ViewBag.relatedCars = relatedCars.ToList();
 
-            foreach(var carList in relatedCars){
+            foreach (var carList in relatedCars)
+            {
                 var carListId = _context.Car.Find(carList.id);
                 var img = _context.Images.FirstOrDefault(i => i.carId == carListId.id);
             }
