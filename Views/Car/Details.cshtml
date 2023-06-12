@@ -310,67 +310,35 @@
 						    <div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
 						      <div class="row">
 							   		<div class="col-md-7">
-							   			<h3 class="head">23 Reviews</h3>
-							   			<div class="review d-flex">
-									   		<div class="user-img" style="background-image: url( /user/images/person_1.jpg)"></div>
-									   		<div class="desc">
-									   			<h4>
-									   				<span class="text-left">Jacob Webb</span>
-									   				<span class="text-right">14 March 2018</span>
-									   			</h4>
-									   			<p class="star">
-									   				<span>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-								   					</span>
-								   					<span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span>
-									   			</p>
-									   			<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrov</p>
-									   		</div>
-									   	</div>
-									   	<div class="review d-flex">
-									   		<div class="user-img" style="background-image: url( /user/images/person_2.jpg)"></div>
-									   		<div class="desc">
-									   			<h4>
-									   				<span class="text-left">Jacob Webb</span>
-									   				<span class="text-right">14 March 2018</span>
-									   			</h4>
-									   			<p class="star">
-									   				<span>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-								   					</span>
-								   					<span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span>
-									   			</p>
-									   			<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrov</p>
-									   		</div>
-									   	</div>
-									   	<div class="review d-flex">
-									   		<div class="user-img" style="background-image: url( /user/images/person_3.jpg)"></div>
-									   		<div class="desc">
-									   			<h4>
-									   				<span class="text-left">Jacob Webb</span>
-									   				<span class="text-right">14 March 2018</span>
-									   			</h4>
-									   			<p class="star">
-									   				<span>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-								   					</span>
-								   					<span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span>
-									   			</p>
-									   			<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrov</p>
-									   		</div>
-									   	</div>
+							   			<h3 class="head">@ViewBag.rating.Count Reviews</h3>
+										
+										@{
+											foreach(var rating in ViewBag.rating)
+											{
+												<div class="review d-flex">
+									   				<div class="user-img" style="background-image: url( /imageUser/@rating.user.image)"></div>
+									   				<div class="desc">
+									   					<h4>
+									   						<span class="text-left">@rating.user.name</span>
+									   						<span class="text-right">@rating.dateRating</span>
+									   					</h4>
+									   					<p class="star">
+									   						<span>
+																@for(var i = 0; i < @rating.Star; i++)
+																{
+																	<i class="ion-ios-star"></i>
+																}
+								   							</span>
+								   							<span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span>
+									   					</p>
+														<div style="word-wrap: break-word;">
+														    <p>@rating.comment</p>
+														</div>
+									 	  				</div>
+									   			</div>
+											}
+
+										}
 							   		</div>
 							   		<div class="col-md-5">
 							   			<div class="rating-wrap">
@@ -383,9 +351,17 @@
 									   					<i class="ion-ios-star"></i>
 									   					<i class="ion-ios-star"></i>
 									   					<i class="ion-ios-star"></i>
-									   					(98%)
+														@{
+														    float divisionResult5 = 0;
+														    if (@ViewBag.rating5.Count != 0)
+														    {
+														        divisionResult5 = ((float)@ViewBag.rating5.Count / (float)@ViewBag.rating.Count)*100 ;
+														    }
+															string formattedResult5 = $"{divisionResult5:0.00}";
+														}
+									   					(@formattedResult5%)
 								   					</span>
-								   					<span>20 Reviews</span>
+								   					<span>@ViewBag.rating5.Count Reviews</span>
 									   			</p>
 									   			<p class="star">
 									   				<span>
@@ -393,43 +369,65 @@
 									   					<i class="ion-ios-star"></i>
 									   					<i class="ion-ios-star"></i>
 									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					(85%)
+									   					@{
+														    float divisionResult4 = 0;
+														    if (@ViewBag.rating4.Count != 0)
+														    {
+														        divisionResult4 = ((float)@ViewBag.rating4.Count / (float)@ViewBag.rating.Count)*100;
+														    }
+															string formattedResult4 = $"{divisionResult4:0.00}";
+														}
+									   					(@formattedResult4%)
 								   					</span>
-								   					<span>10 Reviews</span>
+								   					<span>@ViewBag.rating4.Count Reviews</span>
 									   			</p>
 									   			<p class="star">
 									   				<span>
 									   					<i class="ion-ios-star"></i>
 									   					<i class="ion-ios-star"></i>
 									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					(70%)
+									   					@{
+														    float divisionResult3 = 0;
+														    if (@ViewBag.rating3.Count != 0)
+														    {
+														        divisionResult3 = ((float)@ViewBag.rating3.Count / (float)@ViewBag.rating.Count)*100;
+														    }
+															string formattedResult3 = $"{divisionResult3:0.00}";
+														}
+									   					(@formattedResult3%)
 								   					</span>
-								   					<span>5 Reviews</span>
+								   					<span>@ViewBag.rating3.Count Reviews</span>
 									   			</p>
 									   			<p class="star">
 									   				<span>
 									   					<i class="ion-ios-star"></i>
 									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					(10%)
+									   					@{
+														    float divisionResult2 = 0;
+														    if (@ViewBag.rating2.Count != 0)
+														    {
+														        divisionResult2 = ((float)@ViewBag.rating2.Count / (float)@ViewBag.rating.Count)*100;
+														    }
+															string formattedResult2 = $"{divisionResult2:0.00}";
+														}
+									   					(@formattedResult2%)
 								   					</span>
-								   					<span>0 Reviews</span>
+								   					<span>@ViewBag.rating2.Count Reviews</span>
 									   			</p>
 									   			<p class="star">
 									   				<span>
 									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					(0%)
+									   					@{
+														    float divisionResult1 = 0;
+														    if (@ViewBag.rating1.Count != 0)
+														    {
+														        divisionResult1 = ((float)@ViewBag.rating1.Count / (float)@ViewBag.rating.Count)*100;
+														    }
+															string formattedResult1 = $"{divisionResult1:0.00}";
+														}
+									   					(@formattedResult1%)
 								   					</span>
-								   					<span>0 Reviews</span>
+								   					<span>@ViewBag.rating1.Count Reviews</span>
 									   			</p>
 									   		</div>
 								   		</div>
@@ -452,7 +450,7 @@
           </div>
         </div>
         <div class="row">
-				@for (var i = 0; i < ViewBag.relatedCars.Count; i++)
+				@for (var i = 0; i < 3; i++)
 				{
 					var carListId = _context.Car.Find(ViewBag.relatedCars[i].id);
 					var backgroundImage = "";
@@ -485,3 +483,4 @@
         </div>
     	</div>
     </section>
+	

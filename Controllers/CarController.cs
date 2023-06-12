@@ -134,6 +134,15 @@ namespace Car_rental.Controllers
             var relatedCars = _context.Car.Include(c => c.category).Where(i => i.category_id == carid.category_id && i.id != carid.id);
             ViewBag.relatedCars = relatedCars.ToList();
 
+            //showing rating
+            var rating = _context.rating.Include(r => r.user).Include(r => r.car).Where(r => r.carId == id);
+            ViewBag.rating = rating.ToList();
+            ViewBag.rating5 = rating.Where(r => r.Star == 5).ToList();
+            ViewBag.rating4 = rating.Where(r => r.Star == 4).ToList();
+            ViewBag.rating3 = rating.Where(r => r.Star == 3).ToList();
+            ViewBag.rating2 = rating.Where(r => r.Star == 2).ToList();
+            ViewBag.rating1 = rating.Where(r => r.Star == 1).ToList();
+
             foreach (var carList in relatedCars)
             {
                 var carListId = _context.Car.Find(carList.id);

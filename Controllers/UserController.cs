@@ -185,7 +185,7 @@ namespace Car_rental.Controllers
                     }
                     var email = user.email.ToString();
                     var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
-                    string body = "Please click the link below to confirm your account: " + "\n\n" + "https://ideaweb.azurewebsites.net/User/ConfirmAccount?email=" + email; ;
+                    string body = "Please click the link below to confirm your account: " + "\n\n" + "https://localhost:7160/User/ConfirmAccount?email=" + email; ;
                     send.SendEmail(email, subject, body);
                     return RedirectToAction(nameof(Index));
                 }
