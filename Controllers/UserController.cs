@@ -235,7 +235,7 @@ namespace Car_rental.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Home", "Car");
                     }
                 }
                 else if (user == null)

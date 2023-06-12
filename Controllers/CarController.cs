@@ -23,10 +23,17 @@ namespace Car_rental.Controllers
         }
 
         // GET: Car
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pg = 1)
         {
-            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user);
-            return View(await car_rentalContext.ToListAsync());
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = _context.Car.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Skip(recSkip).Take(pager.PageSize).ToList();
+            this.ViewBag.Pager = pager;
+            return View(car_rentalContext);
         }
         public async Task<IActionResult> Home()
         {
@@ -58,7 +65,7 @@ namespace Car_rental.Controllers
                 Brand = c.brand,
                 Price = c.Price,
                 ImageName = c.images.FirstOrDefault(i => i.carId == c.id) != null ? c.images.FirstOrDefault(i => i.carId == c.id).nameFile : null 
-            }).Skip(recSkip).Take(pager.PageSize).ToList(); ;
+            }).Skip(recSkip).Take(pager.PageSize).ToList(); 
             this.ViewBag.Pager = pager;
             return View(car_rentalContext);
         }

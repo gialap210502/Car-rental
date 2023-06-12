@@ -171,6 +171,9 @@
 							    <li class="nav-item">
 							      <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill" href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer" aria-expanded="true">Description</a>
 							    </li>
+								<li class="nav-item">
+							      <a class="nav-link" id="pills-rate-tab" data-toggle="pill" href="#pills-rate" role="tab" aria-controls="pills-rate" aria-expanded="true">Rate</a>
+							    </li>
 							    <li class="nav-item">
 							      <a class="nav-link" id="pills-review-tab" data-toggle="pill" href="#pills-review" role="tab" aria-controls="pills-review" aria-expanded="true">Review</a>
 							    </li>
@@ -280,7 +283,30 @@
 						      <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
 									<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane. Pityful a rethoric question ran over her cheek, then she continued her way.</p>
 						    </div>
-
+							<div class="tab-pane fade" id="pills-rate" role="tabpanel" aria-labelledby="pills-rate-tab">
+								<form method="post" asp-controller="rating" asp-action="Rate">
+								    <!-- Add a select element for the status if needed -->
+								    <!--
+								    <select name="status" style="margin-bottom:20px">
+								        <option value="0">Public</option>
+								        <option value="1">Stay anonymous</option>
+								    </select>
+								    -->
+								    <input type="hidden" name="Carid" value="@Html.DisplayFor(model => model.id)" />
+								    <div class="form-group">
+								        <label for="star">Rating</label>
+								        <input type="number" class="form-control" id="star" name="Star" required>
+								    </div>
+								    <div class="form-group">
+								        <label for="comment">Comment</label>
+								        <textarea class="form-control" id="comment" name="comment" placeholder="Enter your comment" required></textarea>
+								    </div>
+								    <button type="submit" class="btn btn-primary btn-user btn-block"
+								            style="margin-left: auto; margin-right: auto; margin-bottom: 20px;">
+								        Comment
+								    </button>
+								</form>
+							</div>
 						    <div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
 						      <div class="row">
 							   		<div class="col-md-7">

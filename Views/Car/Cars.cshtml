@@ -50,7 +50,7 @@
                 @if (pager.TotalPages > 0)
                 {
                     var pre = 1;
-                    var next = 0;
+                    var next = pager.CurrentPage + 1;
                   <div class="block-27">
                     <ul>
                         <li><a type="button" class="button break-page" asp-controller="Car" asp-action="Cars" asp-route-pg="@pre">&lt;</a></li>

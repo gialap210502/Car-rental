@@ -13,10 +13,12 @@ namespace Car_rental.Controllers
     public class RatingController : Controller
     {
         private readonly Car_rentalContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public RatingController(Car_rentalContext context)
+        public RatingController(Car_rentalContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: Rating
@@ -24,6 +26,36 @@ namespace Car_rental.Controllers
         {
             var car_rentalContext = _context.rating.Include(r => r.car).Include(r => r.user);
             return View(await car_rentalContext.ToListAsync());
+        }
+        public IActionResult Rate()
+        {
+            ViewData["carId"] = new SelectList(_context.Car, "id", "id");
+            ViewData["userId"] = new SelectList(_context.user, "id", "email");
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Rate(int carId, [Bind("id,dateRating,Status,Star,comment,carId,userId")] rating rating)
+        {
+            var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
+            var existRatingCheck = _context.rating.Where(i => i.carId == carId && i.userId == userId);
+            if(existRatingCheck != null){
+                rating.Status = 1;
+                rating.carId = carId;
+                rating.userId = userId;
+                rating.dateRating = DateTime.Now;
+                _context.Add(rating);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "rating");
+            }
+            if(existRatingCheck == null){
+                var ratingExists = _context.rating.Where(i => i.carId == carId && i.userId == userId).FirstOrDefault();
+                ratingExists.dateRating = DateTime.Now;
+                _context.Update(ratingExists);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "rating");
+            }
+            return RedirectToAction("Login", "User");
         }
 
         // GET: Rating/Details/5
@@ -161,14 +193,14 @@ namespace Car_rental.Controllers
             {
                 _context.rating.Remove(rating);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ratingExists(int id)
         {
-          return (_context.rating?.Any(e => e.id == id)).GetValueOrDefault();
+            return (_context.rating?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }
