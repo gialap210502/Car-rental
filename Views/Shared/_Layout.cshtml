@@ -29,6 +29,8 @@
     <link rel="stylesheet" href="~/user/css/flaticon.css">
     <link rel="stylesheet" href="~/user/css/icomoon.css">
     <link rel="stylesheet" href="~/user/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="https://kit.fontawesome.com/e036ea6b4e.js" crossorigin="anonymous"></script>
   </head>
     <style>
@@ -47,6 +49,32 @@
 video {
     max-width: 100%;
     max-height: 100%;
+}
+
+.star-rating label {
+  position: relative;
+  display: inline-block;
+  color: #5f6f6aa7;
+  font-size: 50px; /* Adjust the font size to make the star larger */
+  margin-right: 5px; /* Add some spacing between the stars */
+}
+
+.star-rating label::after {
+  content: attr(data-rating);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white; /* Set the number color to white */
+  font-size: 16px; /* Adjust the font size to make the number smaller */
+  opacity: 0.8; /* Set the opacity to make the number appear clearer */
+}
+
+.star-rating input[type="radio"] {
+  display: none;
+}
+.star-rating input[type="radio"]:checked + label {
+  color: #01d28e; /* Set the color of the clicked star */
 }
   </style>
   <body>

@@ -293,10 +293,23 @@
 								    </select>
 								    -->
 								    <input type="hidden" name="Carid" value="@Html.DisplayFor(model => model.id)" />
-								    <div class="form-group">
-								        <label for="star">Rating</label>
-								        <input type="number" class="form-control" id="star" name="Star" required>
-								    </div>
+									<div class="form-group">
+									    <label for="star">Rating</label>
+									    <div class="star-rating">
+									        <input type="radio" id="star5" name="Star" value="1" required hidden />
+									        <label for="star5" >&#9733;</label>
+									        <input type="radio" id="star4" name="Star" value="2" required hidden />
+									        <label for="star4" >&#9733;</label>
+									        <input type="radio" id="star3" name="Star" value="3" required hidden />
+									        <label for="star3" >&#9733;</label>
+									        <input type="radio" id="star2" name="Star" value="4" required hidden />
+									        <label for="star2" >&#9733;</label>
+									        <input type="radio" id="star1" name="Star" value="5" required hidden />
+									        <label for="star1" >&#9733;</label>
+									    </div>
+									</div>
+
+
 								    <div class="form-group">
 								        <label for="comment">Comment</label>
 								        <textarea class="form-control" id="comment" name="comment" placeholder="Enter your comment" required></textarea>
@@ -309,9 +322,7 @@
 							</div>
 						    <div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
 						      <div class="row">
-							   		<div class="col-md-7">
-							   			<h3 class="head">@ViewBag.rating.Count Reviews</h3>
-										
+							   		<div class="col-md-7" style="height: 500px; overflow: auto;">
 										@{
 											foreach(var rating in ViewBag.rating)
 											{
@@ -342,7 +353,7 @@
 							   		</div>
 							   		<div class="col-md-5">
 							   			<div class="rating-wrap">
-								   			<h3 class="head">Give a Review</h3>
+								   			<h3 class="head">@ViewBag.rating.Count Reviews</h3>
 								   			<div class="wrap">
 									   			<p class="star">
 									   				<span>
@@ -469,11 +480,11 @@
 				                <h2 class="mb-0"><a href="car-single.html">@ViewBag.relatedCars[i].model</a></h2>
 				                <div class="d-flex mb-3">
 				                    <span class="cat">@ViewBag.relatedCars[i].brand</span>
-				                    <p class="price ml-auto">$300 <span>/day</span></p>
+				                    <p class="price ml-auto">$@ViewBag.relatedCars[i].Price <span>/day</span></p>
 				                </div>
 				                <p class="d-flex mb-0 d-block">
 				                    <a href="#" class="btn btn-primary py-2 mr-1">Book now</a>
-				                    <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a>
+				                    <a asp-action="Details" asp-route-id="@ViewBag.relatedCars[i].id" class="btn btn-secondary py-2 ml-1">Details</a>
 				                </p>
 				            </div>
 				        </div>
@@ -483,4 +494,21 @@
         </div>
     	</div>
     </section>
-	
+
+<script>
+// JavaScript to handle the click event and change the star color
+document.addEventListener('DOMContentLoaded', function() {
+  var stars = document.querySelectorAll('.star-rating input[type="radio"] + label');
+  stars.forEach(function(star, index) {
+    star.addEventListener('click', function() {
+      for (var i = 0; i <= index; i++) {
+        stars[i].style.color = '#01d28e'; /* Set the color of the clicked star and the preceding stars */
+      }
+      for (var j = index + 1; j < stars.length; j++) {
+        stars[j].style.color = '#5f6f6aa7'; /* Reset the color of the remaining stars */
+      }
+    });
+  });
+});
+</script>
+

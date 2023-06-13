@@ -125,8 +125,12 @@ namespace Car_rental.Controllers
             ViewBag.Layout = "_Layout";
             var listImages = _context.Images.Where(i => i.carId == id).ToList();
             ViewBag.listImages = listImages;
-            var Video = _context.VideoCar.FirstOrDefault(i => i.carId == id).nameFile;
-            ViewBag.Video = Video;
+            var Video = _context.VideoCar.FirstOrDefault(i => i.carId == id);
+            ViewBag.Video = "";
+            if(Video != null){
+                ViewBag.Video = Video.nameFile;
+            }
+            
 
             //random related cars base on category 
             // Random random = new Random();
