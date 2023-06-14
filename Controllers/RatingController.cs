@@ -39,21 +39,23 @@ namespace Car_rental.Controllers
         {
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
             var existRatingCheck = _context.rating.Where(i => i.carId == carId && i.userId == userId);
-            if(existRatingCheck != null){
+            if(existRatingCheck == null){
                 rating.Status = 1;
                 rating.carId = carId;
                 rating.userId = userId;
                 rating.dateRating = DateTime.Now;
                 _context.Add(rating);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "rating");
+                return RedirectToAction("Index", "rating", new { id = carId });
             }
-            if(existRatingCheck == null){
+            if(existRatingCheck != null){
                 var ratingExists = _context.rating.Where(i => i.carId == carId && i.userId == userId).FirstOrDefault();
                 ratingExists.dateRating = DateTime.Now;
+                ratingExists.comment = rating.comment;
+                ratingExists.Star = rating.Star;
                 _context.Update(ratingExists);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "rating");
+                return RedirectToAction("Details", "Car", new { id = carId });
             }
             return RedirectToAction("Login", "User");
         }
