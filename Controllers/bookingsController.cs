@@ -69,6 +69,45 @@ namespace Car_rental.Controllers
             return View(bookings);
         }
 
+        
+        public IActionResult Book(int cardId)
+        {
+            ViewBag.cardId = cardId;
+            return View();
+        }
+
+        // POST: bookings/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Book(int cardId, DateTime? startDate, DateTime? endDate, double? totalAmount)
+        {
+            var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
+            Console.WriteLine(cardId+"----------------------");
+            if (ModelState.IsValid)
+            {
+                var bookings = new bookings();
+                bookings.userId = userId;
+                bookings.startDate = startDate;
+                bookings.endDate = endDate;
+                bookings.totalAmount = totalAmount;
+                _context.Add(bookings);
+                await _context.SaveChangesAsync();
+                var payment = new payment();
+                payment.amount = (double) bookings.totalAmount;
+                payment.booking_id = bookings.id;
+                payment.carId = 1;
+                payment.paymentDate = DateTime.Now;
+                payment.paymentMethod = "COD";
+                _context.payment.Add(payment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+        }
+
+
         // GET: bookings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
