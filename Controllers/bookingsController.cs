@@ -70,9 +70,10 @@ namespace Car_rental.Controllers
         }
 
         
-        public IActionResult Book(int cardId)
+        public IActionResult Book(int? cardId)
         {
             ViewBag.cardId = cardId;
+            Console.WriteLine(cardId+"----------------------");
             return View();
         }
 
@@ -81,7 +82,7 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Book(int cardId, DateTime? startDate, DateTime? endDate, double? totalAmount)
+        public async Task<IActionResult> Booking(int cardId, DateTime? startDate, DateTime? endDate, double? totalAmount)
         {
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
             Console.WriteLine(cardId+"----------------------");
@@ -97,7 +98,7 @@ namespace Car_rental.Controllers
                 var payment = new payment();
                 payment.amount = (double) bookings.totalAmount;
                 payment.booking_id = bookings.id;
-                payment.carId = 1;
+                payment.carId = cardId;
                 payment.paymentDate = DateTime.Now;
                 payment.paymentMethod = "COD";
                 _context.payment.Add(payment);
@@ -171,6 +172,7 @@ namespace Car_rental.Controllers
 
             var bookings = await _context.bookings
                 .Include(b => b.user)
+                .Include(b => b.payments)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (bookings == null)
             {
@@ -189,6 +191,16 @@ namespace Car_rental.Controllers
             {
                 return Problem("Entity set 'Car_rentalContext.bookings'  is null.");
             }
+            var payments = _context.payment.Where(p => p.booking_id == id);
+
+            if (payments != null)
+            {
+                foreach(var item in payments)
+                {
+                    _context.payment.Remove(item);
+                }
+            } 
+
             var bookings = await _context.bookings.FindAsync(id);
             if (bookings != null)
             {

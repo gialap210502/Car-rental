@@ -67,11 +67,12 @@ namespace Car_rental.Data
                 .HasForeignKey(r => r.userId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // modelBuilder.Entity<bookings>()
-            //     .HasMany(u => u.payments)
-            //     .WithOne(r => r.booking)
-            //     .HasForeignKey(r => r.booking_id)
-            //     .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<bookings>()
+                .HasMany(u => u.payments)
+                .WithOne(r => r.booking)
+                .HasForeignKey(r => r.booking_id)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<payment>()
                 .HasOne(r => r.booking)
                 .WithMany(u => u.payments)

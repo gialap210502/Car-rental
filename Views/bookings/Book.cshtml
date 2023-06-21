@@ -10,9 +10,9 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Book">
+        <form method="post" asp-controller="bookings" asp-action="Booking">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div type="hidden" name="carId" class="form-control" value="@ViewBag.cardId"></div>
+            <input type="hidden" name="cardId" value="@ViewBag.cardId" />
             <div class="form-group">
                 <label asp-for="startDate" class="control-label"></label>
                 <input asp-for="startDate" class="form-control" />

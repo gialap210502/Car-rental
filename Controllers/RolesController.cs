@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Car_rental.Data;
 using Car_rental.Models;
+using Car_rental.Untils;
 
 namespace Car_rental.Controllers
 {
@@ -162,6 +163,7 @@ namespace Car_rental.Controllers
 
         public async Task<IActionResult> CreateRole()
         {
+            var Encode = new Encode();
             if (!_context.roles.Any())
             {
                 var user1 = new user
@@ -171,8 +173,8 @@ namespace Car_rental.Controllers
                     driver_license = "ABC123",
                     phone = "123456789",
                     dob = new DateTime(1990, 1, 1),
-                    email = "johndoe@example.com",
-                    password = "password123",
+                    email = "lap@gmail.com",
+                    password = Encode.encode("123"),
                     flag = 0,
                     image = "@@@@.png"
                 };
