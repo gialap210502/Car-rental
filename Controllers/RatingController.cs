@@ -38,8 +38,8 @@ namespace Car_rental.Controllers
         public async Task<IActionResult> Rate(int carId, [Bind("id,dateRating,Status,Star,comment,carId,userId")] rating rating)
         {
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
-            var existRatingCheck = _context.rating.Where(i => i.carId == carId && i.userId == userId);
-            if(existRatingCheck == null){
+            var existRatingCheck = _context.rating.Where(i => i.carId == carId && i.userId == userId).ToList();
+            if(existRatingCheck.Count() == 0){
                 rating.Status = 1;
                 rating.carId = carId;
                 rating.userId = userId;
@@ -48,7 +48,7 @@ namespace Car_rental.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "rating", new { id = carId });
             }
-            if(existRatingCheck != null){
+            if(existRatingCheck.Count() > 0){
                 var ratingExists = _context.rating.Where(i => i.carId == carId && i.userId == userId).FirstOrDefault();
                 ratingExists.dateRating = DateTime.Now;
                 ratingExists.comment = rating.comment;

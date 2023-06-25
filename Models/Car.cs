@@ -19,6 +19,7 @@ public class car
     public DateTime ReleaseDate { get; set; }
     public string? Type { get; set; }
     public double Price { get; set; }
+    public string Description { get; set; }
     public bool AirConditioning { get; set; }
     public bool ChildSeat { get; set; }
     public bool GPS { get; set; }

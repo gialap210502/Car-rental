@@ -121,7 +121,7 @@
 			    							<span class="cat">@item.Brand</span>
 			    							<p class="price ml-auto">$@item.Price <span>/day</span></p>
 		    							</div>
-		    							<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary py-2 ml-1">Details</a></p>
+		    							<p class="d-flex mb-0 d-block"><a asp-controller="bookings" asp-action="Book" asp-route-cardId="@item.Id" class="btn btn-primary py-2 mr-1">Book now</a> <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary py-2 ml-1">Details</a></p>
 		    						</div>
 		    					</div>
     						</div>

@@ -115,6 +115,7 @@ namespace Car_rental.Migrations
                     ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<double>(type: "float", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AirConditioning = table.Column<bool>(type: "bit", nullable: false),
                     ChildSeat = table.Column<bool>(type: "bit", nullable: false),
                     GPS = table.Column<bool>(type: "bit", nullable: false),

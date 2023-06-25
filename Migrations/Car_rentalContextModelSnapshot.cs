@@ -119,6 +119,9 @@ namespace Car_rental.Migrations
                     b.Property<bool>("ClimateControl")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("GPS")
                         .HasColumnType("bit");
 
