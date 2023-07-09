@@ -70,10 +70,10 @@ namespace Car_rental.Controllers
         }
 
         
-        public IActionResult Book(int? cardId)
+        public IActionResult Book(int? cardId, double? totalAmount)
         {
             ViewBag.cardId = cardId;
-            Console.WriteLine(cardId+"----------------------");
+            ViewBag.totalAmount = totalAmount;
             return View();
         }
 
@@ -85,7 +85,6 @@ namespace Car_rental.Controllers
         public async Task<IActionResult> Booking(int cardId, DateTime? startDate, DateTime? endDate, double? totalAmount)
         {
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
-            Console.WriteLine(cardId+"----------------------");
             if (ModelState.IsValid)
             {
                 var bookings = new bookings();
