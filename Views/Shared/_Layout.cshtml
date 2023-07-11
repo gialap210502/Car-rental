@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="~/user/css/owl.carousel.min.css">
     <link rel="stylesheet" href="~/user/css/owl.theme.default.min.css">
     <link rel="stylesheet" href="~/user/css/magnific-popup.css">
+    <link rel="stylesheet" href="~/user/site.css" asp-append-version="true" />
 
     <link rel="stylesheet" href="~/user/css/aos.css">
 
@@ -187,7 +188,23 @@ video {
       </div>
     </footer>
     
-  
+       <div class="modal" tabindex="-1" role="dialog" id="form-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="loaderbody" id="loaderbody">
+        <div class="loader"></div>
+    </div>
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
@@ -210,6 +227,7 @@ video {
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="~/user/js/google-map.js"></script>
   <script src="~/user/js/main.js"></script>
+   <script src="~/js/site.js" asp-append-version="true"></script>
      @await RenderSectionAsync("Scripts", required: false)
   </body>
 </html>

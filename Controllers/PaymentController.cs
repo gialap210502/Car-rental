@@ -22,6 +22,7 @@ namespace Car_rental.Controllers
         // GET: Payment
         public async Task<IActionResult> Index()
         {
+            ViewBag.layout="_AdminLayout";
             var car_rentalContext = _context.payment.Include(p => p.booking).Include(p => p.car);
             return View(await car_rentalContext.ToListAsync());
         }
@@ -29,6 +30,7 @@ namespace Car_rental.Controllers
         // GET: Payment/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.payment == null)
             {
                 return NotFound();
@@ -49,6 +51,7 @@ namespace Car_rental.Controllers
         // GET: Payment/Create
         public IActionResult Create()
         {
+            ViewBag.layout="_AdminLayout";
             ViewData["booking_id"] = new SelectList(_context.bookings, "id", "id");
             ViewData["carId"] = new SelectList(_context.Car, "id", "id");
             return View();
@@ -61,6 +64,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,amount,paymentDate,paymentMethod,carId,booking_id")] payment payment)
         {
+            ViewBag.layout="_AdminLayout";
             if (ModelState.IsValid)
             {
                 _context.Add(payment);
@@ -75,6 +79,7 @@ namespace Car_rental.Controllers
         // GET: Payment/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.payment == null)
             {
                 return NotFound();
@@ -97,6 +102,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,amount,paymentDate,paymentMethod,carId,booking_id")] payment payment)
         {
+            ViewBag.layout="_AdminLayout";
             if (id != payment.id)
             {
                 return NotFound();
@@ -130,6 +136,7 @@ namespace Car_rental.Controllers
         // GET: Payment/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.payment == null)
             {
                 return NotFound();
@@ -152,6 +159,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.layout="_AdminLayout";
             if (_context.payment == null)
             {
                 return Problem("Entity set 'Car_rentalContext.payment'  is null.");
@@ -168,6 +176,7 @@ namespace Car_rental.Controllers
 
         private bool paymentExists(int id)
         {
+        ViewBag.layout="_AdminLayout";
           return (_context.payment?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }

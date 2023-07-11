@@ -22,6 +22,7 @@ namespace Car_rental.Controllers
         // GET: Category
         public async Task<IActionResult> Index()
         {
+            ViewBag.layout="_AdminLayout";
             return _context.category != null ?
                         View(await _context.category.ToListAsync()) :
                         Problem("Entity set 'Car_rentalContext.category'  is null.");
@@ -30,6 +31,7 @@ namespace Car_rental.Controllers
         // GET: Category/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.category == null)
             {
                 return NotFound();
@@ -48,6 +50,7 @@ namespace Car_rental.Controllers
         // GET: Category/Create
         public IActionResult Create()
         {
+            ViewBag.layout="_AdminLayout";
             return View();
         }
 
@@ -58,6 +61,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,type,Status,Deleted_Status")] category category)
         {
+            ViewBag.layout="_AdminLayout";
             if (ModelState.IsValid)
             {
                 var catCheck = _context.category.Where(i => i.type == category.type).ToList();
@@ -81,6 +85,7 @@ namespace Car_rental.Controllers
         // GET: Category/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.category == null)
             {
                 return NotFound();
@@ -101,6 +106,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(bool updateCheckBox,int id, [Bind("id,type,Status,Deleted_Status")] category category)
         {
+            ViewBag.layout="_AdminLayout";
             if (id != category.id)
             {
                 return NotFound();
@@ -138,6 +144,7 @@ namespace Car_rental.Controllers
         // GET: Category/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.category == null)
             {
                 return NotFound();
@@ -158,6 +165,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.layout="_AdminLayout";
             if (_context.category == null)
             {
                 return Problem("Entity set 'Car_rentalContext.category'  is null.");
@@ -176,6 +184,7 @@ namespace Car_rental.Controllers
 
         private bool categoryExists(int id)
         {
+            ViewBag.layout="_AdminLayout";
             return (_context.category?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }

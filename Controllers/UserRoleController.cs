@@ -22,6 +22,7 @@ namespace Car_rental.Controllers
         // GET: UserRole
         public async Task<IActionResult> Index()
         {
+            ViewBag.layout="_AdminLayout";
             var car_rentalContext = _context.userRole.Include(u => u.role).Include(u => u.user);
             return View(await car_rentalContext.ToListAsync());
         }
@@ -29,6 +30,7 @@ namespace Car_rental.Controllers
         // GET: UserRole/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.userRole == null)
             {
                 return NotFound();
@@ -49,6 +51,7 @@ namespace Car_rental.Controllers
         // GET: UserRole/Create
         public IActionResult Create()
         {
+            ViewBag.layout="_AdminLayout";
             ViewData["roleId"] = new SelectList(_context.roles, "id", "role");
             ViewData["userId"] = new SelectList(_context.user, "id", "email");
             return View();
@@ -61,6 +64,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,userId,roleId")] userRole userRole)
         {
+            ViewBag.layout="_AdminLayout";
             if (ModelState.IsValid)
             {
                 _context.Add(userRole);
@@ -75,6 +79,7 @@ namespace Car_rental.Controllers
         // GET: UserRole/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.userRole == null)
             {
                 return NotFound();
@@ -97,6 +102,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,userId,roleId")] userRole userRole)
         {
+            ViewBag.layout="_AdminLayout";
             if (id != userRole.id)
             {
                 return NotFound();
@@ -130,6 +136,7 @@ namespace Car_rental.Controllers
         // GET: UserRole/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.userRole == null)
             {
                 return NotFound();
@@ -152,6 +159,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.layout="_AdminLayout";
             if (_context.userRole == null)
             {
                 return Problem("Entity set 'Car_rentalContext.userRole'  is null.");
@@ -168,6 +176,7 @@ namespace Car_rental.Controllers
 
         private bool userRoleExists(int id)
         {
+            ViewBag.layout="_AdminLayout";
           return (_context.userRole?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }

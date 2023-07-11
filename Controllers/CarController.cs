@@ -25,6 +25,7 @@ namespace Car_rental.Controllers
         // GET: Car
         public async Task<IActionResult> Index(int pg = 1)
         {
+            ViewBag.layout="_AdminLayout";
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
@@ -72,6 +73,7 @@ namespace Car_rental.Controllers
 
         public async Task<IActionResult> CreateCar()
         {
+             ViewBag.Layout = "_AdminLayout";
             var cars = new List<car>();
 
             for (int i = 0; i < 15; i++)
@@ -188,6 +190,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IFormFile myVideoFile, IFormFile myfile1, IFormFile myfile2, IFormFile myfile3, IFormFile myfile4, IFormFile myfile5, [Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,Description,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
         {
+            ViewBag.layout="_AdminLayout";
             if (ModelState.IsValid)
             {
                 _context.Add(car);
@@ -284,6 +287,7 @@ namespace Car_rental.Controllers
         // GET: Car/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.Car == null)
             {
                 return NotFound();
@@ -307,6 +311,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,Description,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
         {
+            ViewBag.layout="_AdminLayout";
             if (id != car.id)
             {
                 return NotFound();
@@ -341,6 +346,7 @@ namespace Car_rental.Controllers
         // GET: Car/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.Car == null)
             {
                 return NotFound();
@@ -364,6 +370,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.layout="_AdminLayout";
             if (_context.Car == null)
             {
                 return Problem("Entity set 'Car_rentalContext.Car'  is null.");
@@ -380,6 +387,7 @@ namespace Car_rental.Controllers
 
         private bool carExists(int id)
         {
+            ViewBag.layout="_AdminLayout";
             return _context.Car.Any(e => e.id == id);
         }
     }

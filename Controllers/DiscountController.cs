@@ -22,12 +22,14 @@ namespace Car_rental.Controllers
         // GET: Discount
         public async Task<IActionResult> Index()
         {
-              return View(await _context.discount.ToListAsync());
+            ViewBag.layout="_AdminLayout";
+            return View(await _context.discount.ToListAsync());
         }
 
         // GET: Discount/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.discount == null)
             {
                 return NotFound();
@@ -46,6 +48,7 @@ namespace Car_rental.Controllers
         // GET: Discount/Create
         public IActionResult Create()
         {
+            ViewBag.layout="_AdminLayout";
             return View();
         }
 
@@ -56,6 +59,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,code,percentage,startDate,endDate")] discount discount)
         {
+            ViewBag.layout="_AdminLayout";
             if (ModelState.IsValid)
             {
                 _context.Add(discount);
@@ -68,6 +72,7 @@ namespace Car_rental.Controllers
         // GET: Discount/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.discount == null)
             {
                 return NotFound();
@@ -88,6 +93,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,code,percentage,startDate,endDate")] discount discount)
         {
+            ViewBag.layout="_AdminLayout";
             if (id != discount.id)
             {
                 return NotFound();
@@ -119,6 +125,7 @@ namespace Car_rental.Controllers
         // GET: Discount/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.discount == null)
             {
                 return NotFound();
@@ -139,6 +146,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.layout="_AdminLayout";
             if (_context.discount == null)
             {
                 return Problem("Entity set 'Car_rentalContext.discount'  is null.");
@@ -155,7 +163,8 @@ namespace Car_rental.Controllers
 
         private bool discountExists(int id)
         {
-          return _context.discount.Any(e => e.id == id);
+            ViewBag.layout="_AdminLayout";
+            return _context.discount.Any(e => e.id == id);
         }
     }
 }

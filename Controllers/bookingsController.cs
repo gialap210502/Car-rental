@@ -69,7 +69,7 @@ namespace Car_rental.Controllers
             return View(bookings);
         }
 
-        
+
         public IActionResult Book(int? cardId, double? totalAmount)
         {
             ViewBag.cardId = cardId;
@@ -84,6 +84,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Booking(int cardId, DateTime? startDate, DateTime? endDate, double? totalAmount)
         {
+            ViewBag.Layout = null;
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
             if (ModelState.IsValid)
             {
@@ -95,7 +96,7 @@ namespace Car_rental.Controllers
                 _context.Add(bookings);
                 await _context.SaveChangesAsync();
                 var payment = new payment();
-                payment.amount = (double) bookings.totalAmount;
+                payment.amount = (double)bookings.totalAmount;
                 payment.booking_id = bookings.id;
                 payment.carId = cardId;
                 payment.paymentDate = DateTime.Now;
@@ -194,25 +195,25 @@ namespace Car_rental.Controllers
 
             if (payments != null)
             {
-                foreach(var item in payments)
+                foreach (var item in payments)
                 {
                     _context.payment.Remove(item);
                 }
-            } 
+            }
 
             var bookings = await _context.bookings.FindAsync(id);
             if (bookings != null)
             {
                 _context.bookings.Remove(bookings);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool bookingsExists(int id)
         {
-          return (_context.bookings?.Any(e => e.id == id)).GetValueOrDefault();
+            return (_context.bookings?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }
