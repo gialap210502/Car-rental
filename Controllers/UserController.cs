@@ -34,7 +34,7 @@ namespace Car_rental.Controllers
         // GET: User
         public async Task<IActionResult> Index()
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             return _context.user != null ?
                         View(await _context.user.ToListAsync()) :
                         Problem("Entity set 'Car_rentalContext.user'  is null.");
@@ -43,7 +43,7 @@ namespace Car_rental.Controllers
         // GET: User/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (id == null || _context.user == null)
             {
                 return NotFound();
@@ -62,18 +62,18 @@ namespace Car_rental.Controllers
         // GET: User/Create
         public IActionResult Create()
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             return View();
         }
         public IActionResult Register()
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             ViewBag.Layout = "_Layout";
             return View();
         }
         public IActionResult Login()
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             ViewBag.Layout = "_Layout";
             return View();
         }
@@ -85,7 +85,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IFormFile myfile, [Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag,image")] user user)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             var Encode = new Encode();
             string en_password;
             en_password = Encode.encode(user.password.ToString());
@@ -132,7 +132,7 @@ namespace Car_rental.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(IFormFile myfile, [Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag,image")] user user, String repassword)
+        public async Task<IActionResult> Register(IFormFile avatar, IFormFile license, IFormFile Id, [Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag,image")] user user, String repassword)
         {
             ViewBag.Layout = "_Layout";
             var UserExists = _context.user.FirstOrDefault(u => u.email == user.email);
@@ -161,21 +161,53 @@ namespace Car_rental.Controllers
                 {
                     user.password = en_password;
                     Send send = new Send();
-                    if (myfile == null)
+                    if (avatar == null)
                     {
                         user.image = null;
                     }
                     else
                     {
-                        string filename = Path.GetFileName(myfile.FileName);
+                        string filename = Path.GetFileName(avatar.FileName);
                         var filePath = Path.Combine(_hostEnvironment.WebRootPath, "ImageUser");
                         string fullPath = filePath + "\\" + filename;
                         // Copy files to FileSystem using Streams
                         using (var stream = new FileStream(fullPath, FileMode.Create))
                         {
-                            await myfile.CopyToAsync(stream);
+                            await avatar.CopyToAsync(stream);
                         }
                         user.image = filename;
+                    }
+                    if (license == null)
+                    {
+                        user.driver_license = null;
+                    }
+                    else
+                    {
+                        string filename = Path.GetFileName(license.FileName);
+                        var filePath = Path.Combine(_hostEnvironment.WebRootPath, "DriveLicense");
+                        string fullPath = filePath + "\\" + filename;
+                        // Copy files to FileSystem using Streams
+                        using (var stream = new FileStream(fullPath, FileMode.Create))
+                        {
+                            await license.CopyToAsync(stream);
+                        }
+                        user.driver_license = filename;
+                    }
+                    if (Id == null)
+                    {
+                        user.citizen_identification = null;
+                    }
+                    else
+                    {
+                        string filename = Path.GetFileName(Id.FileName);
+                        var filePath = Path.Combine(_hostEnvironment.WebRootPath, "Identify");
+                        string fullPath = filePath + "\\" + filename;
+                        // Copy files to FileSystem using Streams
+                        using (var stream = new FileStream(fullPath, FileMode.Create))
+                        {
+                            await Id.CopyToAsync(stream);
+                        }
+                        user.citizen_identification = filename;
                     }
                     _context.Add(user);
                     await _context.SaveChangesAsync();
@@ -204,7 +236,7 @@ namespace Car_rental.Controllers
         }
         public IActionResult Logout()
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             HttpContext.Session.Clear();
             return RedirectToAction("Login", "user");
         }
@@ -264,7 +296,7 @@ namespace Car_rental.Controllers
         // GET: User/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (id == null || _context.user == null)
             {
                 return NotFound();
@@ -285,7 +317,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, IFormFile myfile, [Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag,image")] user user)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             var userTempImage = _context.user.Find(id).image;
             _context.Entry(_context.user.Find(id)).State = EntityState.Detached;
             if (id != user.id)
@@ -340,7 +372,7 @@ namespace Car_rental.Controllers
         // GET: User/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (id == null || _context.user == null)
             {
                 return NotFound();
@@ -361,7 +393,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (_context.user == null)
             {
                 return Problem("Entity set 'Car_rentalContext.user'  is null.");
@@ -378,7 +410,7 @@ namespace Car_rental.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmAccount(String email)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             var user = await _context.user.FirstOrDefaultAsync(u => u.email == email);
             string message = "";
             if (user != null && user.flag == 0)
@@ -397,7 +429,7 @@ namespace Car_rental.Controllers
 
         private bool userExists(int id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             return (_context.user?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }

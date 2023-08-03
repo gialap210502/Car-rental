@@ -49,6 +49,11 @@ namespace Car_rental.Controllers
             }); ;
             return View(await car_rentalContext.ToListAsync());
         }
+        public async Task<IActionResult> About()
+        {
+            ViewBag.Layout = "_Layout";
+            return View();
+        }
 
         public async Task<IActionResult> Cars(int pg = 1)
         {

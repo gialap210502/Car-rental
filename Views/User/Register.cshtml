@@ -1,110 +1,83 @@
 @{
-	ViewData["Title"] = "Home Page";
+  ViewData["Title"] = "Home Page";
 }
-@model Car_rental.Models.user    
-    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/bg_3.jpg');" data-stellar-background-ratio="0.5">
+@model Car_rental.Models.user 
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/image_1.jpg');" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
       <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
           <div class="col-md-9 ftco-animate pb-5">
-          	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Contact <i class="ion-ios-arrow-forward"></i></span></p>
-            <h1 class="mb-3 bread">Contact Us</h1>
+            <p class="breadcrumbs"><span class="mr-2"><a href="/">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Register <i class="ion-ios-arrow-forward"></i></span></p>
+            <h1 class="mb-3 bread">Register</h1>
           </div>
         </div>
       </div>
     </section>
 
     <section class="ftco-section contact-section">
-      <div class="container">
-        <div class="row d-flex mb-5 contact-info">
-        	<div class="col-md-4">
-        		<div class="row mb-5">
-		          <div class="col-md-12">
-		          	<div class="border w-100 p-4 rounded mb-2 d-flex">
-			          	<div class="icon mr-3">
-			          		<span class="icon-map-o"></span>
-			          	</div>
-			            <p><span>Address:</span> 198 West 21th Street, Suite 721 New York NY 10016</p>
-			          </div>
-		          </div>
-		          <div class="col-md-12">
-		          	<div class="border w-100 p-4 rounded mb-2 d-flex">
-			          	<div class="icon mr-3">
-			          		<span class="icon-mobile-phone"></span>
-			          	</div>
-			            <p><span>Phone:</span> <a href="tel://1234567920">+ 1235 2355 98</a></p>
-			          </div>
-		          </div>
-		          <div class="col-md-12">
-		          	<div class="border w-100 p-4 rounded mb-2 d-flex">
-			          	<div class="icon mr-3">
-			          		<span class="icon-envelope-o"></span>
-			          	</div>
-			            <p><span>Email:</span> <a href="mailto:info@yoursite.com">info@yoursite.com</a></p>
-			          </div>
-		          </div>
-		        </div>
-          </div>
-          <div class="col-md-8 block-9 mb-md-5">
-               <form asp-action="Register" enctype="multipart/form-data" class="bg-light p-5 contact-form">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="name" class="control-label"></label>
-                <input asp-for="name" class="form-control" />
-                <span asp-validation-for="name" class="text-danger"></span>
+      <div class="container" style="justify-content: center;">
+        <div class="row bg-light p-5 contact-form" style="justify-content: center; font-size: 12px;" >
+          <h2>Register</h2>
+          <form asp-action="Register" enctype="multipart/form-data" >
+           <div class="row" style="justify-content: center;">
+             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+             <div class="col-3">
+                <div class="form-group">
+                  <label asp-for="name" class="control-label"></label>
+                  <input asp-for="name" class="form-control" />
+                  <span asp-validation-for="name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                  <label asp-for="phone" class="control-label"></label>
+                  <input asp-for="phone" class="form-control" />
+                  <span asp-validation-for="phone" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                  <label asp-for="email" class="control-label"></label>
+                  <input asp-for="email" class="form-control" />
+                  <span asp-validation-for="email" class="text-danger"></span>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="form-group">
+                  Citizen identification
+                   <br/>
+                  <input type="file" name="Id" class="form-control" accept="image/*"/>
+                </div>
+                <div class="form-group">
+                  Driver license
+                   <br/>
+                  <input type="file" name="license" class="form-control" accept="image/*"/>
+                </div>
+                <div class="form-group">
+                  Avatar
+                   <br/>
+                  <input type="file" name="avatar" class="form-control" accept="image/*"/>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="form-group">
+                  <label asp-for="dob" class="control-label"></label>
+                  <input asp-for="dob" class="form-control" />
+                  <span asp-validation-for="dob" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                  <label asp-for="password" class="control-label"></label>
+                  <input type="password" asp-for="password" class="form-control" />
+                  <span asp-validation-for="password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                  Confirm password
+                  <input type="password" name="repassword" class="form-control" />
+                  <span asp-validation-for="password" class="text-danger"></span>
+                </div>
+              </div>
+              <div class="col-6" style="justify-content: center;">
+                <input type="submit" value="Create" class="btn btn-primary btn-block" />
+              </div>
             </div>
-            <div class="form-group">
-                <label asp-for="citizen_identification" class="control-label"></label>
-                <input asp-for="citizen_identification" class="form-control" />
-                <span asp-validation-for="citizen_identification" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="driver_license" class="control-label"></label>
-                <input asp-for="driver_license" class="form-control" />
-                <span asp-validation-for="driver_license" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="phone" class="control-label"></label>
-                <input asp-for="phone" class="form-control" />
-                <span asp-validation-for="phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="dob" class="control-label"></label>
-                <input asp-for="dob" class="form-control" />
-                <span asp-validation-for="dob" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="email" class="control-label"></label>
-                <input asp-for="email" class="form-control" />
-                <span asp-validation-for="email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="password" class="control-label"></label>
-                <input type="password" asp-for="password" class="form-control" />
-                <span asp-validation-for="password" class="text-danger"></span>
-            </div>
-			<div class="form-group">
-                Confirm password
-                <input type="password" name="repassword" class="form-control" />
-                <span asp-validation-for="password" class="text-danger"></span>
-            </div>
-			
-            <div class="form-group">
-                <label asp-for="image" class="control-label"></label>
-                 <br/>
-                <input type="file" name="myfile" class="form-control" accept="image/*"/>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-          
-          </div>
-        </div>
-        <div class="row justify-content-center">
-        	<div class="col-md-12">
-        		<div id="map" class="bg-white"></div>
-        	</div>
+
+          </form>
         </div>
       </div>
     </section>
