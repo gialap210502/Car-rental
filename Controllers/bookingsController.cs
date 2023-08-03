@@ -70,10 +70,11 @@ namespace Car_rental.Controllers
         }
 
 
-        public IActionResult Book(int? cardId, double? totalAmount)
+        public IActionResult Book(int? cardId, double? totalAmount, int? userId)
         {
             ViewBag.cardId = cardId;
             ViewBag.totalAmount = totalAmount;
+            ViewBag.userId = userId;
             return View();
         }
 
@@ -82,10 +83,9 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Booking(int cardId, DateTime? startDate, DateTime? endDate, double? totalAmount)
+        public async Task<IActionResult> Booking(int userId,int cardId, DateTime? startDate, DateTime? endDate, double? totalAmount)
         {
             ViewBag.Layout = null;
-            var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
             if (ModelState.IsValid)
             {
                 var bookings = new bookings();

@@ -126,8 +126,11 @@ select:focus{
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" name="cardId" value="@ViewBag.cardId" />
             <input type="hidden" name="totalAmount" value="@ViewBag.totalAmount" />
+            <input type="hidden" name="totalAmount" value="@ViewBag.userId" />
+            
             <div class="row">
             <div class="col-sm-6">
+              <p>@ViewBag.userId</p>
                 <select class="browser-default custom-select mb-4" id="select">
                     <option value="" disabled="" selected="">From City/Airport</option>
                     <option value="1">New Delhi</option>
