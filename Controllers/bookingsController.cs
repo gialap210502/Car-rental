@@ -25,6 +25,12 @@ namespace Car_rental.Controllers
             var car_rentalContext = _context.bookings.Include(b => b.user);
             return View(await car_rentalContext.ToListAsync());
         }
+        public async Task<IActionResult> BookingHistory(int? id)
+        {
+            ViewBag.Layout = "_Layout";
+            var car_rentalContext = _context.bookings.Include(b => b.user).Where(d => d.userId == id);
+            return View(await car_rentalContext.ToListAsync());
+        }
 
         // GET: bookings/Details/5
         public async Task<IActionResult> Details(int? id)
