@@ -58,6 +58,24 @@ namespace Car_rental.Controllers
 
             return View(user);
         }
+        // GET: User/Profile/5
+        public async Task<IActionResult> Profile(int? id)
+        {
+            ViewBag.layout = "_Layout";
+            if (id == null || _context.user == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.user
+                .FirstOrDefaultAsync(m => m.id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
 
         // GET: User/Create
         public IActionResult Create()

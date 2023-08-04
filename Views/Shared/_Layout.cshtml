@@ -1,6 +1,7 @@
 ﻿@{
   var name = Context.Session.GetString("_Name") != null ? Context.Session.GetString("_Name") : null;
   var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
+  var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -107,7 +108,7 @@ video {
                   @if(role == "Owner"){
                         <a class="dropdown-item" href="/user">Manager</a>
                   }
-                        <a class="dropdown-item" href="#">Profile</a>
+                        <a class="dropdown-item" asp-controller="User" asp-action="Profile" asp-route-id="@Id">Profile</a>
                         <a class="dropdown-item" asp-controller="User" asp-action="Logout">Log out</a>
                       </div>
                     </li>
