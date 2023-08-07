@@ -45,10 +45,12 @@ namespace Car_rental.Controllers
                 Model = c.model,
                 Brand = c.brand,
                 Price = c.Price,
+                address = c.address,
                 ImageName = c.images.FirstOrDefault(i => i.carId == c.id) != null ? c.images.FirstOrDefault(i => i.carId == c.id).nameFile : null // Lấy nameFile đầu tiên từ images
             }); ;
             return View(await car_rentalContext.ToListAsync());
         }
+        
         public async Task<IActionResult> About()
         {
             ViewBag.Layout = "_Layout";
@@ -70,12 +72,41 @@ namespace Car_rental.Controllers
                 Model = c.model,
                 Brand = c.brand,
                 Price = c.Price,
+                address = c.address,
                 ImageName = c.images.FirstOrDefault(i => i.carId == c.id) != null ? c.images.FirstOrDefault(i => i.carId == c.id).nameFile : null 
             }).Skip(recSkip).Take(pager.PageSize).ToList(); 
             this.ViewBag.Pager = pager;
             return View(car_rentalContext);
         }
 
+        public ActionResult SearchforUser(string query, int pg = 1)
+        {
+            ViewBag.Layout = "_Layout";
+            const int pageSize = 12;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = _context.Car.Where(d => d.address.Contains(query)).Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            this.ViewBag.Pager = pager;
+            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Include(c => c.images).Where(d => d.address.Contains(query)).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
+            {
+                Id = c.id,
+                Model = c.model,
+                Brand = c.brand,
+                Price = c.Price,
+                address = c.address,
+                ImageName = c.images.FirstOrDefault(i => i.carId == c.id) != null ? c.images.FirstOrDefault(i => i.carId == c.id).nameFile : null 
+            }).Skip(recSkip).Take(pager.PageSize).ToList(); 
+            
+            ViewBag.query = query;
+            //Pass the results to the view
+            // if (car_rentalContext.Count() == 0)
+            // {
+            //     return RedirectToAction("Cars");
+            // }
+            return View(car_rentalContext);
+        }
         public async Task<IActionResult> CreateCar()
         {
              ViewBag.Layout = "_AdminLayout";

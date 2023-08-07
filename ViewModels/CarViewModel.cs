@@ -6,6 +6,7 @@ namespace Car_rental.ViewModels
         public string Model { get; set; }
         public string Brand { get; set; }
         public double Price { get; set; }
+        public string? address { get; set; }
         public string ImageName { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 @model IEnumerable<Car_rental.ViewModels.CarViewModel>
 @{
   var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
+  int displayedItems = 0;
 }
 <div class="hero-wrap ftco-degree-bg" style="background-image: url('/user/images/bg_2.jpg');" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
@@ -30,34 +31,16 @@
     		<div class="row no-gutters">
     			<div class="col-md-12	featured-top">
     				<div class="row no-gutters">
-	  					<div class="col-md-4 d-flex align-items-center">
-	  						<form action="#" class="request-form ftco-animate bg-primary">
-		          		<h2>Make your trip</h2>
+	  					<div class="col-md-4 flex align-items-center">
+	  						<form asp-controller="Car" asp-action="SearchforUser" class="request-form ftco-animate bg-primary">
+		          				<h2>Make your trip</h2>
 			    				<div class="form-group">
 			    					<label for="" class="label">Pick-up location</label>
-			    					<input type="text" class="form-control" placeholder="City, Airport, Station, etc">
+			    					<input type="text" name="query" class="form-control" placeholder="Your Location">
 			    				</div>
-			    				<div class="form-group">
-			    					<label for="" class="label">Drop-off location</label>
-			    					<input type="text" class="form-control" placeholder="City, Airport, Station, etc">
-			    				</div>
-			    				<div class="d-flex">
-			    					<div class="form-group mr-2">
-			                <label for="" class="label">Pick-up date</label>
-			                <input type="text" class="form-control" id="book_pick_date" placeholder="Date">
-			              </div>
-			              <div class="form-group ml-2">
-			                <label for="" class="label">Drop-off date</label>
-			                <input type="text" class="form-control" id="book_off_date" placeholder="Date">
-			              </div>
-		              </div>
-		              <div class="form-group">
-		                <label for="" class="label">Pick-up time</label>
-		                <input type="text" class="form-control" id="time_pick" placeholder="Time">
-		              </div>
-			            <div class="form-group">
-			              <input type="submit" value="Rent A Car Now" class="btn btn-secondary py-3 px-4">
-			            </div>
+			            		<div class="form-group">
+			            		  <input type="submit" value="Rent A Car Now" class="btn btn-secondary py-3 px-4">
+			            		</div>
 			    			</form>
 	  					</div>
 	  					<div class="col-md-8 d-flex align-items-center">
@@ -89,7 +72,7 @@
 					            </div>      
 					          </div>
 					        </div>
-					        <p><a href="#" class="btn btn-primary py-3 px-4">Reserve Your Perfect Car</a></p>
+					        
 	  						</div>
 	  					</div>
 	  				</div>
@@ -113,6 +96,10 @@
     				<div class="carousel-car owl-carousel">
 						@foreach (var item in Model)
 						{
+							    @if (displayedItems >= 6)
+    							{
+    							    break; // Exit the loop once 9 items are displayed
+    							}
 							<div class="item">
     							<div class="car-wrap rounded ftco-animate">
 		    						<div class="img rounded d-flex align-items-end" style="background-image: url( /images/@item.ImageName);">
@@ -129,6 +116,7 @@
 		    						</div>
 		    					</div>
     						</div>
+							displayedItems++;
 						}
     				</div>
     			</div>

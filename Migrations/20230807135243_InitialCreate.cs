@@ -65,6 +65,7 @@ namespace Car_rental.Migrations
                     citizen_identification = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     driver_license = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     dob = table.Column<DateTime>(type: "datetime2", nullable: true),
                     email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),

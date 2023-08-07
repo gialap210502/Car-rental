@@ -19,6 +19,9 @@ public class user
     [Required]
     [Display(Name = "Phone")]
     public string? phone { get; set; }
+    [Required]
+    [Display(Name = "address")]
+    public string? address { get; set; }
 
     [DataType(DataType.Date)]
     [Display(Name = "DOB")]

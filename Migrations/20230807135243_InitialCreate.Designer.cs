@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Car_rental.Migrations
 {
     [DbContext(typeof(Car_rentalContext))]
-    [Migration("20230803123213_InitialCreate")]
+    [Migration("20230807135243_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -356,6 +356,10 @@ namespace Car_rental.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("citizen_identification")
                         .HasColumnType("nvarchar(max)");

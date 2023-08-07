@@ -184,6 +184,7 @@ namespace Car_rental.Controllers
                     phone = "123456789",
                     dob = new DateTime(1990, 1, 1),
                     email = "lap@gmail.com",
+                    address = "AnPhu,AnGiang",
                     password = Encode.encode("123"),
                     flag = 0,
                     image = "@@@@.png"

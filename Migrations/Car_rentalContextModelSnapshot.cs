@@ -354,6 +354,10 @@ namespace Car_rental.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<string>("address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("citizen_identification")
                         .HasColumnType("nvarchar(max)");
 
