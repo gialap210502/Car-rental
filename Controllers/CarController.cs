@@ -421,6 +421,12 @@ namespace Car_rental.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Chart()
+        {
+            ViewBag.Layout = "_AdminLayout";
+            return View();
+        }
+
         private bool carExists(int id)
         {
             ViewBag.layout="_AdminLayout";
