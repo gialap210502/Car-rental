@@ -178,7 +178,7 @@ namespace Car_rental.Controllers
             {
                 var user1 = new user
                 {
-                    name = "Lap Duong",
+                    name = "John Doe",
                     citizen_identification = "123456789",
                     driver_license = "ABC123",
                     phone = "123456789",

@@ -422,41 +422,6 @@ namespace Car_rental.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-<<<<<<< HEAD
-        public IActionResult Chart()
-        {
-            ViewBag.Layout = "_AdminLayout";
-            var data = _context.userRole
-                .GroupBy(ur => ur.roleId)
-                .Select(group => new
-                {
-                    RoleId = group.Key,
-                    RoleName = _context.roles.FirstOrDefault(r => r.id == group.Key).role, // Replace "roles?.role" with the actual property that holds the role name
-                    Percentage = (double)group.Count() / _context.userRole.Count() * 100
-                })
-                .ToList();
-
-            string[] labels = new string[data.Count()];
-            string[] count = new string[data.Count()];
-            string[] rgbs = new string[data.Count()];
-
-            for (int i = 0; i < data.Count(); i++)
-            {
-                labels[i] = data[i].RoleName; // Change "data[i].Name" to "data[i].RoleName"
-                count[i] = data[i].Percentage.ToString("F2"); // Format the percentage to two decimal places
-                rgbs[i] = "'rgb(232, 237, 111)'"; // Correct the RGB format
-            }
-
-            ViewData["Percent_Color"] = string.Join(",", rgbs);
-            ViewData["labels"] = string.Join(",", labels); // No need for single quotes around each label
-            ViewData["Percent"] = string.Join(",", count);
-
-            return View();
-        }
-
-
-=======
->>>>>>> parent of f8b8c60 (up)
         private bool carExists(int id)
         {
             ViewBag.layout = "_AdminLayout";

@@ -72,12 +72,6 @@ namespace Car_rental.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<string>("CarBack")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TakeCar")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("endDate")
                         .IsRequired()
                         .HasColumnType("datetime2");
