@@ -308,7 +308,7 @@ namespace Car_rental.Controllers
         // GET: User/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            ViewBag.layout = "_Layout";
+            ViewBag.layout = "_AdminLayout";
             if (id == null || _context.user == null)
             {
                 return NotFound();

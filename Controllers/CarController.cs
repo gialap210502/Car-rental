@@ -422,6 +422,7 @@ namespace Car_rental.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+<<<<<<< HEAD
         public IActionResult Chart()
         {
             ViewBag.Layout = "_AdminLayout";
@@ -454,6 +455,8 @@ namespace Car_rental.Controllers
         }
 
 
+=======
+>>>>>>> parent of f8b8c60 (up)
         private bool carExists(int id)
         {
             ViewBag.layout = "_AdminLayout";
