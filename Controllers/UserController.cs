@@ -150,7 +150,7 @@ namespace Car_rental.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(IFormFile avatar, IFormFile license, IFormFile Id, [Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag,image")] user user, String repassword)
+        public async Task<IActionResult> Register(IFormFile avatar, IFormFile license, IFormFile Id, [Bind("id,name,citizen_identification,driver_license,phone,dob,email,address,password,flag,image")] user user, String repassword)
         {
             ViewBag.Layout = "_Layout";
             var UserExists = _context.user.FirstOrDefault(u => u.email == user.email);
@@ -175,7 +175,8 @@ namespace Car_rental.Controllers
             en_repassword = Encode.encode(repassword);
             if (en_password == en_repassword)
             {
-
+                if (ModelState.IsValid)
+                {
                     user.password = en_password;
                     Send send = new Send();
                     if (avatar == null)
@@ -243,11 +244,13 @@ namespace Car_rental.Controllers
                     string body = "Please click the link below to confirm your account: " + "\n\n" + "https://localhost:7160/User/ConfirmAccount?email=" + email; ;
                     send.SendEmail(email, subject, body);
                     return RedirectToAction(nameof(Index));
-                
-            }
-            else if (en_password != en_repassword)
-            {
-                ViewBag.ErrorMessage = "Repeated Password does not match Original Password";
+
+                }
+                else if (en_password != en_repassword)
+                {
+                    ViewBag.ErrorMessage = "Repeated Password does not match Original Password";
+                }
+            
             }
             return View();
         }
