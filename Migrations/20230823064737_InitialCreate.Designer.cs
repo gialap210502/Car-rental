@@ -12,11 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Car_rental.Migrations
 {
     [DbContext(typeof(Car_rentalContext))]
-<<<<<<<< HEAD:Migrations/20230807135243_InitialCreate.Designer.cs
-    [Migration("20230807135243_InitialCreate")]
-========
-    [Migration("20230625053649_InitialCreate")]
->>>>>>>> parent of 78accfa (Tomorrow: create profile page, update manage page):Migrations/20230625053649_InitialCreate.Designer.cs
+    [Migration("20230823064737_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

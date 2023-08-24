@@ -25,7 +25,7 @@ namespace Car_rental.Controllers
         // GET: Car
         public async Task<IActionResult> Index(int pg = 1)
         {
-            ViewBag.layout = "_AdminLayout";
+            ViewBag.layout="_AdminLayout";
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
@@ -50,7 +50,7 @@ namespace Car_rental.Controllers
             }); ;
             return View(await car_rentalContext.ToListAsync());
         }
-
+        
         public async Task<IActionResult> About()
         {
             ViewBag.Layout = "_Layout";
@@ -73,8 +73,8 @@ namespace Car_rental.Controllers
                 Brand = c.brand,
                 Price = c.Price,
                 address = c.address,
-                ImageName = c.images.FirstOrDefault(i => i.carId == c.id) != null ? c.images.FirstOrDefault(i => i.carId == c.id).nameFile : null
-            }).Skip(recSkip).Take(pager.PageSize).ToList();
+                ImageName = c.images.FirstOrDefault(i => i.carId == c.id) != null ? c.images.FirstOrDefault(i => i.carId == c.id).nameFile : null 
+            }).Skip(recSkip).Take(pager.PageSize).ToList(); 
             this.ViewBag.Pager = pager;
             return View(car_rentalContext);
         }
@@ -96,9 +96,9 @@ namespace Car_rental.Controllers
                 Brand = c.brand,
                 Price = c.Price,
                 address = c.address,
-                ImageName = c.images.FirstOrDefault(i => i.carId == c.id) != null ? c.images.FirstOrDefault(i => i.carId == c.id).nameFile : null
-            }).Skip(recSkip).Take(pager.PageSize).ToList();
-
+                ImageName = c.images.FirstOrDefault(i => i.carId == c.id) != null ? c.images.FirstOrDefault(i => i.carId == c.id).nameFile : null 
+            }).Skip(recSkip).Take(pager.PageSize).ToList(); 
+            
             ViewBag.query = query;
             //Pass the results to the view
             // if (car_rentalContext.Count() == 0)
@@ -109,7 +109,7 @@ namespace Car_rental.Controllers
         }
         public async Task<IActionResult> CreateCar()
         {
-            ViewBag.Layout = "_AdminLayout";
+             ViewBag.Layout = "_AdminLayout";
             var cars = new List<car>();
 
             for (int i = 0; i < 15; i++)
@@ -166,11 +166,10 @@ namespace Car_rental.Controllers
             ViewBag.listImages = listImages;
             var Video = _context.VideoCar.FirstOrDefault(i => i.carId == id);
             ViewBag.Video = "";
-            if (Video != null)
-            {
+            if(Video != null){
                 ViewBag.Video = Video.nameFile;
             }
-
+            
 
             //random related cars base on category 
             // Random random = new Random();
@@ -227,7 +226,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IFormFile myVideoFile, IFormFile myfile1, IFormFile myfile2, IFormFile myfile3, IFormFile myfile4, IFormFile myfile5, [Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,Description,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
         {
-            ViewBag.layout = "_AdminLayout";
+            ViewBag.layout="_AdminLayout";
             if (ModelState.IsValid)
             {
                 _context.Add(car);
@@ -324,7 +323,7 @@ namespace Car_rental.Controllers
         // GET: Car/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            ViewBag.layout = "_AdminLayout";
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.Car == null)
             {
                 return NotFound();
@@ -348,7 +347,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,Description,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
         {
-            ViewBag.layout = "_AdminLayout";
+            ViewBag.layout="_AdminLayout";
             if (id != car.id)
             {
                 return NotFound();
@@ -383,7 +382,7 @@ namespace Car_rental.Controllers
         // GET: Car/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            ViewBag.layout = "_AdminLayout";
+            ViewBag.layout="_AdminLayout";
             if (id == null || _context.Car == null)
             {
                 return NotFound();
@@ -407,7 +406,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            ViewBag.layout = "_AdminLayout";
+            ViewBag.layout="_AdminLayout";
             if (_context.Car == null)
             {
                 return Problem("Entity set 'Car_rentalContext.Car'  is null.");
@@ -422,9 +421,18 @@ namespace Car_rental.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+<<<<<<< HEAD
+=======
+        public async Task<IActionResult> Chart()
+        {
+            ViewBag.Layout = "_AdminLayout";
+            return View();
+        }
+
+>>>>>>> parent of 2054f0e (chart not done)
         private bool carExists(int id)
         {
-            ViewBag.layout = "_AdminLayout";
+            ViewBag.layout="_AdminLayout";
             return _context.Car.Any(e => e.id == id);
         }
     }

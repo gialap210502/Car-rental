@@ -175,8 +175,7 @@ namespace Car_rental.Controllers
             en_repassword = Encode.encode(repassword);
             if (en_password == en_repassword)
             {
-                if (ModelState.IsValid)
-                {
+
                     user.password = en_password;
                     Send send = new Send();
                     if (avatar == null)
@@ -244,7 +243,7 @@ namespace Car_rental.Controllers
                     string body = "Please click the link below to confirm your account: " + "\n\n" + "https://localhost:7160/User/ConfirmAccount?email=" + email; ;
                     send.SendEmail(email, subject, body);
                     return RedirectToAction(nameof(Index));
-                }
+                
             }
             else if (en_password != en_repassword)
             {
