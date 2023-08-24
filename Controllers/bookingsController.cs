@@ -89,9 +89,11 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Booking(int userId,int cardId, DateTime? startDate, DateTime? endDate, double? totalAmount)
+        public async Task<IActionResult> Booking(int userId,int cardId, DateTime? startDate, DateTime? endDate, double? totalAmount, string TakeCar, string CarBack)
         {
             ViewBag.Layout = null;
+            ViewBag.Layout = null;
+            Console.WriteLine(userId);
             if (ModelState.IsValid)
             {
                 var bookings = new bookings();
@@ -99,6 +101,8 @@ namespace Car_rental.Controllers
                 bookings.startDate = startDate;
                 bookings.endDate = endDate;
                 bookings.totalAmount = totalAmount;
+                bookings.TakeCar = TakeCar;
+                bookings.CarBack = CarBack;
                 _context.Add(bookings);
                 await _context.SaveChangesAsync();
                 var payment = new payment();

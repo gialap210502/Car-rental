@@ -2,6 +2,15 @@
 
 @{
     ViewData["Title"] = "Create";
+    var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
+    string message = "You need to login to continue booking!";
+    if (Id == null)
+    {
+      <script>
+              alert("@message");
+              window.location.href = "/User/login";
+      </script>
+    }
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -126,62 +135,40 @@ select:focus{
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" name="cardId" value="@ViewBag.cardId" />
             <input type="hidden" name="totalAmount" value="@ViewBag.totalAmount" />
-            <input type="hidden" name="totalAmount" value="@ViewBag.userId" />
+            <input type="hidden" name="userId" value="@ViewBag.userId" />
             
-            <div class="row">
-            <div class="col-sm-6">
-              <p>@ViewBag.userId</p>
-                <select class="browser-default custom-select mb-4" id="select">
-                    <option value="" disabled="" selected="">From City/Airport</option>
-                    <option value="1">New Delhi</option>
-                    <option value="2">Mumbai</option>
-                    <option value="3">Bangalore</option>
-                </select>
-            </div>
 
-            <div class="col-sm-6">
-                <select class="browser-default custom-select mb-4" id="select">
-                    <option value="" disabled="" selected="">To City/Airport</option>
-                    <option value="1">New Delhi</option>
-                    <option value="2">Mumbai</option>
-                    <option value="3">Bangalore</option>
-                </select>
-            </div>
-        </div>
         <!--Third Row-->
         <div class="row">
             <div class="col-sm-6">
                 Start-days
-                <input placeholder="&#xf073; Departing" id="date-picker-example" class="form-control datepicker mb-4" style="font-family:Arial, FontAwesome"asp-for="startDate" class="form-control" />
-                <span asp-validation-for="startDate" class="text-danger"></span>
+                <input placeholder="&#xf073; Departing" id="date-picker-example" class="form-control datepicker mb-4" style="font-family:Arial, FontAwesome"asp-for="startDate" class="form-control" required/>
             </div>
                 <div class="col-sm-6">
                 End-day
-                <input placeholder="&#xf073; Arriving" id="date-picker-example" class="form-control datepicker" style="font-family:Arial, FontAwesome" asp-for="endDate" class="form-control" />
+                <input placeholder="&#xf073; Arriving" id="date-picker-example" class="form-control datepicker" style="font-family:Arial, FontAwesome" asp-for="endDate" class="form-control" required/>
                 <span asp-validation-for="endDate" class="text-danger"></span>
             </div>
         </div>
         <!--Fourth Row-->
         <div class="row mt-4">
             <div class="col-sm-6">
-                <select class="browser-default custom-select mb-4" id="select">
-                    <option value="" disabled="" selected="">Anytime</option>
-                    <option value="1">6:00 AM</option>
-                    <option value="2">3:00 PM</option>
-                    <option value="3">6:00 PM</option>
-                </select>
+              <div class="form-group">
+                  <label asp-for="TakeCar" class="control-label"></label>
+                  <input asp-for="TakeCar" class="form-control" type="text" inputmode="numeric" pattern="(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]" />
+                  <span asp-validation-for="TakeCar" class="text-danger"></span>
+              </div>
             </div>
             <div class="col-sm-6">
-                <select class="browser-default custom-select mb-4" id="select">
-                    <option value="" disabled="" selected="">Anytime</option>
-                    <option value="1">6:00 AM</option>
-                    <option value="2">3:00 PM</option>
-                    <option value="3">6:00 PM</option>
-                </select>
+              <div class="form-group">
+                  <label asp-for="CarBack" class="control-label"></label>
+                  <input asp-for="CarBack" class="form-control" type="text" inputmode="numeric" pattern="(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]" />
+                  <span asp-validation-for="CarBack" class="text-danger"></span>
+              </div>
             </div>
                 </div>
                 <!--Fifth Row-->
-                <div class="row">
+                @* <div class="row">
                     <div class="col-sm-4">
                         <select class="browser-default custom-select mb-4" id="select">
                             <option value="" disabled="" selected="">Kids(0-14)</option>
@@ -207,7 +194,7 @@ select:focus{
                             <option value="3">3</option>
                          </select>
                     </div>
-                </div>
+                </div> *@
                 <div class="form-group">
                         <label asp-for="totalAmount" class="control-label"></label>
                         <div class="input-group">

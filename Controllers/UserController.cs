@@ -250,7 +250,7 @@ namespace Car_rental.Controllers
                 {
                     ViewBag.ErrorMessage = "Repeated Password does not match Original Password";
                 }
-            
+
             }
             return View();
         }
@@ -288,14 +288,7 @@ namespace Car_rental.Controllers
                     HttpContext.Session.SetInt32(SessionId, user.id);
                     HttpContext.Session.SetString(SessionRole, userRole.role.role);
 
-                    if (userRole.role.role == "Admin" || userRole.role.role == "Owner")
-                    {
-                        return RedirectToAction("Index", "User");
-                    }
-                    else
-                    {
-                        return RedirectToAction("Home", "Car");
-                    }
+                    return RedirectToAction("Home", "Car");
                 }
                 else if (user == null)
                 {

@@ -110,7 +110,10 @@
 			    							<span class="cat">@item.Brand</span>
 			    							<p class="price ml-auto">$@item.Price <span>/day</span></p>
 		    							</div>
-		    							<p class="d-flex mb-0 d-block"><a asp-controller="bookings" asp-action="Book" asp-route-cardId="@item.Id" class="btn btn-primary py-2 mr-1">Book now</a> <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary py-2 ml-1">Details</a></p>
+		    							<p class="d-flex mb-0 d-block">
+                        <a onclick="showInPopup('@Url.Action("Book","bookings",new {cardId=@item.Id, totalAmount=@item.Price, userId=@Id},Context.Request.Scheme)','Book')" class="btn btn-primary py-2 mr-1">book now</a>  
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary py-2 ml-1">Details</a>
+                      </p>
 		    						</div>
 		    					</div>
     						</div>
@@ -275,63 +278,7 @@
       </div>
     </section>
 
-    <section class="ftco-section">
-      <div class="container">
-        <div class="row justify-content-center mb-5">
-          <div class="col-md-7 heading-section text-center ftco-animate">
-          	<span class="subheading">Blog</span>
-            <h2>Recent Blog</h2>
-          </div>
-        </div>
-        <div class="row d-flex">
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry justify-content-end">
-              <a href="blog-single.html" class="block-20" style="background-image: url(' /user/images/image_1.jpg');">
-              </a>
-              <div class="text pt-4">
-              	<div class="meta mb-3">
-                  <div><a href="#">Oct. 29, 2019</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading mt-2"><a href="#">Why Lead Generation is Key for Business Growth</a></h3>
-                <p><a href="#" class="btn btn-primary">Read more</a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry justify-content-end">
-              <a href="blog-single.html" class="block-20" style="background-image: url(' /user/images/image_2.jpg');">
-              </a>
-              <div class="text pt-4">
-              	<div class="meta mb-3">
-                  <div><a href="#">Oct. 29, 2019</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading mt-2"><a href="#">Why Lead Generation is Key for Business Growth</a></h3>
-                <p><a href="#" class="btn btn-primary">Read more</a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry">
-              <a href="blog-single.html" class="block-20" style="background-image: url(' /user/images/image_3.jpg');">
-              </a>
-              <div class="text pt-4">
-              	<div class="meta mb-3">
-                  <div><a href="#">Oct. 29, 2019</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading mt-2"><a href="#">Why Lead Generation is Key for Business Growth</a></h3>
-                <p><a href="#" class="btn btn-primary">Read more</a></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>	
+
 
     <section class="ftco-counter ftco-section img bg-light" id="section-counter">
 			<div class="overlay"></div>
