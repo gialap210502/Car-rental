@@ -1,6 +1,14 @@
 @model IEnumerable<Car_rental.Models.bookings>
 @{
-    ViewData["Title"] = "Booking history";
+  ViewData["Title"] = "Booking history";
+  Pager pager = new Pager();
+  int pageNo = 0;
+
+  if (ViewBag.Pager != null)
+  {
+    pager = ViewBag.Pager;
+    pageNo = pager.CurrentPage;
+  }
 }
 <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('../../user/images/image_1.jpg');" data-stellar-background-ratio="0.5">
   <div class="overlay"></div>
@@ -21,16 +29,10 @@
                 <div class="d-flex justify-content-center">
                   <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                     <li class="nav-item">
-                      <a class="nav-link active" id="pills-description-tab" data-toggle="pill" href="#pills-description" role="tab" aria-controls="pills-description" aria-expanded="true">Features</a>
+                      <a class="nav-link active" id="pills-description-tab" data-toggle="pill" href="#pills-description" role="tab" aria-controls="pills-description" aria-expanded="true">Bookings History</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill" href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer" aria-expanded="true">Description</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" id="pills-rate-tab" data-toggle="pill" href="#pills-rate" role="tab" aria-controls="pills-rate" aria-expanded="true">Rate</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" id="pills-review-tab" data-toggle="pill" href="#pills-review" role="tab" aria-controls="pills-review" aria-expanded="true">Review</a>
+                      <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill" href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer" aria-expanded="true">Review History</a>
                     </li>
                   </ul>
                 </div>
@@ -39,42 +41,103 @@
                         <div class="row">
                             <div class="table-responsive">
                                 <table class="table table-hover">
-                                   <thead>
+                                   <thead style="background-color: #01d28e; color: white; font-weight: bold; text-align: center;">
+                                        <th>Car</th>
+                                        <th>Payment Date</th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.startDate)
+                                            Start Date
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.endDate)
+                                            End Date
                                         </th>
+                                        <th>Payment Method</th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.totalAmount)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.user)
+                                            Total Amount
                                         </th>
                                         <th></th>
                                    </thead>
-                                   <tbody>
-                                    @foreach (var item in Model) 
-                                    {
-                                        <tr>
-                                           <td>
-                                               @Html.DisplayFor(modelItem => item.startDate)
-                                           </td>
-                                           <td>
-                                               @Html.DisplayFor(modelItem => item.endDate)
-                                           </td>
-                                           <td>
-                                               @Html.DisplayFor(modelItem => item.totalAmount)
-                                           </td>
-                                           <td>
-                                               @Html.DisplayFor(modelItem => item.user.email)
-                                           </td>
-                                        </tr>
-                                    }
+                                   <tbody >
+                      @foreach (var item in Model)
+                      {
+                                            <tr style="text-align: center; border-bottom: 1px solid black;">
+                                              <td >
+                            @foreach (var paymentItem in item.payments)
+                            {
+                              @Html.DisplayFor(modelItem => paymentItem.car.model)
+
+                                  <br />
+                            }
+                                              </td>
+                                              <td >
+                            @foreach (var paymentItem in item.payments)
+                            {
+                              @Html.DisplayFor(modelItem => paymentItem.paymentDate)
+
+                                  <br />
+                            }
+                                              </td>
+                                              <td >
+                            @Html.DisplayFor(modelItem => item.startDate)
+                                              </td>
+                                              <td >
+                            @Html.DisplayFor(modelItem => item.endDate)
+                                              </td>
+                                              <td >
+                            @foreach (var paymentItem in item.payments)
+                            {
+                              @Html.DisplayFor(modelItem => paymentItem.paymentMethod)
+
+                                  <br />
+                            }
+                                              </td>
+                                              <td >
+                            @Html.DisplayFor(modelItem => item.totalAmount)
+                                              </td>
+                                              <td>
+                            @foreach (var paymentItem in item.payments)
+                            {
+                                                        <a class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal"> 1 </a>
+                            }
+                                              </td>
+                                            </tr>
+                      }
                                    </tbody>
                                  </table>
                             </div>
+                        </div>
+                        <div class="row mt-5">
+                          <div class="col text-center">
+                  @if (pager.TotalPages > 0)
+                  {
+                    var pre = 1;
+                    var next = pager.CurrentPage + 1;
+                                      <div class="block-27">
+                                        <ul>
+                                            <li><a type="button" class="button break-page" asp-controller="bookings" asp-action="BookingHistory" asp-route-pg="@pre">&lt;</a></li>
+                        @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                        {
+
+                                                    <li><a type="button" class="button break-page" asp-controller="bookings" asp-action="BookingHistory" asp-route-pg="@pge">@pge</a></li>
+                          pre = pge - 1;
+                          if (pre == 1 || pre == 0)
+                          {
+                            pre = 1;
+                          }
+                          if (next < pager.EndPage)
+                          {
+                            next = pge + 1;
+                          }
+
+                          if (next >= pager.EndPage)
+                          {
+                            next = pager.EndPage;
+                          }
+                        }
+                                            <li><a type="button" class="button break-page" asp-controller="bookings" asp-action="BookingHistory" asp-route-pg="@next">&gt;</a></li>
+                                        </ul>
+                                      </div>
+                  }
+                          </div>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="pills-manufacturer" role="tabpanel" aria-labelledby="pills-manufacturer-tab">
@@ -92,4 +155,59 @@
             </div>
         </div>
     </div>
+    <div class="modal" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Modal Heading</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form method="post" asp-controller="rating" asp-action="Rate">
+                    <!-- Add a select element for the status if needed -->
+                    <!--
+                    <select name="status" style="margin-bottom:20px">
+                        <option value="0">Public</option>
+                        <option value="1">Stay anonymous</option>
+                    </select>
+                    -->
+                    <input type="hidden" name="Carid" value="" />
+                  <div class="form-group">
+                      <label for="star">Rating</label>
+                      <div class="star-rating">
+                          <input type="radio" id="star5" name="Star" value="1" required hidden />
+                          <label for="star5" >&#9733;</label>
+                          <input type="radio" id="star4" name="Star" value="2" required hidden />
+                          <label for="star4" >&#9733;</label>
+                          <input type="radio" id="star3" name="Star" value="3" required hidden />
+                          <label for="star3" >&#9733;</label>
+                          <input type="radio" id="star2" name="Star" value="4" required hidden />
+                          <label for="star2" >&#9733;</label>
+                          <input type="radio" id="star1" name="Star" value="5" required hidden />
+                          <label for="star1" >&#9733;</label>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                        <label for="comment">Comment</label>
+                        <textarea class="form-control" id="comment" name="comment" placeholder="Enter your comment" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-user btn-block"
+                            style="margin-left: auto; margin-right: auto; margin-bottom: 20px;">
+                        Comment
+                    </button>
+                </form>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
 </section>

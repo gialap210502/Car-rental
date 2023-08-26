@@ -25,10 +25,17 @@ namespace Car_rental.Controllers
             var car_rentalContext = _context.bookings.Include(b => b.user);
             return View(await car_rentalContext.ToListAsync());
         }
-        public async Task<IActionResult> BookingHistory(int? id)
+        public async Task<IActionResult> BookingHistory(int? id, int pg = 1)
         {
             ViewBag.Layout = "_Layout";
-            var car_rentalContext = _context.bookings.Include(b => b.user).Where(d => d.userId == id);
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = _context.bookings.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            this.ViewBag.Pager = pager;
+            var car_rentalContext = _context.bookings.Include(b => b.user).Include(b => b.payments).ThenInclude(p => p.car).Where(d => d.userId == id).Skip(recSkip).Take(pager.PageSize);
             return View(await car_rentalContext.ToListAsync());
         }
 
@@ -89,11 +96,9 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Booking(int userId,int cardId, DateTime? startDate, DateTime? endDate, double? totalAmount, string TakeCar, string CarBack)
+        public async Task<IActionResult> Booking(int userId, int cardId, DateTime? startDate, DateTime? endDate, double? totalAmount, string TakeCar, string CarBack)
         {
             ViewBag.Layout = null;
-            ViewBag.Layout = null;
-            Console.WriteLine(userId);
             if (ModelState.IsValid)
             {
                 var bookings = new bookings();
@@ -113,9 +118,9 @@ namespace Car_rental.Controllers
                 payment.paymentMethod = "COD";
                 _context.payment.Add(payment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("BookingHistory", "bookings", new { id = userId });
             }
-            return View();
+            return RedirectToAction("BookingHistory", "bookings", new { id = userId });
         }
 
 
