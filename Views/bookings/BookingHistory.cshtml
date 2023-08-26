@@ -96,7 +96,7 @@ var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID
                                               <td>
                             @foreach (var paymentItem in item.payments)
                             {
-                                                        <a class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal"> 1 </a>
+                              <a class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal" data-carid="@Html.DisplayFor(modelItem => paymentItem.car.id)"> Review </a>
                             }
                                               </td>
                                             </tr>
@@ -175,7 +175,7 @@ var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID
                         <option value="1">Stay anonymous</option>
                     </select>
                     -->
-                    <input type="hidden" name="Carid" value="" />
+                    <input type="hidden" name="Carid" value="" data-carid-input/>
                   <div class="form-group">
                       <label for="star">Rating</label>
                       <div class="star-rating">
@@ -226,4 +226,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+</script>
+<script>
+    $(document).ready(function() {
+        // Xử lý sự kiện khi modal được hiển thị
+        $('#myModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Nút "Review" được nhấn
+            var carId = button.data('carid'); // Lấy giá trị từ thuộc tính data-carid
+            
+            // Gán giá trị vào trường ẩn trong modal
+            $("input[data-carid-input]").val(carId);
+        });
+    });
 </script>
