@@ -3,7 +3,7 @@
   ViewData["Title"] = "Booking history";
   Pager pager = new Pager();
   int pageNo = 0;
-
+var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
   if (ViewBag.Pager != null)
   {
     pager = ViewBag.Pager;
@@ -211,3 +211,19 @@
   </div>
 </div>
 </section>
+<script>
+// JavaScript to handle the click event and change the star color
+document.addEventListener('DOMContentLoaded', function() {
+  var stars = document.querySelectorAll('.star-rating input[type="radio"] + label');
+  stars.forEach(function(star, index) {
+    star.addEventListener('click', function() {
+      for (var i = 0; i <= index; i++) {
+        stars[i].style.color = '#01d28e'; /* Set the color of the clicked star and the preceding stars */
+      }
+      for (var j = index + 1; j < stars.length; j++) {
+        stars[j].style.color = '#5f6f6aa7'; /* Reset the color of the remaining stars */
+      }
+    });
+  });
+});
+</script>
