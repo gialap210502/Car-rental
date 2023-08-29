@@ -46,7 +46,7 @@ namespace Car_rental.Controllers
                 rating.dateRating = DateTime.Now;
                 _context.Add(rating);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "rating", new { id = carId });
+                return RedirectToAction("BookingHistory", "bookings", new { id = userId });
             }
             if(existRatingCheck.Count() > 0){
                 var ratingExists = _context.rating.Where(i => i.carId == carId && i.userId == userId).FirstOrDefault();
@@ -55,7 +55,7 @@ namespace Car_rental.Controllers
                 ratingExists.Star = rating.Star;
                 _context.Update(ratingExists);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Car", new { id = carId });
+                return RedirectToAction("BookingHistory", "bookings", new { id = userId });
             }
             return RedirectToAction("Login", "User");
         }

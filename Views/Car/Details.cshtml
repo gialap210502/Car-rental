@@ -489,7 +489,7 @@
 				                    <p class="price ml-auto">$@ViewBag.relatedCars[i].Price <span>/day</span></p>
 				                </div>
 				                <p class="d-flex mb-0 d-block">
-				                    <a href="#" class="btn btn-primary py-2 mr-1">Book now</a>
+				                    <a onclick="showInPopup('@Url.Action("Book","bookings",new {cardId=@ViewBag.relatedCars[i].id, totalAmount=@ViewBag.relatedCars[i].Price, userId=@Id},Context.Request.Scheme)','Book')" class="btn btn-primary py-2 mr-1">Book now</a>
 				                    <a asp-action="Details" asp-route-id="@ViewBag.relatedCars[i].id" class="btn btn-secondary py-2 ml-1">Details</a>
 				                </p>
 				            </div>

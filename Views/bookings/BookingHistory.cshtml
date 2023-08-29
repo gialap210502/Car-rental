@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
   stars.forEach(function(star, index) {
     star.addEventListener('click', function() {
       for (var i = 0; i <= index; i++) {
-        stars[i].style.color = '#01d28e'; /* Set the color of the clicked star and the preceding stars */
+        stars[i].style.color = '#ffe234'; /* Set the color of the clicked star and the preceding stars */
       }
       for (var j = index + 1; j < stars.length; j++) {
         stars[j].style.color = '#5f6f6aa7'; /* Reset the color of the remaining stars */

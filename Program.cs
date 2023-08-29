@@ -19,6 +19,8 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(10);
     options.Cookie.IsEssential = true;
 });
+builder.Services.AddSignalR();
+
 
 
 
@@ -41,6 +43,9 @@ app.UseRouting();
 
 app.UseAuthorization();
 app.UseSession();
+
+
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Car}/{action=Home}/{id?}");
