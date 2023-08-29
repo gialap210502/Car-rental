@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Car_rental.Data;
+using MySignalRApp.Hubs;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Car_rentalContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Car_rentalContext") ?? throw new InvalidOperationException("Connection string 'Car_rentalContext' not found.")));
@@ -46,8 +48,14 @@ app.UseSession();
 
 
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Car}/{action=Home}/{id?}");
+
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatHub>("/chathub"); // Map SignalR hub
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Car}/{action=Home}/{id?}"); // Your default route
+});
 
 app.Run();

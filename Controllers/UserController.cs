@@ -85,13 +85,16 @@ namespace Car_rental.Controllers
         }
         public IActionResult Register()
         {
-            ViewBag.layout = "_AdminLayout";
+            ViewBag.Layout = "_Layout";
+            return View();
+        }
+        public IActionResult Chat()
+        {
             ViewBag.Layout = "_Layout";
             return View();
         }
         public IActionResult Login()
         {
-            ViewBag.layout = "_AdminLayout";
             ViewBag.Layout = "_Layout";
             return View();
         }
