@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Car_rental.Migrations
 {
     [DbContext(typeof(Car_rentalContext))]
-    [Migration("20230901125908_InitialCreate")]
+    [Migration("20230901140853_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -500,7 +500,7 @@ namespace Car_rental.Migrations
                     b.HasOne("Car_rental.Models.user", "User")
                         .WithMany()
                         .HasForeignKey("userID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("ChatBox");

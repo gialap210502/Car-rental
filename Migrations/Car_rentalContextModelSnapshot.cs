@@ -497,7 +497,7 @@ namespace Car_rental.Migrations
                     b.HasOne("Car_rental.Models.user", "User")
                         .WithMany()
                         .HasForeignKey("userID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("ChatBox");

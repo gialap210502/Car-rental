@@ -79,6 +79,12 @@ namespace Car_rental.Data
                 .HasForeignKey(r => r.booking_id)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Message>()
+            .HasOne(m => m.User)
+            .WithMany()
+            .HasForeignKey(m => m.userID)
+            .OnDelete(DeleteBehavior.NoAction);
+
 
         }
 

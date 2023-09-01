@@ -329,8 +329,7 @@ namespace Car_rental.Migrations
                         name: "FK_Message_user_userID",
                         column: x => x.userID,
                         principalTable: "user",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateIndex(
