@@ -162,6 +162,25 @@ namespace Car_rental.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ChatBox",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatBox", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChatBox_user_UserId",
+                        column: x => x.UserId,
+                        principalTable: "user",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "userRole",
                 columns: table => new
                 {
@@ -286,6 +305,34 @@ namespace Car_rental.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Message",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ChatBoxId = table.Column<int>(type: "int", nullable: false),
+                    userID = table.Column<int>(type: "int", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Message", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Message_ChatBox_ChatBoxId",
+                        column: x => x.ChatBoxId,
+                        principalTable: "ChatBox",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Message_user_userID",
+                        column: x => x.userID,
+                        principalTable: "user",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_bookings_userId",
                 table: "bookings",
@@ -307,9 +354,24 @@ namespace Car_rental.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ChatBox_UserId",
+                table: "ChatBox",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Images_carId",
                 table: "Images",
                 column: "carId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Message_ChatBoxId",
+                table: "Message",
+                column: "ChatBoxId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Message_userID",
+                table: "Message",
+                column: "userID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_payment_booking_id",
@@ -354,6 +416,9 @@ namespace Car_rental.Migrations
                 name: "Images");
 
             migrationBuilder.DropTable(
+                name: "Message");
+
+            migrationBuilder.DropTable(
                 name: "payment");
 
             migrationBuilder.DropTable(
@@ -364,6 +429,9 @@ namespace Car_rental.Migrations
 
             migrationBuilder.DropTable(
                 name: "VideoCar");
+
+            migrationBuilder.DropTable(
+                name: "ChatBox");
 
             migrationBuilder.DropTable(
                 name: "bookings");

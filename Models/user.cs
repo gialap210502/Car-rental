@@ -44,4 +44,5 @@ public class user
     public ICollection<bookings>? bookings { get; } = new List<bookings>();
 
     public ICollection<car>? cars { get; } = new List<car>();
+    public ICollection<ChatBox>? ChatBoxes { get; } = new List<ChatBox>();
 }
