@@ -88,10 +88,72 @@ namespace Car_rental.Controllers
             ViewBag.Layout = "_Layout";
             return View();
         }
-        public IActionResult Chat()
+        //User1 is the person creating the chat, user2 is the person receiving the message
+        public IActionResult CreateChatRoom(int UserId1, int UserId2)
         {
             ViewBag.Layout = "_Layout";
-            return View();
+            Console.WriteLine(UserId1 + "----" + UserId2);
+            // Tìm cuộc trò chuyện chứa cả hai người dùng
+            var existingConversation = _context.Conversation
+                .Where(c => c.Participations.Any(p => p.UserID == UserId1) && c.Participations.Any(p => p.UserID == UserId2))
+                .FirstOrDefault();
+
+            if (existingConversation == null)
+            {
+                // Nếu không có cuộc trò chuyện tồn tại, tạo mới một cuộc trò chuyện
+                var newConversation = new Conversation { Name = UserId1 + "--" + UserId2, CreatedAt = DateTime.Now };
+                _context.Conversation.Add(newConversation);
+                _context.SaveChanges();
+
+                // Thêm hai người dùng vào cuộc trò chuyện mới
+                var participation1 = new Participation { UserID = UserId1, ConversationID = newConversation.ConversationID };
+                var participation2 = new Participation { UserID = UserId2, ConversationID = newConversation.ConversationID };
+                _context.Participation.AddRange(participation1, participation2);
+                _context.SaveChanges();
+
+                // Chuyển hướng đến trang chat với cuộc trò chuyện mới
+                return RedirectToAction("Chat", new { conversationId = newConversation.ConversationID });
+            }
+            else
+            {
+                // Nếu cuộc trò chuyện đã tồn tại, chuyển hướng đến trang chat với cuộc trò chuyện đã tồn tại
+                return RedirectToAction("Chat", new { conversationId = existingConversation.ConversationID });
+            }
+        }
+        public IActionResult Chat(int? conversationId)
+        {
+            ViewBag.layout = "_Layout";
+            List<Conversation> ConversationData = _context.Conversation.Include(C => C.Messages).ThenInclude(m => m.user).Include(C => C.Participations).Where(C => C.ConversationID == conversationId).ToList();
+            return View(ConversationData);
+        }
+
+        [HttpPost]
+        public IActionResult SendMessage(int conversationId, int userId, string content)
+        {
+            ViewBag.Layout = "_Layout";
+
+            if (ModelState.IsValid)
+            {
+                // Assuming you have a DbContext named _context for database operations.
+                var message = new Message
+                {
+                    ConversationID = conversationId,
+                    UserID = userId,
+                    Content = content,
+                    SentAt = DateTime.Now
+                };
+
+                // Add the message to the database and save changes.
+                _context.Message.Add(message);
+                _context.SaveChanges();
+
+                // Optionally, you can redirect the user back to the chat page or perform other actions.
+                return RedirectToAction("Chat", new { conversationId = conversationId });
+            }
+
+            // If ModelState is not valid, you can handle validation errors.
+            // For example, you can return the user to the chat page with validation errors.
+            return View("Chat");
         }
         public IActionResult Login()
         {

@@ -44,5 +44,6 @@ public class user
     public ICollection<bookings>? bookings { get; } = new List<bookings>();
 
     public ICollection<car>? cars { get; } = new List<car>();
-    public ICollection<ChatBox>? ChatBoxes { get; } = new List<ChatBox>();
+    public ICollection<Message>? Messages { get; } = new List<Message>();
+    public ICollection<Participation>? Participations { get; } = new List<Participation>();
 }

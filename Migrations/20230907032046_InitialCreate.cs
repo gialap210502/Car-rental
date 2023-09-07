@@ -27,6 +27,20 @@ namespace Car_rental.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Conversation",
+                columns: table => new
+                {
+                    ConversationID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Conversation", x => x.ConversationID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "discount",
                 columns: table => new
                 {
@@ -162,19 +176,54 @@ namespace Car_rental.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChatBox",
+                name: "Message",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    MessageID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    ConversationID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SentAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChatBox", x => x.Id);
+                    table.PrimaryKey("PK_Message", x => x.MessageID);
                     table.ForeignKey(
-                        name: "FK_ChatBox_user_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Message_Conversation_ConversationID",
+                        column: x => x.ConversationID,
+                        principalTable: "Conversation",
+                        principalColumn: "ConversationID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Message_user_UserID",
+                        column: x => x.UserID,
+                        principalTable: "user",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Participation",
+                columns: table => new
+                {
+                    ParticipationID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    ConversationID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Participation", x => x.ParticipationID);
+                    table.ForeignKey(
+                        name: "FK_Participation_Conversation_ConversationID",
+                        column: x => x.ConversationID,
+                        principalTable: "Conversation",
+                        principalColumn: "ConversationID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Participation_user_UserID",
+                        column: x => x.UserID,
                         principalTable: "user",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -305,33 +354,6 @@ namespace Car_rental.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Message",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ChatBoxId = table.Column<int>(type: "int", nullable: false),
-                    userID = table.Column<int>(type: "int", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Message", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Message_ChatBox_ChatBoxId",
-                        column: x => x.ChatBoxId,
-                        principalTable: "ChatBox",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Message_user_userID",
-                        column: x => x.userID,
-                        principalTable: "user",
-                        principalColumn: "id");
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_bookings_userId",
                 table: "bookings",
@@ -353,24 +375,29 @@ namespace Car_rental.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatBox_UserId",
-                table: "ChatBox",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Images_carId",
                 table: "Images",
                 column: "carId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Message_ChatBoxId",
+                name: "IX_Message_ConversationID",
                 table: "Message",
-                column: "ChatBoxId");
+                column: "ConversationID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Message_userID",
+                name: "IX_Message_UserID",
                 table: "Message",
-                column: "userID");
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Participation_ConversationID",
+                table: "Participation",
+                column: "ConversationID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Participation_UserID",
+                table: "Participation",
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_payment_booking_id",
@@ -418,6 +445,9 @@ namespace Car_rental.Migrations
                 name: "Message");
 
             migrationBuilder.DropTable(
+                name: "Participation");
+
+            migrationBuilder.DropTable(
                 name: "payment");
 
             migrationBuilder.DropTable(
@@ -430,7 +460,7 @@ namespace Car_rental.Migrations
                 name: "VideoCar");
 
             migrationBuilder.DropTable(
-                name: "ChatBox");
+                name: "Conversation");
 
             migrationBuilder.DropTable(
                 name: "bookings");

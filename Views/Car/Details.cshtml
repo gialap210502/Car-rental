@@ -101,7 +101,8 @@
                         		<h2>@Html.DisplayFor(model => model.model)</h2>
 					    		<p>Price: $@Html.DisplayFor(model => model.Price)</p> 
 					    		<a onclick="showInPopup('@Url.Action("Book","bookings",new {cardId=@Model.id, totalAmount=@Model.Price, userId=@Id},Context.Request.Scheme)','Book')" class="btn btn-primary py-2 mr-1">book now</a> 
-					      	</div>
+					      		<a asp-controller="user" asp-action="CreateChatRoom" asp-route-UserId1="@Id" asp-route-UserId2="@Model.user_id" class="btn btn-primary py-2 mr-1">Chat with owner</a>
+							</div>
 						</div>
       				</div>
       			</div>

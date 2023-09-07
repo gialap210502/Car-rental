@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Car_rental.Migrations
 {
     [DbContext(typeof(Car_rentalContext))]
-    [Migration("20230901140853_InitialCreate")]
+    [Migration("20230907032046_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,22 +25,23 @@ namespace Car_rental.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Car_rental.Models.ChatBox", b =>
+            modelBuilder.Entity("Car_rental.Models.Conversation", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ConversationID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ConversationID"));
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("UserId");
+                    b.HasKey("ConversationID");
 
-                    b.ToTable("ChatBox");
+                    b.ToTable("Conversation");
                 });
 
             modelBuilder.Entity("Car_rental.Models.Images", b =>
@@ -66,31 +67,54 @@ namespace Car_rental.Migrations
 
             modelBuilder.Entity("Car_rental.Models.Message", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("MessageID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ChatBoxId")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageID"));
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("userID")
+                    b.Property<int>("ConversationID")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("ChatBoxId");
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
 
-                    b.HasIndex("userID");
+                    b.HasKey("MessageID");
+
+                    b.HasIndex("ConversationID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Message");
+                });
+
+            modelBuilder.Entity("Car_rental.Models.Participation", b =>
+                {
+                    b.Property<int>("ParticipationID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ParticipationID"));
+
+                    b.Property<int>("ConversationID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ParticipationID");
+
+                    b.HasIndex("ConversationID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Participation");
                 });
 
             modelBuilder.Entity("Car_rental.Models.VideoCar", b =>
@@ -467,17 +491,6 @@ namespace Car_rental.Migrations
                     b.ToTable("userRole");
                 });
 
-            modelBuilder.Entity("Car_rental.Models.ChatBox", b =>
-                {
-                    b.HasOne("Car_rental.Models.user", "User")
-                        .WithMany("ChatBoxes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Car_rental.Models.Images", b =>
                 {
                     b.HasOne("Car_rental.Models.car", "car")
@@ -491,21 +504,40 @@ namespace Car_rental.Migrations
 
             modelBuilder.Entity("Car_rental.Models.Message", b =>
                 {
-                    b.HasOne("Car_rental.Models.ChatBox", "ChatBox")
+                    b.HasOne("Car_rental.Models.Conversation", "Conversation")
                         .WithMany("Messages")
-                        .HasForeignKey("ChatBoxId")
+                        .HasForeignKey("ConversationID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Car_rental.Models.user", "User")
-                        .WithMany()
-                        .HasForeignKey("userID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.HasOne("Car_rental.Models.user", "user")
+                        .WithMany("Messages")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ChatBox");
+                    b.Navigation("Conversation");
 
-                    b.Navigation("User");
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("Car_rental.Models.Participation", b =>
+                {
+                    b.HasOne("Car_rental.Models.Conversation", "Conversation")
+                        .WithMany("Participations")
+                        .HasForeignKey("ConversationID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Car_rental.Models.user", "user")
+                        .WithMany("Participations")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Conversation");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("Car_rental.Models.VideoCar", b =>
@@ -614,9 +646,11 @@ namespace Car_rental.Migrations
                     b.Navigation("user");
                 });
 
-            modelBuilder.Entity("Car_rental.Models.ChatBox", b =>
+            modelBuilder.Entity("Car_rental.Models.Conversation", b =>
                 {
                     b.Navigation("Messages");
+
+                    b.Navigation("Participations");
                 });
 
             modelBuilder.Entity("Car_rental.Models.bookings", b =>
@@ -652,7 +686,9 @@ namespace Car_rental.Migrations
 
             modelBuilder.Entity("Car_rental.Models.user", b =>
                 {
-                    b.Navigation("ChatBoxes");
+                    b.Navigation("Messages");
+
+                    b.Navigation("Participations");
 
                     b.Navigation("bookings");
 

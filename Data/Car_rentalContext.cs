@@ -79,13 +79,6 @@ namespace Car_rental.Data
                 .HasForeignKey(r => r.booking_id)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Message>()
-            .HasOne(m => m.User)
-            .WithMany()
-            .HasForeignKey(m => m.userID)
-            .OnDelete(DeleteBehavior.NoAction);
-
-
         }
 
         public DbSet<Car_rental.Models.car> Car { get; set; } = default!;
@@ -109,5 +102,13 @@ namespace Car_rental.Data
         public DbSet<Car_rental.Models.Images> Images { get; set; }
 
         public DbSet<Car_rental.Models.VideoCar> VideoCar { get; set; }
+
+        public DbSet<Car_rental.Models.Conversation> Conversation { get; set; } = default!;
+
+        public DbSet<Car_rental.Models.Message> Message { get; set; } = default!;
+        
+        public DbSet<Car_rental.Models.Participation> Participation { get; set; } = default!;
+        
+
     }
 }
