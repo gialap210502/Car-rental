@@ -25,17 +25,17 @@ namespace MySignalRApp.Hubs
             // Ở đây, bạn có thể thực hiện các xử lý cần thiết trước khi gửi tin nhắn.
             // Ví dụ: lưu tin nhắn vào cơ sở dữ liệu, kiểm tra quyền truy cập, vv.
             // Tạo một tin nhắn mới
-            // var message = new Message
-            // {
-            //     ConversationID = conversationId,
-            //     UserID = userId,
-            //     Content = content,
-            //     SentAt = DateTime.Now
-            // };
+            var message = new Message
+            {
+                ConversationID = conversationId,
+                UserID = userId,
+                Content = content,
+                SentAt = DateTime.Now
+            };
 
-            // // Thêm tin nhắn vào DbContext và lưu vào cơ sở dữ liệu
-            // _context.Message.Add(message);
-            // await _context.SaveChangesAsync();
+            // Thêm tin nhắn vào DbContext và lưu vào cơ sở dữ liệu
+            _context.Message.Add(message);
+            await _context.SaveChangesAsync();
             // Gửi tin nhắn tới tất cả các khách hàng trong cùng một phòng
             Console.WriteLine("hello123");
             await Clients.Group(conversationId.ToString()).SendAsync("TakeMessage", userId, content);
