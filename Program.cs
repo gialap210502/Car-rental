@@ -1,4 +1,4 @@
- using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
@@ -16,12 +16,15 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSession(options =>
-{   
+{
     options.Cookie.Name = ".CarRental";
     options.IdleTimeout = TimeSpan.FromMinutes(10);
     options.Cookie.IsEssential = true;
 });
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options =>
+             {
+                 options.EnableDetailedErrors = true;
+             });
 
 
 

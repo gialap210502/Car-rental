@@ -77,11 +77,13 @@
                 </div>
               }
             }
+
           </div>
           <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
             @* <form id="sendMessageForm" asp-action="SendMessage"> *@
-            <form id="sendMessageForm" asp-action="SendMessage">
-              <input type="hidden" id="conversationId" name="conversationId" value="@Context.Request.Query["conversationId"]" />
+            <form id="sendMessageForm">
+              <input type="hidden" id="conversationId" name="conversationId"
+                value="@Context.Request.Query["conversationId"]" />
               <input type="hidden" id="userId" name="userId" value="@Id" />
               <div class="input-group mb-0">
                 <input type="text" id="content" name="content" class="form-control" placeholder="Type message"
@@ -92,6 +94,7 @@
                 </button>
               </div>
             </form>
+            <ul id="messagesList1"></ul>
           </div>
         </div>
 
@@ -107,10 +110,11 @@
     <div class="col-md-4">
       <h2>Chat</h2>
       <ul id="messagesList"></ul>
+      
       <div>
         <input type="text" id="userInput" placeholder="User" />
         <input type="text" id="messageInput" placeholder="Message" />
-        <button id="sendButton">Send</button>
+        <button id="sendButton1">Send</button>
       </div>
     </div>
   </div>
@@ -118,62 +122,97 @@
 
 
 
-@* <script src="~/js/chat.js"></script> *@
+
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-  var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+
+  var connection = new signalR.HubConnectionBuilder().withUrl("/chathub").build();
 
   connection.on("ReceiveMessage", function (user, message) {
-    // Xử lý tin nhắn nhận được ở đây
-    console.log("Hello1")
+    var msg = user + " says: " + message;
+    var li = document.createElement("li");
+    li.textContent = msg;
+    document.getElementById("messagesList").appendChild(li);
   });
-    connection.on("ReceiveData", function (data) {
-        // Xử lý dữ liệu realtime ở đây và cập nhật giao diện người dùng
-        console.log(data+ "0000");
-    });
+
+  connection.on("TakeMessage", function (userId, content) {
+    var msg = userId + " says: " + content;
+    console.log(msg);
+    var li = document.createElement("li");
+    li.textContent = msg;
+    document.getElementById("messagesList1").appendChild(li);
+  });
 
   connection.start().then(function () {
-    // Khi kết nối thành công
+    // Event listener code here
+    console.log("--------Hubs Connected--------");
   }).catch(function (err) {
     console.error(err.toString());
   });
 
 
+  document.getElementById("sendButton1").addEventListener("click", function (event) {
+    var user = document.getElementById("userInput").value;
+    var message = document.getElementById("messageInput").value;
+
+    connection.invoke("SendMessage1", user, message).catch(function (err) {
+      return console.error(err.toString());
+    });
+
+
+    event.preventDefault();
+  });
+
+  document.getElementById("submitButton").addEventListener("click", function (event) {
+    var conversationId = parseInt(document.getElementById("conversationId").value);
+    var user = parseInt(document.getElementById("userId").value);
+    var message = document.getElementById("content").value.toString();
+    console.log(conversationId + "-" + user + "-" + message);
+    connection.invoke("JoinConversation", conversationId).catch(function (err) {
+      return console.error(err.toString());
+    });
+    connection.invoke("SendMessage", conversationId, user, message).catch(function (err) {
+      return console.error(err.toString());
+    });
+
+    event.preventDefault();
+  });
+
+
 
   $(document).ready(function () {
-  // Prevent the form from submitting normally
-  $('#sendMessageForm').submit(function (e) {
-    e.preventDefault();
+    // Prevent the form from submitting normally
+    $('#sendMessageForm').submit(function (e) {
+      e.preventDefault();
 
-    // Get values from the form fields
-    const conversationId = $('#conversationId').val();
-    const userId = $('#userId').val();
-    const content = $('#content').val();
+      // Get values from the form fields
+      const conversationId = $('#conversationId').val();
+      const userId = $('#userId').val();
+      const content = $('#content').val();
 
-    // Create an object with the data to be sent
-    const data = {
-      conversationId: conversationId,
-      userId: userId,
-      content: content
-    };
+      // Create an object with the data to be sent
+      const data = {
+        conversationId: conversationId,
+        userId: userId,
+        content: content
+      };
 
-    // Send a POST request using jQuery Ajax
-    $.ajax({
-      type: 'POST',
-      url: '/user/SendMessage',
-      data: data,
-      success: function (response) {
-        // Handle the success response here
-        console.log(response); // You can log the response or perform other actions
-      },
-      error: function (error) {
-        // Handle any errors that occurred during the request
-        console.error(error);
-      }
+      // Send a POST request using jQuery Ajax
+      $.ajax({
+        type: 'POST',
+        url: '/user/SendMessage',
+        data: data,
+        success: function (response) {
+          // Handle the success response here
+          console.log(response); // You can log the response or perform other actions
+        },
+        error: function (error) {
+          // Handle any errors that occurred during the request
+          console.error(error);
+        }
+      });
     });
   });
-});
 </script>
-
