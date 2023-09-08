@@ -11,6 +11,9 @@ using Car_rental.Untils;
 using System.IO.Compression;
 using System.Drawing;
 using System.Drawing.Imaging;
+using MySignalRApp.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 
 
 
@@ -20,15 +23,17 @@ namespace Car_rental.Controllers
     {
         private IWebHostEnvironment _hostEnvironment;
         private readonly Car_rentalContext _context;
+        private readonly IHubContext<ChatHub> _hubContext;
         const string SessionName = "_Name";
         const string SessionImage = "_Image";
         const string SessionId = "_ID";
         const string SessionRole = "_Role";
 
-        public UserController(IWebHostEnvironment hostEnvironment, Car_rentalContext context)
+        public UserController(IWebHostEnvironment hostEnvironment, Car_rentalContext context, IHubContext<ChatHub> hubContext)
         {
             _hostEnvironment = hostEnvironment;
             _context = context;
+            _hubContext = hubContext;
         }
 
         // GET: User
@@ -120,7 +125,7 @@ namespace Car_rental.Controllers
                 return RedirectToAction("Chat", new { conversationId = existingConversation.ConversationID });
             }
         }
-        public IActionResult Chat(int? conversationId)
+        public async Task<IActionResult> Chat(int? conversationId)
         {
             ViewBag.layout = "_Layout";
             List<Conversation> ConversationData = _context.Conversation.Include(C => C.Messages).ThenInclude(m => m.user).Include(C => C.Participations).Where(C => C.ConversationID == conversationId).ToList();
@@ -128,7 +133,7 @@ namespace Car_rental.Controllers
         }
 
         [HttpPost]
-        public IActionResult SendMessage(int conversationId, int userId, string content)
+        public async Task<IActionResult> SendMessage(int conversationId, int userId, string content)
         {
             ViewBag.Layout = "_Layout";
 
@@ -147,8 +152,8 @@ namespace Car_rental.Controllers
                 _context.Message.Add(message);
                 _context.SaveChanges();
 
+                return new EmptyResult();
                 // Optionally, you can redirect the user back to the chat page or perform other actions.
-                return RedirectToAction("Chat", new { conversationId = conversationId });
             }
 
             // If ModelState is not valid, you can handle validation errors.
