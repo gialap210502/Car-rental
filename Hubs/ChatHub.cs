@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using Car_rental.Data;
 using Car_rental.Models;
+using NuGet.Packaging.Signing;
 
 namespace MySignalRApp.Hubs
 {
@@ -19,18 +20,19 @@ namespace MySignalRApp.Hubs
             await Clients.All.SendAsync("ReceiveMessage", user, message);
         }
         // Phương thức này được gọi khi một khách hàng gửi tin nhắn
-        public async Task SendMessage(int conversationId, int userId, string content)
+        public async Task SendMessage(int conversationId, int userId, string userName, string content)
         {
             string connectionId = Context.ConnectionId;
             // Ở đây, bạn có thể thực hiện các xử lý cần thiết trước khi gửi tin nhắn.
             // Ví dụ: lưu tin nhắn vào cơ sở dữ liệu, kiểm tra quyền truy cập, vv.
             // Tạo một tin nhắn mới
+            DateTime Timestamp = DateTime.Now;
             var message = new Message
             {
                 ConversationID = conversationId,
                 UserID = userId,
                 Content = content,
-                SentAt = DateTime.Now
+                SentAt = Timestamp
             };
 
             // Thêm tin nhắn vào DbContext và lưu vào cơ sở dữ liệu
@@ -38,7 +40,7 @@ namespace MySignalRApp.Hubs
             await _context.SaveChangesAsync();
             // Gửi tin nhắn tới tất cả các khách hàng trong cùng một phòng
             Console.WriteLine("hello123");
-            await Clients.Group(conversationId.ToString()).SendAsync("TakeMessage", userId, content);
+            await Clients.Group(conversationId.ToString()).SendAsync("TakeMessage", Timestamp, userName, content);
         }
 
         // Đây là một phương thức để khách hàng tham gia một phòng (conversation)

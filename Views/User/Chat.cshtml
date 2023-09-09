@@ -3,6 +3,7 @@
 @{
   ViewData["Title"] = "Chat";
   var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
+  var name = Context.Session.GetString("_Name") != null ? Context.Session.GetString("_Name") : null;
 }
 <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/image_1.jpg');"
   data-stellar-background-ratio="0.5">
@@ -85,6 +86,7 @@
               <input type="hidden" id="conversationId" name="conversationId"
                 value="@Context.Request.Query["conversationId"]" />
               <input type="hidden" id="userId" name="userId" value="@Id" />
+              <input type="hidden" id="userName" name="userId" value="@name" />
               <div class="input-group mb-0">
                 <input type="text" id="content" name="content" class="form-control" placeholder="Type message"
                   aria-label="Recipient's username" aria-describedby="button-addon2" />
@@ -110,7 +112,7 @@
     <div class="col-md-4">
       <h2>Chat</h2>
       <ul id="messagesList"></ul>
-      
+
       <div>
         <input type="text" id="userInput" placeholder="User" />
         <input type="text" id="messageInput" placeholder="Message" />
@@ -119,9 +121,6 @@
     </div>
   </div>
 </section>
-
-
-
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -137,13 +136,7 @@
     document.getElementById("messagesList").appendChild(li);
   });
 
-  connection.on("TakeMessage", function (userId, content) {
-    var msg = userId + " says: " + content;
-    console.log(msg);
-    var li = document.createElement("li");
-    li.textContent = msg;
-    document.getElementById("messagesList1").appendChild(li);
-  });
+
 
   connection.start().then(function () {
     // Event listener code here
@@ -164,55 +157,85 @@
 
     event.preventDefault();
   });
+  document.addEventListener("DOMContentLoaded", function () {
+    var connection = new signalR.HubConnectionBuilder().withUrl("/chathub").build();
 
-  document.getElementById("submitButton").addEventListener("click", function (event) {
-    var conversationId = parseInt(document.getElementById("conversationId").value);
-    var user = parseInt(document.getElementById("userId").value);
-    var message = document.getElementById("content").value.toString();
-    console.log(conversationId + "-" + user + "-" + message);
-    connection.invoke("JoinConversation", conversationId).catch(function (err) {
-      return console.error(err.toString());
-    });
-    connection.invoke("SendMessage", conversationId, user, message).catch(function (err) {
-      return console.error(err.toString());
+    connection.on("TakeMessage", function (timeStamp, userName, content) {
+      // Tạo một đối tượng Date từ chuỗi thời gian
+      var timeStampNew = new Date(timeStamp);
+      // Định dạng lại thời gian theo yêu cầu
+      function formatTime(date) {
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // Nếu hours là 0 thì hiển thị 12 giờ
+
+        var day = date.getDate();
+        var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        var month = monthNames[date.getMonth()];
+
+        var formattedTime = day + ' ' + month + ' ' + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ' ' + ampm;
+        return formattedTime;
+      }
+      var formattedTime = formatTime(timeStampNew);
+
+      var msg = userName + " says: " + content + " at " + formattedTime;
+      console.log(msg);
+      var li = document.createElement("li");
+      //div user info
+      var divUserInfo = document.createElement("div");
+      divUserInfo.classList.add("d-flex", "justify-content-between");
+      var p = document.createElement("p");
+      p.classList.add("small", "mb-1");
+      var pMute = document.createElement("p");
+      pMute.classList.add("small", "mb-1", "text-muted");
+
+      //div message
+      var divUserSend = document.createElement("div");
+      divUserSend.classList.add("d-flex", "flex-row", "justify-content-end", "mb-4", "pt-1");
+      var divUserGet = document.createElement("div");
+      divUserGet.classList.add("d-flex", "flex-row", "justify-content-start", "mb-4", "pt-1");
+
+      var img = document.createElement("img");
+      img.style.width = "45px";
+      img.style.height = "100%";
+
+      var pMsgSend = document.createElement("p");
+      pMsgSend.classList.add('small', 'p-2', 'me-3', 'mb-3', 'text-white', 'rounded-3', 'bg-warning');
+      var pMsgGet = document.createElement("p");
+      pMsgGet.classList.add('small', 'p-2', 'ms-3', 'mb-3', 'rounded-3');
+
+      li.textContent = msg;
+      document.getElementById("messagesList1").appendChild(li);
     });
 
-    event.preventDefault();
+    connection.start().then(function () {
+      // Event listener code here
+      console.log("--------Hubs Connected--------");
+      var conversationId = parseInt(@Context.Request.Query["conversationId"]);
+      connection.invoke("JoinConversation", conversationId).catch(function (err) {
+        return console.error(err.toString());
+      });
+    }).catch(function (err) {
+      console.error(err.toString());
+    });
+
+    document.getElementById("submitButton").addEventListener("click", function (event) {
+      var conversationId = parseInt(document.getElementById("conversationId").value);
+      var userName = document.getElementById("userName").value.toString();
+      var user = parseInt(document.getElementById("userId").value);
+      var message = document.getElementById("content").value.toString();
+      console.log(conversationId + "-" + user + "-" + userName + "-" + message);
+      connection.invoke("SendMessage", conversationId, user, userName, message).catch(function (err) {
+        return console.error(err.toString());
+      });
+
+      event.preventDefault();
+    });
+
   });
 
 
-@* 
-  $(document).ready(function () {
-    // Prevent the form from submitting normally
-    $('#sendMessageForm').submit(function (e) {
-      e.preventDefault();
 
-      // Get values from the form fields
-      const conversationId = $('#conversationId').val();
-      const userId = $('#userId').val();
-      const content = $('#content').val();
-
-      // Create an object with the data to be sent
-      const data = {
-        conversationId: conversationId,
-        userId: userId,
-        content: content
-      };
-
-      // Send a POST request using jQuery Ajax
-      $.ajax({
-        type: 'POST',
-        url: '/user/SendMessage',
-        data: data,
-        success: function (response) {
-          // Handle the success response here
-          console.log(response); // You can log the response or perform other actions
-        },
-        error: function (error) {
-          // Handle any errors that occurred during the request
-          console.error(error);
-        }
-      });
-    }); 
-  });*@
 </script>
