@@ -40,7 +40,7 @@ namespace MySignalRApp.Hubs
             await _context.SaveChangesAsync();
             // Gửi tin nhắn tới tất cả các khách hàng trong cùng một phòng
             Console.WriteLine("hello123");
-            await Clients.Group(conversationId.ToString()).SendAsync("TakeMessage", Timestamp, userName, content);
+            await Clients.Group(conversationId.ToString()).SendAsync("TakeMessage", userId, Timestamp, userName, content);
         }
 
         // Đây là một phương thức để khách hàng tham gia một phòng (conversation)

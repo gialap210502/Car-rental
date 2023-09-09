@@ -78,7 +78,7 @@
                 </div>
               }
             }
-
+            <div id="messagesList1"></div>
           </div>
           <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
             @* <form id="sendMessageForm" asp-action="SendMessage"> *@
@@ -96,7 +96,7 @@
                 </button>
               </div>
             </form>
-            <ul id="messagesList1"></ul>
+            
           </div>
         </div>
 
@@ -157,10 +157,11 @@
 
     event.preventDefault();
   });
+  ///code hear
   document.addEventListener("DOMContentLoaded", function () {
     var connection = new signalR.HubConnectionBuilder().withUrl("/chathub").build();
-
-    connection.on("TakeMessage", function (timeStamp, userName, content) {
+    //Display message
+    connection.on("TakeMessage", function (userId, timeStamp, userName, content) {
       // Tạo một đối tượng Date từ chuỗi thời gian
       var timeStampNew = new Date(timeStamp);
       // Định dạng lại thời gian theo yêu cầu
@@ -180,9 +181,11 @@
       }
       var formattedTime = formatTime(timeStampNew);
 
-      var msg = userName + " says: " + content + " at " + formattedTime;
+      var msg = userName + " says: " + userId + " - " + content + " at " + formattedTime;
       console.log(msg);
-      var li = document.createElement("li");
+      var divContain = document.createElement("div");
+
+
       //div user info
       var divUserInfo = document.createElement("div");
       divUserInfo.classList.add("d-flex", "justify-content-between");
@@ -201,13 +204,81 @@
       img.style.width = "45px";
       img.style.height = "100%";
 
+      var divContainMsg = document.createElement("div");
+
       var pMsgSend = document.createElement("p");
       pMsgSend.classList.add('small', 'p-2', 'me-3', 'mb-3', 'text-white', 'rounded-3', 'bg-warning');
       var pMsgGet = document.createElement("p");
       pMsgGet.classList.add('small', 'p-2', 'ms-3', 'mb-3', 'rounded-3');
+      pMsgGet.style.backgroundColor = "#f5f6f7";
 
-      li.textContent = msg;
-      document.getElementById("messagesList1").appendChild(li);
+      var userIDOnSession = @Id;
+     
+      //add elements
+      if(parseInt(userId) === parseInt(userIDOnSession)){
+        //userInfor
+        //<div>
+        //  <pMute>
+        //  <p>
+        //</div>
+        divUserInfo.appendChild(pMute);
+        divUserInfo.appendChild(p);
+        //Msg
+          //insert msg
+        //<div>
+        //  <p>
+        //</div>
+        divContainMsg.appendChild(pMsgSend);
+        //create full div
+        //divUserSend
+          //  divContainMsg
+          //  img
+        divUserSend.appendChild(divContainMsg);
+        divUserSend.appendChild(img);
+        //final
+        divContain.appendChild(divUserInfo);
+        divContain.appendChild(divUserSend);
+
+        pMsgSend.textContent = content;
+        p.textContent = userName;
+        pMute.textContent = formattedTime;
+
+        document.getElementById("messagesList1").appendChild(divContain);
+      } else{
+                //userInfor
+        //<div>
+        //  <pMute>
+        //  <p>
+        //</div>
+        divUserInfo.appendChild(p);
+        divUserInfo.appendChild(pMute);
+        //Msg
+          //insert msg
+        //<div>
+        //  <p>
+        //</div>
+        divContainMsg.appendChild(pMsgGet);
+        //create full div
+        //divUserSend
+          //  divContainMsg
+          //  img
+        divUserGet.appendChild(img);
+        divUserGet.appendChild(divContainMsg);
+
+        //final
+        divContain.appendChild(divUserInfo);
+        divContain.appendChild(divUserGet);
+
+        pMsgGet.textContent = content;
+        p.textContent = userName;
+        pMute.textContent = formattedTime;
+
+        document.getElementById("messagesList1").appendChild(divContain);
+      }
+
+
+
+      
     });
 
     connection.start().then(function () {
