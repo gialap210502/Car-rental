@@ -20,7 +20,7 @@ namespace MySignalRApp.Hubs
             await Clients.All.SendAsync("ReceiveMessage", user, message);
         }
         // Phương thức này được gọi khi một khách hàng gửi tin nhắn
-        public async Task SendMessage(int conversationId, int userId, string userName, string content)
+        public async Task SendMessage(int conversationId, int userId, string userName, string content, string userImgString)
         {
             string connectionId = Context.ConnectionId;
             // Ở đây, bạn có thể thực hiện các xử lý cần thiết trước khi gửi tin nhắn.
@@ -39,15 +39,13 @@ namespace MySignalRApp.Hubs
             _context.Message.Add(message);
             await _context.SaveChangesAsync();
             // Gửi tin nhắn tới tất cả các khách hàng trong cùng một phòng
-            Console.WriteLine("hello123");
-            await Clients.Group(conversationId.ToString()).SendAsync("TakeMessage", userId, Timestamp, userName, content);
+            await Clients.Group(conversationId.ToString()).SendAsync("TakeMessage", userId, Timestamp, userName, content, userImgString);
         }
 
         // Đây là một phương thức để khách hàng tham gia một phòng (conversation)
         public async Task JoinConversation(int conversationId)
         {
             // Gọi phương thức Groups.AddToGroup để tham gia phòng
-            Console.WriteLine("hello");
             await Groups.AddToGroupAsync(Context.ConnectionId, conversationId.ToString());
         }
     }

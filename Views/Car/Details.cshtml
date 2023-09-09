@@ -1,521 +1,620 @@
 @model Car_rental.Models.car
 @{
-    ViewData["Title"] = "Details";
+	ViewData["Title"] = "Details";
 	@using Car_rental.Data;
 	var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
-	@inject  Car_rentalContext _context
+	@inject Car_rentalContext _context
+
 }
 
-    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url(' /user/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
-          <div class="col-md-9 ftco-animate pb-5">
-          	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Car details <i class="ion-ios-arrow-forward"></i></span></p>
-            <h1 class="mb-3 bread">Car Details</h1>
-          </div>
-        </div>
-      </div>
-    </section>
-		<section class="ftco-section ftco-car-details">
-      <div class="container">
-      	<div class="row justify-content-center">
-      		<div class="col-md-12">
-      			<div class="car-details" >
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url(' /user/images/bg_3.jpg');"
+	data-stellar-background-ratio="0.5">
+	<div class="overlay"></div>
+	<div class="container">
+		<div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+			<div class="col-md-9 ftco-animate pb-5">
+				<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i
+								class="ion-ios-arrow-forward"></i></a></span> <span>Car details <i
+							class="ion-ios-arrow-forward"></i></span></p>
+				<h1 class="mb-3 bread">Car Details</h1>
+			</div>
+		</div>
+	</div>
+</section>
+<section class="ftco-section ftco-car-details">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-12">
+				<div class="car-details">
 					<div class="container">
-					    <div class="row">
+						<div class="row">
 							<div class="col-md-6">
- 								<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-    								<ol class="carousel-indicators">
-      									@{
-      									  // Check if there are any images
-      									  if (ViewBag.listImages != null && ViewBag.listImages.Count > 0)
-      									  {
-      									    // The first image will have 'active' class
-      									    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active" style="background-color: #01d28e;"></li>
-      									    var slideIndex = 1; // Initialize the slide index with 1
-      									    for (var j = 1; j < ViewBag.listImages.Count + 1; j++)
-      									    {
-      									      <li data-target="#carouselExampleIndicators" data-slide-to="@slideIndex" style="background-color: #01d28e;"></li>
-      									      slideIndex++;
-      									    }
-      									  }
-      									}
-    								</ol>
-    								<!-- The slideshow -->
-    								<div class="carousel-inner" style="width: 525px; height: 300px;">
-      									@{
-      									  if (ViewBag.Video != null)
-      									  {
-      									    <div class="carousel-item active">
-      									      <div class="video-container" style="width: 525px; height: 300px;">
-      									        <video controls style="border: 1px solid #01d28e;">
-      									          <source src="/Video/@ViewBag.Video" type="video/mp4">
-      									          Your browser does not support the video tag.
-      									        </video>
-      									      </div>
-      									    </div>
-      									  }
-      									  // Check if there are any images
-      									  if (ViewBag.listImages != null && ViewBag.listImages.Count > 0)
-      									  {
-      									    int j = 1;
-      									    // The first image will have 'active' class
-      									    if (ViewBag.Video == null)
-      									    {
-      									      <div class="carousel-item active" style="width: 525px; height: 300px;">
-      									        <img src="/images/@ViewBag.listImages[0].nameFile"  style="width: 100%; height: 100%; object-fit: contain;"/>
-												  @* <div class="img rounded d-block w-100" style="background-image: url(/images/@ViewBag.listImages[0].nameFile);"></div> *@
-      									      </div>
-      									    }
-      									    else
-      									    {
-      									      j = 0;
-      									    }
+								<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+									<ol class="carousel-indicators">
+										@{
+											// Check if there are any images
+											if (ViewBag.listImages != null && ViewBag.listImages.Count > 0)
+											{
+											// The first image will have 'active' class
+												<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"
+													style="background-color: #01d28e;"></li>
+												var slideIndex = 1; // Initialize the slide index with 1
+												for (var j = 1; j < ViewBag.listImages.Count + 1; j++)
+												{
+													<li data-target="#carouselExampleIndicators" data-slide-to="@slideIndex"
+														style="background-color: #01d28e;"></li>
+													slideIndex++;
+												}
+											}
+										}
+									</ol>
+									<!-- The slideshow -->
+									<div class="carousel-inner" style="width: 525px; height: 300px;">
+										@{
+											if (ViewBag.Video != null)
+											{
+												<div class="carousel-item active">
+													<div class="video-container" style="width: 525px; height: 300px;">
+														<video controls style="border: 1px solid #01d28e;">
+															<source src="/Video/@ViewBag.Video" type="video/mp4">
+															Your browser does not support the video tag.
+														</video>
+													</div>
+												</div>
+											}
+											// Check if there are any images
+											if (ViewBag.listImages != null && ViewBag.listImages.Count > 0)
+											{
+												int j = 1;
+												// The first image will have 'active' class
+												if (ViewBag.Video == null)
+												{
+													<div class="carousel-item active" style="width: 525px; height: 300px;">
+														<img src="/images/@ViewBag.listImages[0].nameFile"
+															style="width: 100%; height: 100%; object-fit: contain;" />
+														@* <div class="img rounded d-block w-100" style="background-image:
+											url(/images/@ViewBag.listImages[0].nameFile);"></div> *@
+													</div>
+												}
+												else
+												{
+													j = 0;
+												}
 
-      									    // Start looping from second image onwards
-      									    for (var i = j; i < ViewBag.listImages.Count; i++)
-      									    {
-      									      if (ViewBag.listImages[i].nameFile != "null" || ViewBag.listImages[i].nameFile != null)
-      									      {
-      									        <div class="carousel-item" style="width: 525px; height: 300px;">
-													<img src="/images/@ViewBag.listImages[i].nameFile" style="width: 100%; height: 100%; object-fit: contain;"/>
-      									          @* <div class="img rounded d-block w-100" style="background-image: url(/images/@ViewBag.listImages[i].nameFile); width: 50%; height: 50%"></div> *@
-      									        </div>
-      									      }
-      									    }
-      									  }
-      									}
-    								</div>
-    								<!-- Left and right controls -->
-    								<a class="carousel-control-prev" href="#carouselExampleIndicators" data-slide="prev">
-    								  <span><i class="fa-solid fa-chevron-left fa-bounce fa-lg" style="color: #01d28e;"></i></span>
-    								</a>
-    								<a class="carousel-control-next" href="#carouselExampleIndicators" data-slide="next">
-    								  <span><i class="fa-solid fa-chevron-right fa-bounce fa-lg" style="color: #01d28e;"></i></span>
-    								</a>
- 								</div>
+												// Start looping from second image onwards
+												for (var i = j; i < ViewBag.listImages.Count; i++)
+												{
+													if (ViewBag.listImages[i].nameFile != "null" || ViewBag.listImages[i].nameFile
+													!= null)
+													{
+														<div class="carousel-item" style="width: 525px; height: 300px;">
+															<img src="/images/@ViewBag.listImages[i].nameFile"
+																style="width: 100%; height: 100%; object-fit: contain;" />
+															@* <div class="img rounded d-block w-100" style="background-image:
+											url(/images/@ViewBag.listImages[i].nameFile); width: 50%; height:
+											50%"></div> *@
+														</div>
+													}
+												}
+											}
+										}
+									</div>
+									<!-- Left and right controls -->
+									<a class="carousel-control-prev" href="#carouselExampleIndicators"
+										data-slide="prev">
+										<span><i class="fa-solid fa-chevron-left fa-bounce fa-lg"
+												style="color: #01d28e;"></i></span>
+									</a>
+									<a class="carousel-control-next" href="#carouselExampleIndicators"
+										data-slide="next">
+										<span><i class="fa-solid fa-chevron-right fa-bounce fa-lg"
+												style="color: #01d28e;"></i></span>
+									</a>
+								</div>
 							</div>
-					      	<div class="col-md-6">
-                        		<span class="subheading">@Html.DisplayFor(model => model.brand)</span>
-                        		<h2>@Html.DisplayFor(model => model.model)</h2>
-					    		<p>Price: $@Html.DisplayFor(model => model.Price)</p> 
-					    		<a onclick="showInPopup('@Url.Action("Book","bookings",new {cardId=@Model.id, totalAmount=@Model.Price, userId=@Id},Context.Request.Scheme)','Book')" class="btn btn-primary py-2 mr-1">book now</a> 
-					      		<a asp-controller="user" asp-action="CreateChatRoom" asp-route-UserId1="@Id" asp-route-UserId2="@Model.user_id" class="btn btn-primary py-2 mr-1">Chat with owner</a>
+							<div class="col-md-6">
+								<span class="subheading">@Html.DisplayFor(model => model.brand)</span>
+								<h2>@Html.DisplayFor(model => model.model)</h2>
+								<p>Price: $@Html.DisplayFor(model => model.Price)</p>
+								<a onclick="showInPopup('@Url.Action("Book","bookings",new {cardId=@Model.id, totalAmount=@Model.Price, userId=@Id},Context.Request.Scheme)','Book')"
+									class="btn btn-primary py-2 mr-1">Book Now</a>
+								<a id="chatButton" asp-controller="user" asp-action="CreateChatRoom"
+									asp-route-UserId1="@Id" asp-route-UserId2="@Model.user_id"
+									class="btn btn-secondary py-2 mr-1">Chat with owner</a>
 							</div>
 						</div>
-      				</div>
-      			</div>
-      		</div>
-		</div>
-      	<div class="row">
-      		<div class="col-md d-flex align-self-stretch ftco-animate">
-            <div class="media block-6 services">
-              <div class="media-body py-md-4">
-              	<div class="d-flex mb-3 align-items-center">
-	              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-dashboard"></span></div>
-	              	<div class="text">
-		                <h3 class="heading mb-0 pl-3">
-		                	Mileage
-		                	<span>@Html.DisplayFor(model => model.Mileage)</span>
-		                </h3>
-	                </div>
-                </div>
-              </div>
-            </div>      
-          </div>
-          <div class="col-md d-flex align-self-stretch ftco-animate">
-            <div class="media block-6 services">
-              <div class="media-body py-md-4">
-              	<div class="d-flex mb-3 align-items-center">
-	              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-pistons"></span></div>
-	              	<div class="text">
-		                <h3 class="heading mb-0 pl-3">
-		                	Transmission
-		                	<span>@Html.DisplayFor(model => model.Transmission)</span>
-		                </h3>
-	                </div>
-                </div>
-              </div>
-            </div>      
-          </div>
-          <div class="col-md d-flex align-self-stretch ftco-animate">
-            <div class="media block-6 services">
-              <div class="media-body py-md-4">
-              	<div class="d-flex mb-3 align-items-center">
-	              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-car-seat"></span></div>
-	              	<div class="text">
-		                <h3 class="heading mb-0 pl-3">
-		                	Seats
-		                	<span>@Html.DisplayFor(model => model.seat)</span>
-		                </h3>
-	                </div>
-                </div>
-              </div>
-            </div>      
-          </div>
-          <div class="col-md d-flex align-self-stretch ftco-animate">
-            <div class="media block-6 services">
-              <div class="media-body py-md-4">
-              	<div class="d-flex mb-3 align-items-center">
-	              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-diesel"></span></div>
-	              	<div class="text">
-		                <h3 class="heading mb-0 pl-3">
-		                	Fuel
-		                	<span>@Html.DisplayFor(model => model.Type)</span>
-		                </h3>
-	                </div>
-                </div>
-              </div>
-            </div>      
-          </div>
-      	</div>
-      	<div class="row">
-      		<div class="col-md-12 pills">
-				<div class="bd-example bd-example-tabs">
-							<div class="d-flex justify-content-center">
-							  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-
-							    <li class="nav-item">
-							      <a class="nav-link active" id="pills-description-tab" data-toggle="pill" href="#pills-description" role="tab" aria-controls="pills-description" aria-expanded="true">Features</a>
-							    </li>
-							    <li class="nav-item">
-							      <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill" href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer" aria-expanded="true">Description</a>
-							    </li>
-								<li class="nav-item">
-							      <a class="nav-link" id="pills-rate-tab" data-toggle="pill" href="#pills-rate" role="tab" aria-controls="pills-rate" aria-expanded="true">Rate</a>
-							    </li>
-							    <li class="nav-item">
-							      <a class="nav-link" id="pills-review-tab" data-toggle="pill" href="#pills-review" role="tab" aria-controls="pills-review" aria-expanded="true">Review</a>
-							    </li>
-							  </ul>
-							</div>
-						  <div class="tab-content" id="pills-tabContent">
-						    <div class="tab-pane fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab">
-						    	<div class="row">
-						    		<div class="col-md-4">
-						    			<ul class="features">
-											@{
-												if(Model.AirConditioning == true){
-													<li class="check"><span class="ion-ios-checkmark"></span>Airconditions</li>
-												}else{
-													<li class="remove"><span class="ion-ios-close"></span>Airconditions</li>
-												}
-												if(Model.ChildSeat == true){
-													<li class="check"><span class="ion-ios-checkmark"></span>Child Seat</li>
-												}else{
-													<li class="remove"><span class="ion-ios-close"></span>Child Seat</li>
-												}
-												if(Model.GPS == true){
-													<li class="check"><span class="ion-ios-checkmark"></span>GPS</li>
-												}else{
-													<li class="remove"><span class="ion-ios-close"></span>GPS</li>
-												}
-												if(Model.Luggage == true){
-													<li class="check"><span class="ion-ios-checkmark"></span>Luggage</li>
-												}else{
-													<li class="remove"><span class="ion-ios-close"></span>Luggage</li>
-												}
-												if(Model.Music == true){
-													<li class="check"><span class="ion-ios-checkmark"></span>Music</li>
-												}else{
-													<li class="remove"><span class="ion-ios-close"></span>Music</li>
-												}
-											}
-						    			</ul>
-						    		</div>
-						    		<div class="col-md-4">
-						    			<ul class="features">
-											@{
-												if(Model.SeatBelt == true){
-													<li class="check"><span class="ion-ios-checkmark"></span>Seat Belt</li>
-												}else{
-													<li class="remove"><span class="ion-ios-close"></span>Seat Belt</li>
-												}
-												if(Model.SleepingBed == true){
-													<li class="check"><span class="ion-ios-checkmark"></span>Sleeping Bed</li>
-												}else{
-													<li class="remove"><span class="ion-ios-close"></span>Sleeping Bed</li>
-												}
-												if(Model.Water == true){
-													<li class="check"><span class="ion-ios-checkmark"></span>Water</li>
-												}else{
-													<li class="remove"><span class="ion-ios-close"></span>Water</li>
-												}
-												if(Model.Bluetooth == true){
-													<li class="check"><span class="ion-ios-checkmark"></span>Bluetooth</li>
-												}else{
-													<li class="remove"><span class="ion-ios-close"></span>Bluetooth</li>
-												}
-												if(Model.OnboardComputer == true){
-													<li class="check"><span class="ion-ios-checkmark"></span>Onboard computer</li>
-												}else{
-													<li class="remove"><span class="ion-ios-close"></span>Onboard computer</li>
-												}
-											}
-						    			</ul>
-						    		</div>
-						    		<div class="col-md-4">
-						    			<ul class="features">
-											@{
-												if(Model.AudioInput == true){
-													<li class="check"><span class="ion-ios-checkmark"></span>Audio input</li>
-												}else{
-													<li class="remove"><span class="ion-ios-close"></span>Audio input</li>
-												}
-												if(Model.LongTermTrips == true){
-													<li class="check"><span class="ion-ios-checkmark"></span>Long Term Trips</li>
-												}else{
-													<li class="remove"><span class="ion-ios-close"></span>Long Term Trips</li>
-												}
-												if(Model.CarKit == true){
-													<li class="check"><span class="ion-ios-checkmark"></span>Car Kit</li>
-												}else{
-													<li class="remove"><span class="ion-ios-close"></span>Car Kit</li>
-												}
-												if(Model.RemoteCentralLocking == true){
-													<li class="check"><span class="ion-ios-checkmark"></span>Remote central locking</li>
-												}else{
-													<li class="remove"><span class="ion-ios-close"></span>Remote central locking</li>
-												}
-												if(Model.ClimateControl == true){
-													<li class="check"><span class="ion-ios-checkmark"></span>Climate control</li>
-												}else{
-													<li class="remove"><span class="ion-ios-close"></span>Climate control</li>
-												}
-											}
-						    			</ul>
-						    		</div>
-						    	</div>
-						    </div>
-
-						    <div class="tab-pane fade" id="pills-manufacturer" role="tabpanel" aria-labelledby="pills-manufacturer-tab">
-								<p>@Html.DisplayFor(model => model.Description)</p>
-						    </div>
-							<div class="tab-pane fade" id="pills-rate" role="tabpanel" aria-labelledby="pills-rate-tab">
-								<form method="post" asp-controller="rating" asp-action="Rate">
-								    <!-- Add a select element for the status if needed -->
-								    <!--
-								    <select name="status" style="margin-bottom:20px">
-								        <option value="0">Public</option>
-								        <option value="1">Stay anonymous</option>
-								    </select>
-								    -->
-								    <input type="hidden" name="Carid" value="@Html.DisplayFor(model => model.id)" />
-									<div class="form-group">
-									    <label for="star">Rating</label>
-									    <div class="star-rating">
-									        <input type="radio" id="star5" name="Star" value="1" required hidden />
-									        <label for="star5" >&#9733;</label>
-									        <input type="radio" id="star4" name="Star" value="2" required hidden />
-									        <label for="star4" >&#9733;</label>
-									        <input type="radio" id="star3" name="Star" value="3" required hidden />
-									        <label for="star3" >&#9733;</label>
-									        <input type="radio" id="star2" name="Star" value="4" required hidden />
-									        <label for="star2" >&#9733;</label>
-									        <input type="radio" id="star1" name="Star" value="5" required hidden />
-									        <label for="star1" >&#9733;</label>
-									    </div>
-									</div>
-									<div class="form-group">
-								        <label for="comment">Comment</label>
-								        <textarea class="form-control" id="comment" name="comment" placeholder="Enter your comment" required></textarea>
-								    </div>
-								    <button type="submit" class="btn btn-primary btn-user btn-block"
-								            style="margin-left: auto; margin-right: auto; margin-bottom: 20px;">
-								        Comment
-								    </button>
-								</form>
-							</div>
-						    <div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
-						      <div class="row">
-							   		<div class="col-md-7" style="height: 500px; overflow: auto;">
-										@{
-											foreach(var rating in ViewBag.rating)
-											{
-												<div class="review d-flex">
-									   				<div class="user-img" style="background-image: url( /imageUser/@rating.user.image)"></div>
-									   				<div class="desc">
-									   					<h4>
-									   						<span class="text-left">@rating.user.name</span>
-									   						<span class="text-right">@rating.dateRating</span>
-									   					</h4>
-									   					<p class="star">
-									   						<span>
-																@for(var i = 0; i < @rating.Star; i++)
-																{
-																	<i class="ion-ios-star"></i>
-																}
-								   							</span>
-								   							<span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span>
-									   					</p>
-														<div style="word-wrap: break-word;">
-														    <p>@rating.comment</p>
-														</div>
-									 	  				</div>
-									   			</div>
-											}
-
-										}
-							   		</div>
-							   		<div class="col-md-5">
-							   			<div class="rating-wrap">
-								   			<h3 class="head">@ViewBag.rating.Count Reviews</h3>
-								   			<div class="wrap">
-									   			<p class="star">
-									   				<span>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-														@{
-														    float divisionResult5 = 0;
-														    if (@ViewBag.rating5.Count != 0)
-														    {
-														        divisionResult5 = ((float)@ViewBag.rating5.Count / (float)@ViewBag.rating.Count)*100 ;
-														    }
-															string formattedResult5 = $"{divisionResult5:0.00}";
-														}
-									   					(@formattedResult5%)
-								   					</span>
-								   					<span>@ViewBag.rating5.Count Reviews</span>
-									   			</p>
-									   			<p class="star">
-									   				<span>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					@{
-														    float divisionResult4 = 0;
-														    if (@ViewBag.rating4.Count != 0)
-														    {
-														        divisionResult4 = ((float)@ViewBag.rating4.Count / (float)@ViewBag.rating.Count)*100;
-														    }
-															string formattedResult4 = $"{divisionResult4:0.00}";
-														}
-									   					(@formattedResult4%)
-								   					</span>
-								   					<span>@ViewBag.rating4.Count Reviews</span>
-									   			</p>
-									   			<p class="star">
-									   				<span>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					@{
-														    float divisionResult3 = 0;
-														    if (@ViewBag.rating3.Count != 0)
-														    {
-														        divisionResult3 = ((float)@ViewBag.rating3.Count / (float)@ViewBag.rating.Count)*100;
-														    }
-															string formattedResult3 = $"{divisionResult3:0.00}";
-														}
-									   					(@formattedResult3%)
-								   					</span>
-								   					<span>@ViewBag.rating3.Count Reviews</span>
-									   			</p>
-									   			<p class="star">
-									   				<span>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					@{
-														    float divisionResult2 = 0;
-														    if (@ViewBag.rating2.Count != 0)
-														    {
-														        divisionResult2 = ((float)@ViewBag.rating2.Count / (float)@ViewBag.rating.Count)*100;
-														    }
-															string formattedResult2 = $"{divisionResult2:0.00}";
-														}
-									   					(@formattedResult2%)
-								   					</span>
-								   					<span>@ViewBag.rating2.Count Reviews</span>
-									   			</p>
-									   			<p class="star">
-									   				<span>
-									   					<i class="ion-ios-star"></i>
-									   					@{
-														    float divisionResult1 = 0;
-														    if (@ViewBag.rating1.Count != 0)
-														    {
-														        divisionResult1 = ((float)@ViewBag.rating1.Count / (float)@ViewBag.rating.Count)*100;
-														    }
-															string formattedResult1 = $"{divisionResult1:0.00}";
-														}
-									   					(@formattedResult1%)
-								   					</span>
-								   					<span>@ViewBag.rating1.Count Reviews</span>
-									   			</p>
-									   		</div>
-								   		</div>
-							   		</div>
-							   	</div>
-						    </div>
-						  </div>
+					</div>
 				</div>
-		    </div>
+			</div>
 		</div>
-      </div>
-    </section>
+		<div class="row">
+			<div class="col-md d-flex align-self-stretch ftco-animate">
+				<div class="media block-6 services">
+					<div class="media-body py-md-4">
+						<div class="d-flex mb-3 align-items-center">
+							<div class="icon d-flex align-items-center justify-content-center"><span
+									class="flaticon-dashboard"></span></div>
+							<div class="text">
+								<h3 class="heading mb-0 pl-3">
+									Mileage
+									<span>@Html.DisplayFor(model => model.Mileage)</span>
+								</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md d-flex align-self-stretch ftco-animate">
+				<div class="media block-6 services">
+					<div class="media-body py-md-4">
+						<div class="d-flex mb-3 align-items-center">
+							<div class="icon d-flex align-items-center justify-content-center"><span
+									class="flaticon-pistons"></span></div>
+							<div class="text">
+								<h3 class="heading mb-0 pl-3">
+									Transmission
+									<span>@Html.DisplayFor(model => model.Transmission)</span>
+								</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md d-flex align-self-stretch ftco-animate">
+				<div class="media block-6 services">
+					<div class="media-body py-md-4">
+						<div class="d-flex mb-3 align-items-center">
+							<div class="icon d-flex align-items-center justify-content-center"><span
+									class="flaticon-car-seat"></span></div>
+							<div class="text">
+								<h3 class="heading mb-0 pl-3">
+									Seats
+									<span>@Html.DisplayFor(model => model.seat)</span>
+								</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md d-flex align-self-stretch ftco-animate">
+				<div class="media block-6 services">
+					<div class="media-body py-md-4">
+						<div class="d-flex mb-3 align-items-center">
+							<div class="icon d-flex align-items-center justify-content-center"><span
+									class="flaticon-diesel"></span></div>
+							<div class="text">
+								<h3 class="heading mb-0 pl-3">
+									Fuel
+									<span>@Html.DisplayFor(model => model.Type)</span>
+								</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 pills">
+				<div class="bd-example bd-example-tabs">
+					<div class="d-flex justify-content-center">
+						<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 
-    <section class="ftco-section ftco-no-pt">
-    	<div class="container">
-    		<div class="row justify-content-center">
-          <div class="col-md-12 heading-section text-center ftco-animate mb-5">
-          	<span class="subheading">Choose Car</span>
-            <h2 class="mb-2">Related Cars</h2>
-          </div>
-        </div>
-        <div class="row">
-				@for (var i = 0; i < 3; i++)
+							<li class="nav-item">
+								<a class="nav-link active" id="pills-description-tab" data-toggle="pill"
+									href="#pills-description" role="tab" aria-controls="pills-description"
+									aria-expanded="true">Features</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill"
+									href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer"
+									aria-expanded="true">Description</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" id="pills-rate-tab" data-toggle="pill" href="#pills-rate" role="tab"
+									aria-controls="pills-rate" aria-expanded="true">Rate</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" id="pills-review-tab" data-toggle="pill" href="#pills-review"
+									role="tab" aria-controls="pills-review" aria-expanded="true">Review</a>
+							</li>
+						</ul>
+					</div>
+					<div class="tab-content" id="pills-tabContent">
+						<div class="tab-pane fade show active" id="pills-description" role="tabpanel"
+							aria-labelledby="pills-description-tab">
+							<div class="row">
+								<div class="col-md-4">
+									<ul class="features">
+										@{
+											if (Model.AirConditioning == true)
+											{
+												<li class="check"><span class="ion-ios-checkmark"></span>Airconditions</li>
+											}
+											else
+											{
+												<li class="remove"><span class="ion-ios-close"></span>Airconditions</li>
+											}
+											if (Model.ChildSeat == true)
+											{
+												<li class="check"><span class="ion-ios-checkmark"></span>Child Seat</li>
+											}
+											else
+											{
+												<li class="remove"><span class="ion-ios-close"></span>Child Seat</li>
+											}
+											if (Model.GPS == true)
+											{
+												<li class="check"><span class="ion-ios-checkmark"></span>GPS</li>
+											}
+											else
+											{
+												<li class="remove"><span class="ion-ios-close"></span>GPS</li>
+											}
+											if (Model.Luggage == true)
+											{
+												<li class="check"><span class="ion-ios-checkmark"></span>Luggage</li>
+											}
+											else
+											{
+												<li class="remove"><span class="ion-ios-close"></span>Luggage</li>
+											}
+											if (Model.Music == true)
+											{
+												<li class="check"><span class="ion-ios-checkmark"></span>Music</li>
+											}
+											else
+											{
+												<li class="remove"><span class="ion-ios-close"></span>Music</li>
+											}
+										}
+									</ul>
+								</div>
+								<div class="col-md-4">
+									<ul class="features">
+										@{
+											if (Model.SeatBelt == true)
+											{
+												<li class="check"><span class="ion-ios-checkmark"></span>Seat Belt</li>
+											}
+											else
+											{
+												<li class="remove"><span class="ion-ios-close"></span>Seat Belt</li>
+											}
+											if (Model.SleepingBed == true)
+											{
+												<li class="check"><span class="ion-ios-checkmark"></span>Sleeping Bed</li>
+											}
+											else
+											{
+												<li class="remove"><span class="ion-ios-close"></span>Sleeping Bed</li>
+											}
+											if (Model.Water == true)
+											{
+												<li class="check"><span class="ion-ios-checkmark"></span>Water</li>
+											}
+											else
+											{
+												<li class="remove"><span class="ion-ios-close"></span>Water</li>
+											}
+											if (Model.Bluetooth == true)
+											{
+												<li class="check"><span class="ion-ios-checkmark"></span>Bluetooth</li>
+											}
+											else
+											{
+												<li class="remove"><span class="ion-ios-close"></span>Bluetooth</li>
+											}
+											if (Model.OnboardComputer == true)
+											{
+												<li class="check"><span class="ion-ios-checkmark"></span>Onboard computer</li>
+											}
+											else
+											{
+												<li class="remove"><span class="ion-ios-close"></span>Onboard computer</li>
+											}
+										}
+									</ul>
+								</div>
+								<div class="col-md-4">
+									<ul class="features">
+										@{
+											if (Model.AudioInput == true)
+											{
+												<li class="check"><span class="ion-ios-checkmark"></span>Audio input</li>
+											}
+											else
+											{
+												<li class="remove"><span class="ion-ios-close"></span>Audio input</li>
+											}
+											if (Model.LongTermTrips == true)
+											{
+												<li class="check"><span class="ion-ios-checkmark"></span>Long Term Trips</li>
+											}
+											else
+											{
+												<li class="remove"><span class="ion-ios-close"></span>Long Term Trips</li>
+											}
+											if (Model.CarKit == true)
+											{
+												<li class="check"><span class="ion-ios-checkmark"></span>Car Kit</li>
+											}
+											else
+											{
+												<li class="remove"><span class="ion-ios-close"></span>Car Kit</li>
+											}
+											if (Model.RemoteCentralLocking == true)
+											{
+												<li class="check"><span class="ion-ios-checkmark"></span>Remote central locking
+												</li>
+											}
+											else
+											{
+												<li class="remove"><span class="ion-ios-close"></span>Remote central locking
+												</li>
+											}
+											if (Model.ClimateControl == true)
+											{
+												<li class="check"><span class="ion-ios-checkmark"></span>Climate control</li>
+											}
+											else
+											{
+												<li class="remove"><span class="ion-ios-close"></span>Climate control</li>
+											}
+										}
+									</ul>
+								</div>
+							</div>
+						</div>
+
+						<div class="tab-pane fade" id="pills-manufacturer" role="tabpanel"
+							aria-labelledby="pills-manufacturer-tab">
+							<p>@Html.DisplayFor(model => model.Description)</p>
+						</div>
+						<div class="tab-pane fade" id="pills-rate" role="tabpanel" aria-labelledby="pills-rate-tab">
+							<form method="post" asp-controller="rating" asp-action="Rate">
+								<!-- Add a select element for the status if needed -->
+								<!--
+									<select name="status" style="margin-bottom:20px">
+										<option value="0">Public</option>
+										<option value="1">Stay anonymous</option>
+									</select>
+									-->
+								<input type="hidden" name="Carid" value="@Html.DisplayFor(model => model.id)" />
+								<div class="form-group">
+									<label for="star">Rating</label>
+									<div class="star-rating">
+										<input type="radio" id="star5" name="Star" value="1" required hidden />
+										<label for="star5">&#9733;</label>
+										<input type="radio" id="star4" name="Star" value="2" required hidden />
+										<label for="star4">&#9733;</label>
+										<input type="radio" id="star3" name="Star" value="3" required hidden />
+										<label for="star3">&#9733;</label>
+										<input type="radio" id="star2" name="Star" value="4" required hidden />
+										<label for="star2">&#9733;</label>
+										<input type="radio" id="star1" name="Star" value="5" required hidden />
+										<label for="star1">&#9733;</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="comment">Comment</label>
+									<textarea class="form-control" id="comment" name="comment"
+										placeholder="Enter your comment" required></textarea>
+								</div>
+								<button type="submit" class="btn btn-primary btn-user btn-block"
+									style="margin-left: auto; margin-right: auto; margin-bottom: 20px;">
+									Comment
+								</button>
+							</form>
+						</div>
+						<div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
+							<div class="row">
+								<div class="col-md-7" style="height: 500px; overflow: auto;">
+									@{
+										foreach (var rating in ViewBag.rating)
+										{
+											<div class="review d-flex">
+												<div class="user-img"
+													style="background-image: url( /imageUser/@rating.user.image)"></div>
+												<div class="desc">
+													<h4>
+														<span class="text-left">@rating.user.name</span>
+														<span class="text-right">@rating.dateRating</span>
+													</h4>
+													<p class="star">
+														<span>
+															@for (var i = 0; i < @rating.Star; i++)
+															{
+																<i class="ion-ios-star"></i>
+															}
+														</span>
+														<span class="text-right"><a href="#" class="reply"><i
+																	class="icon-reply"></i></a></span>
+													</p>
+													<div style="word-wrap: break-word;">
+														<p>@rating.comment</p>
+													</div>
+												</div>
+											</div>
+										}
+
+									}
+								</div>
+								<div class="col-md-5">
+									<div class="rating-wrap">
+										<h3 class="head">@ViewBag.rating.Count Reviews</h3>
+										<div class="wrap">
+											<p class="star">
+												<span>
+													<i class="ion-ios-star"></i>
+													<i class="ion-ios-star"></i>
+													<i class="ion-ios-star"></i>
+													<i class="ion-ios-star"></i>
+													<i class="ion-ios-star"></i>
+													@{
+														float divisionResult5 = 0;
+														if (@ViewBag.rating5.Count != 0)
+														{
+															divisionResult5 = ((float)@ViewBag.rating5.Count /
+															(float)@ViewBag.rating.Count) * 100;
+														}
+														string formattedResult5 = $"{divisionResult5:0.00}";
+													}
+													(@formattedResult5%)
+												</span>
+												<span>@ViewBag.rating5.Count Reviews</span>
+											</p>
+											<p class="star">
+												<span>
+													<i class="ion-ios-star"></i>
+													<i class="ion-ios-star"></i>
+													<i class="ion-ios-star"></i>
+													<i class="ion-ios-star"></i>
+													@{
+														float divisionResult4 = 0;
+														if (@ViewBag.rating4.Count != 0)
+														{
+															divisionResult4 = ((float)@ViewBag.rating4.Count /
+															(float)@ViewBag.rating.Count) * 100;
+														}
+														string formattedResult4 = $"{divisionResult4:0.00}";
+													}
+													(@formattedResult4%)
+												</span>
+												<span>@ViewBag.rating4.Count Reviews</span>
+											</p>
+											<p class="star">
+												<span>
+													<i class="ion-ios-star"></i>
+													<i class="ion-ios-star"></i>
+													<i class="ion-ios-star"></i>
+													@{
+														float divisionResult3 = 0;
+														if (@ViewBag.rating3.Count != 0)
+														{
+															divisionResult3 = ((float)@ViewBag.rating3.Count /
+															(float)@ViewBag.rating.Count) * 100;
+														}
+														string formattedResult3 = $"{divisionResult3:0.00}";
+													}
+													(@formattedResult3%)
+												</span>
+												<span>@ViewBag.rating3.Count Reviews</span>
+											</p>
+											<p class="star">
+												<span>
+													<i class="ion-ios-star"></i>
+													<i class="ion-ios-star"></i>
+													@{
+														float divisionResult2 = 0;
+														if (@ViewBag.rating2.Count != 0)
+														{
+															divisionResult2 = ((float)@ViewBag.rating2.Count /
+															(float)@ViewBag.rating.Count) * 100;
+														}
+														string formattedResult2 = $"{divisionResult2:0.00}";
+													}
+													(@formattedResult2%)
+												</span>
+												<span>@ViewBag.rating2.Count Reviews</span>
+											</p>
+											<p class="star">
+												<span>
+													<i class="ion-ios-star"></i>
+													@{
+														float divisionResult1 = 0;
+														if (@ViewBag.rating1.Count != 0)
+														{
+															divisionResult1 = ((float)@ViewBag.rating1.Count /
+															(float)@ViewBag.rating.Count) * 100;
+														}
+														string formattedResult1 = $"{divisionResult1:0.00}";
+													}
+													(@formattedResult1%)
+												</span>
+												<span>@ViewBag.rating1.Count Reviews</span>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="ftco-section ftco-no-pt">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-12 heading-section text-center ftco-animate mb-5">
+				<span class="subheading">Choose Car</span>
+				<h2 class="mb-2">Related Cars</h2>
+			</div>
+		</div>
+		<div class="row">
+			@for (var i = 0; i < 3; i++)
+			{
+				var carListId = _context.Car.Find(ViewBag.relatedCars[i].id);
+				var backgroundImage = "";
+				foreach (var image in carListId.images)
 				{
-					var carListId = _context.Car.Find(ViewBag.relatedCars[i].id);
-					var backgroundImage = "";
-					foreach (var image in carListId.images)
+					if (image.carId == ViewBag.relatedCars[i].id)
 					{
-						if (image.carId == ViewBag.relatedCars[i].id)
-						{	
-							backgroundImage = image.nameFile;
-							break;
-						}
+						backgroundImage = image.nameFile;
+						break;
 					}
-				    <div class="col-md-4">
-				        <div class="car-wrap rounded ftco-animate">
-				            <div class="img rounded d-flex align-items-end" style="background-image: url(/images/@backgroundImage"></div>
-				            <div class="text">
-				                <h2 class="mb-0"><a href="car-single.html">@ViewBag.relatedCars[i].model</a></h2>
-				                <div class="d-flex mb-3">
-				                    <span class="cat">@ViewBag.relatedCars[i].brand</span>
-				                    <p class="price ml-auto">$@ViewBag.relatedCars[i].Price <span>/day</span></p>
-				                </div>
-				                <p class="d-flex mb-0 d-block">
-				                    <a onclick="showInPopup('@Url.Action("Book","bookings",new {cardId=@ViewBag.relatedCars[i].id, totalAmount=@ViewBag.relatedCars[i].Price, userId=@Id},Context.Request.Scheme)','Book')" class="btn btn-primary py-2 mr-1">Book now</a>
-				                    <a asp-action="Details" asp-route-id="@ViewBag.relatedCars[i].id" class="btn btn-secondary py-2 ml-1">Details</a>
-				                </p>
-				            </div>
-				        </div>
-				    </div>
 				}
+				<div class="col-md-4">
+					<div class="car-wrap rounded ftco-animate">
+						<div class="img rounded d-flex align-items-end"
+							style="background-image: url(/images/@backgroundImage"></div>
+						<div class="text">
+							<h2 class="mb-0"><a href="car-single.html">@ViewBag.relatedCars[i].model</a></h2>
+							<div class="d-flex mb-3">
+								<span class="cat">@ViewBag.relatedCars[i].brand</span>
+								<p class="price ml-auto">$@ViewBag.relatedCars[i].Price <span>/day</span></p>
+							</div>
+							<p class="d-flex mb-0 d-block">
+								<a onclick="showInPopup('@Url.Action("Book","bookings",new {cardId=@ViewBag.relatedCars[i].id, totalAmount=@ViewBag.relatedCars[i].Price, userId=@Id},Context.Request.Scheme)','Book')"
+									class="btn btn-primary py-2 mr-1">Book now</a>
+								<a asp-action="Details" asp-route-id="@ViewBag.relatedCars[i].id"
+									class="btn btn-secondary py-2 ml-1">Details</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			}
 
-        </div>
-    	</div>
-    </section>
+		</div>
+	</div>
+</section>
 
 <script>
-// JavaScript to handle the click event and change the star color
-document.addEventListener('DOMContentLoaded', function() {
-  var stars = document.querySelectorAll('.star-rating input[type="radio"] + label');
-  stars.forEach(function(star, index) {
-    star.addEventListener('click', function() {
-      for (var i = 0; i <= index; i++) {
-        stars[i].style.color = '#01d28e'; /* Set the color of the clicked star and the preceding stars */
-      }
-      for (var j = index + 1; j < stars.length; j++) {
-        stars[j].style.color = '#5f6f6aa7'; /* Reset the color of the remaining stars */
-      }
+    document.getElementById('chatButton').addEventListener('click', function (e) {
+        var userId1 = '@Id';
+        var userId2 = '@Model.user_id';
+        
+        if (!userId1 || !userId2) {
+            alert('You Should Login');
+            e.preventDefault(); // Prevent the link from navigating
+            return false;
+        }
     });
-  });
-});
-</script>
+	// JavaScript to handle the click event and change the star color
+	document.addEventListener('DOMContentLoaded', function () {
+		var stars = document.querySelectorAll('.star-rating input[type="radio"] + label');
+		stars.forEach(function (star, index) {
+			star.addEventListener('click', function () {
+				for (var i = 0; i <= index; i++) {
+					stars[i].style.color = '#01d28e'; /* Set the color of the clicked star and the preceding stars */
+				}
+				for (var j = index + 1; j < stars.length; j++) {
+					stars[j].style.color = '#5f6f6aa7'; /* Reset the color of the remaining stars */
+				}
+			});
+		});
+	});
 
+</script>

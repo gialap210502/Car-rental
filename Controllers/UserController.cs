@@ -97,7 +97,10 @@ namespace Car_rental.Controllers
         public IActionResult CreateChatRoom(int UserId1, int UserId2)
         {
             ViewBag.Layout = "_Layout";
-            Console.WriteLine(UserId1 + "----" + UserId2);
+            if (UserId1 == 0 || UserId2 == 0)
+            {
+                
+            }
             // Tìm cuộc trò chuyện chứa cả hai người dùng
             var existingConversation = _context.Conversation
                 .Where(c => c.Participations.Any(p => p.UserID == UserId1) && c.Participations.Any(p => p.UserID == UserId2))
@@ -105,6 +108,7 @@ namespace Car_rental.Controllers
 
             if (existingConversation == null)
             {
+
                 // Nếu không có cuộc trò chuyện tồn tại, tạo mới một cuộc trò chuyện
                 var newConversation = new Conversation { Name = UserId1 + "--" + UserId2, CreatedAt = DateTime.Now };
                 _context.Conversation.Add(newConversation);
@@ -128,6 +132,13 @@ namespace Car_rental.Controllers
         public async Task<IActionResult> Chat(int? conversationId)
         {
             ViewBag.layout = "_Layout";
+            var userID = HttpContext.Session.GetInt32(SessionId);
+            var userImgString = "";
+            if (userID != null)
+            {
+                userImgString = _context.user.Find(userID).image;
+            }
+            ViewBag.userImg = userImgString;
             List<Conversation> ConversationData = _context.Conversation.Include(C => C.Messages).ThenInclude(m => m.user).Include(C => C.Participations).Where(C => C.ConversationID == conversationId).ToList();
             return View(ConversationData);
         }
@@ -245,6 +256,18 @@ namespace Car_rental.Controllers
             en_repassword = Encode.encode(repassword);
             if (en_password == en_repassword)
             {
+                if (Id == null)
+                {
+                    user.citizen_identification = null;
+                }
+                if (license == null)
+                {
+                    user.driver_license = null;
+                }
+                if (avatar == null)
+                {
+                    user.image = null;
+                }
                 if (ModelState.IsValid)
                 {
                     user.password = en_password;
@@ -340,7 +363,6 @@ namespace Car_rental.Controllers
             {
                 var en_password = Encode.encode(Password);
                 var user = await _context.user.FirstOrDefaultAsync(u => u.email == UserName && u.password == en_password);
-
 
                 if (user != null /*&& user.flag == 1*/)
                 {
