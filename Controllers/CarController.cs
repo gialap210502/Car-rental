@@ -79,6 +79,21 @@ namespace Car_rental.Controllers
             return View(car_rentalContext);
         }
 
+        public IActionResult CarListForManager(int UserId, int pg = 1)
+        {
+            ViewBag.layout = "_AdminLayout";
+            Console.WriteLine(UserId+"----------");
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = _context.Car.Where(u => u.user_id == UserId).Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Where(u => u.user_id == UserId).Skip(recSkip).Take(pager.PageSize).ToList();
+            this.ViewBag.Pager = pager;
+            return View(car_rentalContext);
+        }
+
         public ActionResult SearchforUser(string query, int pg = 1)
         {
             ViewBag.Layout = "_Layout";
@@ -214,6 +229,7 @@ namespace Car_rental.Controllers
         // GET: Car/Create
         public IActionResult Create()
         {
+            ViewBag.layout = "_AdminLayout";
             ViewData["discount_id"] = new SelectList(_context.discount, "id", "code");
             ViewData["category_id"] = new SelectList(_context.category, "id", "type");
             ViewData["user_id"] = new SelectList(_context.user, "id", "email");
@@ -225,11 +241,13 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormFile myVideoFile, IFormFile myfile1, IFormFile myfile2, IFormFile myfile3, IFormFile myfile4, IFormFile myfile5, [Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,Description,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Create(int userId,IFormFile myVideoFile, IFormFile myfile1, IFormFile myfile2, IFormFile myfile3, IFormFile myfile4, IFormFile myfile5, [Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,Description,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
         {
             ViewBag.layout = "_AdminLayout";
+            
             if (ModelState.IsValid)
             {
+                car.user_id = userId;
                 _context.Add(car);
                 await _context.SaveChangesAsync();
                 if (myVideoFile != null)
@@ -317,7 +335,8 @@ namespace Car_rental.Controllers
             }
             ViewData["discount_id"] = new SelectList(_context.discount, "id", "code", car.discount_id);
             ViewData["category_id"] = new SelectList(_context.category, "id", "type", car.category_id);
-            ViewData["user_id"] = new SelectList(_context.user, "id", "email", car.user_id);
+            ViewData["user_id"] = new SelectList(_context.user, "id", "id", car.user_id);
+            
             return View(car);
         }
 
@@ -425,12 +444,12 @@ namespace Car_rental.Controllers
         public async Task<IActionResult> Chart()
         {
             ViewBag.Layout = "_AdminLayout";
-            
-            var roleList = _context.roles.GroupBy(r => r.role)            
+
+            var roleList = _context.roles.GroupBy(r => r.role)
             .Select(g => new
             {
-                    RoleName = g.Key,
-                    Percentage = (double)0
+                RoleName = g.Key,
+                Percentage = (double)0
             }).ToList();
             var userRole = _context.userRole.Count();
 

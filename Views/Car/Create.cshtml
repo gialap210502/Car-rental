@@ -2,16 +2,19 @@
 
 @{
     ViewData["Title"] = "Create";
+    var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
 }
 
 <h1>Create</h1>
 
 <h4>car</h4>
+<p>@ViewBag.UserId</p>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" name="userID" value=@Id />
             <div class="form-group">
                 video
                 <br/>
