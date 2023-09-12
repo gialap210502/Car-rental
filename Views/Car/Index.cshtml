@@ -10,6 +10,7 @@
         pager = ViewBag.Pager;
         pageNo = pager.CurrentPage;
     }
+    var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
 }
 
 <div class="col-lg-12 grid-margin stretch-card">
@@ -115,9 +116,9 @@
                                     @Html.DisplayFor(modelItem => item.category.type)
                                 </td>
                                 <td>
-                                    <a class="badge badge-warning" asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                                    <a class="badge badge-warning" asp-action="Edit"  asp-route-userId="@Id" asp-route-id="@item.id">Edit</a> |
                                     <a class="badge badge-info" asp-action="Details" asp-route-id="@item.id">Details</a> |
-                                    <a class="badge badge-danger" asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                                    <a class="badge badge-danger" asp-action="Delete" asp-route-userId="@Id" asp-route-id="@item.id">Delete</a>
                                 </td>
                             </tr>
                         }

@@ -82,7 +82,6 @@ namespace Car_rental.Controllers
         public IActionResult CarListForManager(int UserId, int pg = 1)
         {
             ViewBag.layout = "_AdminLayout";
-            Console.WriteLine(UserId+"----------");
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
@@ -241,10 +240,10 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int userId,IFormFile myVideoFile, IFormFile myfile1, IFormFile myfile2, IFormFile myfile3, IFormFile myfile4, IFormFile myfile5, [Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,Description,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Create(int userId, IFormFile myVideoFile, IFormFile myfile1, IFormFile myfile2, IFormFile myfile3, IFormFile myfile4, IFormFile myfile5, [Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,Description,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
         {
             ViewBag.layout = "_AdminLayout";
-            
+
             if (ModelState.IsValid)
             {
                 car.user_id = userId;
@@ -336,12 +335,12 @@ namespace Car_rental.Controllers
             ViewData["discount_id"] = new SelectList(_context.discount, "id", "code", car.discount_id);
             ViewData["category_id"] = new SelectList(_context.category, "id", "type", car.category_id);
             ViewData["user_id"] = new SelectList(_context.user, "id", "id", car.user_id);
-            
+
             return View(car);
         }
 
         // GET: Car/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int userId)
         {
             ViewBag.layout = "_AdminLayout";
             if (id == null || _context.Car == null)
@@ -350,6 +349,13 @@ namespace Car_rental.Controllers
             }
 
             var car = await _context.Car.FindAsync(id);
+            var userRole = _context.userRole.Include(u => u.role).FirstOrDefault(u => u.userId == userId);
+            var userRoleName = _context.roles.FirstOrDefault(i => i.id == userRole.roleId);
+            // Check if the userId matches the user associated with the car
+            if (car.user_id != userId && userRoleName.role != "Admin")
+            {
+                return BadRequest("You are not authorized to delete this car.");
+            }
             if (car == null)
             {
                 return NotFound();
@@ -365,34 +371,46 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,Description,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Edit(int id, int userId, [Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,Description,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
         {
             ViewBag.layout = "_AdminLayout";
             if (id != car.id)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            var userCheck = _context.user.Find(userId);
+            // Check if the userId matches the user associated with the car
+            if (car.user_id != userId)
             {
-                try
+                if (userCheck.userRoles.FirstOrDefault().role.role == "Admin")
                 {
-                    _context.Update(car);
-                    await _context.SaveChangesAsync();
+                    if (ModelState.IsValid)
+                    {
+                        try
+                        {
+                            _context.Update(car);
+                            await _context.SaveChangesAsync();
+                        }
+                        catch (DbUpdateConcurrencyException)
+                        {
+                            if (!carExists(car.id))
+                            {
+                                return NotFound();
+                            }
+                            else
+                            {
+                                throw;
+                            }
+                        }
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!carExists(car.id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return BadRequest("You are not authorized to delete this car.");
                 }
-                return RedirectToAction(nameof(Index));
             }
+
             ViewData["discount_id"] = new SelectList(_context.discount, "id", "code", car.discount_id);
             ViewData["category_id"] = new SelectList(_context.category, "id", "type", car.category_id);
             ViewData["user_id"] = new SelectList(_context.user, "id", "email", car.user_id);
@@ -400,19 +418,25 @@ namespace Car_rental.Controllers
         }
 
         // GET: Car/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, int userId)
         {
             ViewBag.layout = "_AdminLayout";
             if (id == null || _context.Car == null)
             {
                 return NotFound();
             }
-
             var car = await _context.Car
                 .Include(c => c.Discount)
                 .Include(c => c.category)
                 .Include(c => c.user)
                 .FirstOrDefaultAsync(m => m.id == id);
+            // Check if the userId matches the user associated with the car
+            var userRole = _context.userRole.Include(u => u.role).FirstOrDefault(u => u.userId == userId);
+            var userRoleName = _context.roles.FirstOrDefault(i => i.id == userRole.roleId);
+            if (car.user_id != userId && userRoleName.role != "Admin")
+            {
+                return BadRequest("You are not authorized to delete this car.");
+            }
             if (car == null)
             {
                 return NotFound();
@@ -424,7 +448,7 @@ namespace Car_rental.Controllers
         // POST: Car/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, int userId)
         {
             ViewBag.layout = "_AdminLayout";
             if (_context.Car == null)
@@ -434,7 +458,15 @@ namespace Car_rental.Controllers
             var car = await _context.Car.FindAsync(id);
             if (car != null)
             {
-                _context.Car.Remove(car);
+                // Check if the userId matches the user associated with the car
+                if (car.user_id != userId)
+                {
+                    return BadRequest("You are not authorized to delete this car.");
+                }
+                else
+                {
+                    _context.Car.Remove(car);
+                }
             }
 
             await _context.SaveChangesAsync();
