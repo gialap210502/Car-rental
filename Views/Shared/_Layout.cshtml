@@ -3,213 +3,267 @@
   var name = Context.Session.GetString("_Name") != null ? Context.Session.GetString("_Name") : null;
   var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
   var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
+  @using Car_rental.Data;
+  @inject Car_rentalContext _context
+var conversationsOfUser = _context.Conversation
+  .Where(conversation => conversation.Participations.Any(participation => participation.UserID ==
+  Id))
+  .ToList();
 }
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Car Rental</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="~/user/css/open-iconic-bootstrap.min.css">
-    <link rel="stylesheet" href="~/user/css/animate.css">
-    
-    <link rel="stylesheet" href="~/user/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="~/user/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="~/user/css/magnific-popup.css">
-    @* <link rel="stylesheet" href="~/site.css" asp-append-version="true" /> *@
+<head>
+  <title>Car Rental</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    @* <link rel="stylesheet" href="~/user/css/aos.css"> *@
+  <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
+    rel="stylesheet">
 
-    <link rel="stylesheet" href="~/user/css/ionicons.min.css">
+  <link rel="stylesheet" href="~/user/css/open-iconic-bootstrap.min.css">
+  <link rel="stylesheet" href="~/user/css/animate.css">
 
-    <link rel="stylesheet" href="~/user/css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="~/user/css/jquery.timepicker.css">
+  <link rel="stylesheet" href="~/user/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="~/user/css/owl.theme.default.min.css">
+  <link rel="stylesheet" href="~/user/css/magnific-popup.css">
+  @* <link rel="stylesheet" href="~/site.css" asp-append-version="true" /> *@
 
-    
-    <link rel="stylesheet" href="~/user/css/flaticon.css">
-    <link rel="stylesheet" href="~/user/css/icomoon.css">
-    <link rel="stylesheet" href="~/user/css/style.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://kit.fontawesome.com/e036ea6b4e.js" crossorigin="anonymous"></script>
-  </head>
-    <style>
+  @* <link rel="stylesheet" href="~/user/css/aos.css"> *@
+
+  <link rel="stylesheet" href="~/user/css/ionicons.min.css">
+
+  <link rel="stylesheet" href="~/user/css/bootstrap-datepicker.css">
+  <link rel="stylesheet" href="~/user/css/jquery.timepicker.css">
+
+
+  <link rel="stylesheet" href="~/user/css/flaticon.css">
+  <link rel="stylesheet" href="~/user/css/icomoon.css">
+  <link rel="stylesheet" href="~/user/css/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/e036ea6b4e.js" crossorigin="anonymous"></script>
+</head>
+<style>
   /* Make the image fully responsive */
   .carousel-inner img {
     width: 100%;
     height: 100%;
   }
+
   .video-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%; /* Đảm bảo div video-container có chiều cao 100% của cha nó */
-}
+    height: 100%;
+    /* Đảm bảo div video-container có chiều cao 100% của cha nó */
+  }
 
-video {
+  video {
     max-width: 100%;
     max-height: 100%;
-}
+  }
 
-.star-rating label {
-  position: relative;
-  display: inline-block;
-  color: #5f6f6aa7;
-  font-size: 50px; /* Adjust the font size to make the star larger */
-  margin-right: 5px; /* Add some spacing between the stars */
-}
+  .star-rating label {
+    position: relative;
+    display: inline-block;
+    color: #5f6f6aa7;
+    font-size: 50px;
+    /* Adjust the font size to make the star larger */
+    margin-right: 5px;
+    /* Add some spacing between the stars */
+  }
 
-.star-rating label::after {
-  content: attr(data-rating);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white; /* Set the number color to white */
-  font-size: 16px; /* Adjust the font size to make the number smaller */
-  opacity: 0.8; /* Set the opacity to make the number appear clearer */
-}
+  .star-rating label::after {
+    content: attr(data-rating);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    /* Set the number color to white */
+    font-size: 16px;
+    /* Adjust the font size to make the number smaller */
+    opacity: 0.8;
+    /* Set the opacity to make the number appear clearer */
+  }
 
-.star-rating input[type="radio"] {
-  display: none;
-}
-.star-rating input[type="radio"]:checked + label {
-  color: #01d28e; /* Set the color of the clicked star */
-}
-  </style>
-  <body>
-    
-	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar" style="background-color: black">
-	    <div class="container">
-	      <a class="navbar-brand" href="/">Car<span>Rental</span></a>
-	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span> Menu
-	      </button>
+  .star-rating input[type="radio"] {
+    display: none;
+  }
 
-	      <div class="collapse navbar-collapse" id="ftco-nav">
-	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item active"><a href="/Car/Home" class="nav-link" style="font-weight: bold;">Home</a></li>
-	          <li class="nav-item"><a href="/Car/About" class="nav-link" style="font-weight: bold;">About</a></li>
-	          <li class="nav-item"><a href="/Car/Cars" class="nav-link" style="font-weight: bold;">Cars</a></li>
-                @{
-              if (name != null)
-              {
-                    <li class="nav-item dropdown">
-                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" > 
-                        Hi @name
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background: rgba(53, 114, 62, 0.5);">
-                        @if(role == "Admin"){
-                              <a class="dropdown-item" href="/user/index">Admin</a>
-                        }
-                        @if(role == "Owner"){
-                              <a class="dropdown-item" href="/car/index">Manager</a>
-                        }
-                        <a class="dropdown-item" asp-controller="User" asp-action="Profile" asp-route-id="@Id">Profile</a>
-                        <a class="dropdown-item" asp-controller="bookings" asp-action="BookingHistory" asp-route-id="@Id">Booking History</a>
-                        <a class="dropdown-item" asp-controller="User" asp-action="Logout">Log out</a>
-                      </div>
-                    </li>
-              }
-              else
-              {
-                    <li class="nav-item active"><a class="nav-link" asp-controller="User" asp-action="Login" style="font-weight: bold;">Login</a></li>
-              }
+  .star-rating input[type="radio"]:checked+label {
+    color: #01d28e;
+    /* Set the color of the clicked star */
+  }
+</style>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar"
+    style="background-color: black">
+    <div class="container">
+      <a class="navbar-brand" href="/">Car<span>Rental</span></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+        aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="oi oi-menu"></span> Menu
+      </button>
+
+      <div class="collapse navbar-collapse" id="ftco-nav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active"><a href="/Car/Home" class="nav-link" style="font-weight: bold;">Home</a></li>
+          <li class="nav-item"><a href="/Car/About" class="nav-link" style="font-weight: bold;">About</a></li>
+          <li class="nav-item"><a href="/Car/Cars" class="nav-link" style="font-weight: bold;">Cars</a></li>
+          @{
+            if (name != null)
+            {
+              <li class="nav-item dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Hi @name
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background: rgba(53, 114, 62, 0.5);">
+                  @if (role == "Admin")
+                  {
+                    <a class="dropdown-item" href="/user/index">Admin</a>
+                  }
+                  @if (role == "Owner")
+                  {
+                    <a class="dropdown-item" href="/Car/CarListForManager?UserId=@Id">Manager</a>
+                  }
+                  <a class="dropdown-item" asp-controller="User" asp-action="Profile" asp-route-id="@Id">Profile</a>
+                  <a class="dropdown-item" asp-controller="User" asp-action="Message" >Message</a>
+                  <a class="dropdown-item" asp-controller="bookings" asp-action="BookingHistory" asp-route-id="@Id">Booking
+                    History</a>
+                  <a class="dropdown-item" asp-controller="User" asp-action="Logout">Log out</a>
+                </div>
+              </li>
             }
-	        </ul>
-	      </div>
-	    </div>
-	  </nav>
-    <!-- END nav -->
-    @RenderBody()
-    <footer class="ftco-footer ftco-bg-dark ftco-section">
-      <div class="container">
-        <div class="row mb-5">
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2"><a href="#" class="logo">Car<span>book</span></a></h2>
-              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-              <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-                <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-              </ul>
+            else
+            {
+              <li class="nav-item active"><a class="nav-link" asp-controller="User" asp-action="Login"
+                  style="font-weight: bold;">Login</a></li>
+            }
+          }
+          @* <li class="nav-item dropdown" style="margin-left: 10px;">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa-solid fa-message" style="color: #ffffff;"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background: rgba(222, 255, 227, 0.5);">
+              @foreach (var item in conversationsOfUser)
+              {
+                <a href="/user/Chat?conversationId=@item.ConversationID" class="dropdown-item">
+                  <div>
+                    <h6>
+                      @item.Name
+                    </h6>
+                  </div>
+                </a>
+              }
             </div>
-          </div>
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4 ml-md-5">
-              <h2 class="ftco-heading-2">Information</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">About</a></li>
-                <li><a href="#" class="py-2 d-block">Services</a></li>
-                <li><a href="#" class="py-2 d-block">Term and Conditions</a></li>
-                <li><a href="#" class="py-2 d-block">Best Price Guarantee</a></li>
-                <li><a href="#" class="py-2 d-block">Privacy &amp; Cookies Policy</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md">
-             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Customer Support</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">FAQ</a></li>
-                <li><a href="#" class="py-2 d-block">Payment Option</a></li>
-                <li><a href="#" class="py-2 d-block">Booking Tips</a></li>
-                <li><a href="#" class="py-2 d-block">How it works</a></li>
-                <li><a href="#" class="py-2 d-block">Contact Us</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4">
-            	<h2 class="ftco-heading-2">Have a Questions?</h2>
-            	<div class="block-23 mb-3">
-	              <ul>
-	                <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
-	                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
-	                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
-	              </ul>
-	            </div>
-            </div>
+          </li> *@
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- END nav -->
+  @RenderBody()
+  <footer class="ftco-footer ftco-bg-dark ftco-section">
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-md">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2"><a href="#" class="logo">Car<span>book</span></a></h2>
+            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the
+              blind texts.</p>
+            <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+              <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+              <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+              <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+            </ul>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12 text-center">
-
-            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+        <div class="col-md">
+          <div class="ftco-footer-widget mb-4 ml-md-5">
+            <h2 class="ftco-heading-2">Information</h2>
+            <ul class="list-unstyled">
+              <li><a href="#" class="py-2 d-block">About</a></li>
+              <li><a href="#" class="py-2 d-block">Services</a></li>
+              <li><a href="#" class="py-2 d-block">Term and Conditions</a></li>
+              <li><a href="#" class="py-2 d-block">Best Price Guarantee</a></li>
+              <li><a href="#" class="py-2 d-block">Privacy &amp; Cookies Policy</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Customer Support</h2>
+            <ul class="list-unstyled">
+              <li><a href="#" class="py-2 d-block">FAQ</a></li>
+              <li><a href="#" class="py-2 d-block">Payment Option</a></li>
+              <li><a href="#" class="py-2 d-block">Booking Tips</a></li>
+              <li><a href="#" class="py-2 d-block">How it works</a></li>
+              <li><a href="#" class="py-2 d-block">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Have a Questions?</h2>
+            <div class="block-23 mb-3">
+              <ul>
+                <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San
+                    Francisco, California, USA</span></li>
+                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
+                <li><a href="#"><span class="icon icon-envelope"></span><span
+                      class="text">info@yourdomain.com</span></a></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-    </footer>
-    
-       <div class="modal" tabindex="-1" role="dialog" id="form-modal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 text-center">
 
-                </div>
-            </div>
+          <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;
+            <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with
+            <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com"
+              target="_blank">Colorlib</a>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          </p>
         </div>
+      </div>
     </div>
+  </footer>
 
-    <div class="loaderbody" id="loaderbody">
-        <div class="loader"></div>
+  <div class="modal" tabindex="-1" role="dialog" id="form-modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+        </div>
+      </div>
     </div>
+  </div>
+
+  <div class="loaderbody" id="loaderbody">
+    <div class="loader"></div>
+  </div>
 
   <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+        stroke="#F96D00" />
+    </svg></div>
 
   @* <script src="~/js/chat.js"></script> *@
   <script src="~/js/signalr/dist/browser/signalr.js"></script>
@@ -227,10 +281,12 @@ video {
   <script src="~/user/js/bootstrap-datepicker.js"></script>
   <script src="~/user/js/jquery.timepicker.min.js"></script>
   <script src="~/user/js/scrollax.min.js"></script>
-  @* <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script> *@
+  @* <script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script> *@
   @* <script src="~/user/js/google-map.js"></script> *@
   <script src="~/user/js/main.js"></script>
   <script src="~/js/site.js" asp-append-version="true"></script>
   @await RenderSectionAsync("Scripts", required: false)
-  </body>
+</body>
+
 </html>

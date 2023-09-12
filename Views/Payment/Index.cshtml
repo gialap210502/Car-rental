@@ -2,58 +2,127 @@
 
 @{
     ViewData["Title"] = "Index";
+    Pager pager = new Pager();
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
 }
 
-<h1>Index</h1>
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Car Table</h4>
+            <p class="card-description">
+                <a asp-action="Create">Create New</a>
+            </p>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Total Amount
+                            </th>
+                            <th>
+                                Customer Email
+                            </th>
+                            <th>
+                                Date Of Payment
+                            </th>
+                            <th>
+                                Car Model
+                            </th>
+                            <th>
+                                Booking Id
+                            </th>
+                            <th>
+                                Start Date
+                            </th>
+                            <th>
+                                End Date
+                            </th>
+                            <th>
+                                Pick Up
+                            </th>
+                            <th>
+                                Return
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.amount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.booking.user.email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.paymentDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.car.model)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.booking.id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.booking.startDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.booking.endDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.booking.TakeCar)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.booking.CarBack)
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                @if (pager.TotalPages > 0)
+                {
+                    var pre = 1;
+                    var next = pager.CurrentPage + 1;
+                    <a type="button" class="btn btn-outline-secondary" asp-controller="Payment" asp-action="Index"
+                        asp-route-pg="@pre">&lt;</a>
+                    @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                    {
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.paymentDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.paymentMethod)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.car)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.booking)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.paymentDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.paymentMethod)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.car.id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.booking.id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                        <a type="button" class="btn btn-outline-secondary" asp-controller="Payment" asp-action="Index"
+                            asp-route-pg="@pge">@pge</a>
+                        pre = pge - 1;
+                        if (pre == 1 || pre == 0)
+                        {
+                            pre = 1;
+                        }
+                        if (next >= pager.EndPage)
+                        {
+                            next = pager.EndPage;
+                        }
+                    }
+                    <a type="button" class="btn btn-outline-secondary" asp-controller="Payment" asp-action="Index"
+                        asp-route-pg="@next">&gt;</a>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>

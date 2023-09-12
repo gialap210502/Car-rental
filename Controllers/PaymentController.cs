@@ -20,11 +20,33 @@ namespace Car_rental.Controllers
         }
 
         // GET: Payment
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pg = 1)
         {
             ViewBag.layout="_AdminLayout";
-            var car_rentalContext = _context.payment.Include(p => p.booking).Include(p => p.car);
-            return View(await car_rentalContext.ToListAsync());
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = _context.payment.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var car_rentalContext = _context.payment.Include(p => p.booking).ThenInclude(b => b.user).Include(p => p.car).Skip(recSkip).Take(pager.PageSize).ToList();
+            this.ViewBag.Pager = pager;
+            return View(car_rentalContext);
+        }
+        public async Task<IActionResult> OrderList(int UserId, int pg = 1)
+        {
+            ViewBag.layout="_AdminLayout";
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+
+            //var usercar = _context.ca
+            int recsCount = _context.payment.Include(p => p.car).ThenInclude(c => c.user).Where(p => p.car.user.id == UserId).Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var car_rentalContext = _context.payment.Include(p => p.booking).ThenInclude(b => b.user).Include(p => p.car).Where(p => p.car.user.id == UserId).Skip(recSkip).Take(pager.PageSize).ToList();
+            this.ViewBag.Pager = pager;
+            return View(car_rentalContext);
         }
 
         // GET: Payment/Details/5

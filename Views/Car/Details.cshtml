@@ -118,9 +118,15 @@
 								<p>Price: $@Html.DisplayFor(model => model.Price)</p>
 								<a onclick="showInPopup('@Url.Action("Book","bookings",new {cardId=@Model.id, totalAmount=@Model.Price, userId=@Id},Context.Request.Scheme)','Book')"
 									class="btn btn-primary py-2 mr-1">Book Now</a>
-								<a id="chatButton" asp-controller="user" asp-action="CreateChatRoom"
-									asp-route-UserId1="@Id" asp-route-UserId2="@Model.user_id"
-									class="btn btn-secondary py-2 mr-1">Chat with owner</a>
+								@{
+									if (Id != Model.user_id)
+									{
+										<a id="chatButton" asp-controller="user" asp-action="CreateChatRoom"
+											asp-route-UserId1="@Id" asp-route-UserId2="@Model.user_id"
+											class="btn btn-secondary py-2 mr-1">Chat with owner</a>
+									}
+								}
+
 							</div>
 						</div>
 					</div>
@@ -592,16 +598,16 @@
 </section>
 
 <script>
-    document.getElementById('chatButton').addEventListener('click', function (e) {
-        var userId1 = '@Id';
-        var userId2 = '@Model.user_id';
-        
-        if (!userId1 || !userId2) {
-            alert('You Should Login');
-            e.preventDefault(); // Prevent the link from navigating
-            return false;
-        }
-    });
+	document.getElementById('chatButton').addEventListener('click', function (e) {
+		var userId1 = '@Id';
+		var userId2 = '@Model.user_id';
+
+		if (!userId1 || !userId2) {
+			alert('You Should Login');
+			e.preventDefault(); // Prevent the link from navigating
+			return false;
+		}
+	});
 	// JavaScript to handle the click event and change the star color
 	document.addEventListener('DOMContentLoaded', function () {
 		var stars = document.querySelectorAll('.star-rating input[type="radio"] + label');

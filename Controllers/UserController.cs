@@ -97,10 +97,8 @@ namespace Car_rental.Controllers
         public IActionResult CreateChatRoom(int UserId1, int UserId2)
         {
             ViewBag.Layout = "_Layout";
-            if (UserId1 == 0 || UserId2 == 0)
-            {
-                
-            }
+            var user1 = _context.user.Find(UserId1).email;
+            var user2 = _context.user.Find(UserId2).email;
             // Tìm cuộc trò chuyện chứa cả hai người dùng
             var existingConversation = _context.Conversation
                 .Where(c => c.Participations.Any(p => p.UserID == UserId1) && c.Participations.Any(p => p.UserID == UserId2))
@@ -110,7 +108,7 @@ namespace Car_rental.Controllers
             {
 
                 // Nếu không có cuộc trò chuyện tồn tại, tạo mới một cuộc trò chuyện
-                var newConversation = new Conversation { Name = UserId1 + "--" + UserId2, CreatedAt = DateTime.Now };
+                var newConversation = new Conversation { Name = user1 + "-" + user2, CreatedAt = DateTime.Now };
                 _context.Conversation.Add(newConversation);
                 _context.SaveChanges();
 
@@ -141,6 +139,11 @@ namespace Car_rental.Controllers
             ViewBag.userImg = userImgString;
             List<Conversation> ConversationData = _context.Conversation.Include(C => C.Messages).ThenInclude(m => m.user).Include(C => C.Participations).Where(C => C.ConversationID == conversationId).ToList();
             return View(ConversationData);
+        }
+        public async Task<IActionResult> Message()
+        {
+            ViewBag.layout = "_Layout";
+            return View();
         }
 
         [HttpPost]
