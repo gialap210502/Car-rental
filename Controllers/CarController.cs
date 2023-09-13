@@ -105,34 +105,84 @@ namespace Car_rental.Controllers
             return View(car_rentalContext);
         }
 
-        public ActionResult SearchforUser(string query, int pg = 1)
+        public ActionResult SearchforUser(string query, string model, string location, double? minPrice, double? maxPrice, int? minSeat, int? maxSeat, int pg = 1)
         {
             ViewBag.Layout = "_Layout";
             const int pageSize = 12;
             if (pg < 1)
                 pg = 1;
-            int recsCount = _context.Car.Where(d => d.address.Contains(query) && d.available == 1).Count();
+
+            var queryable = _context.Car.Include(c => c.Discount)
+                .Include(c => c.category)
+                .Include(c => c.user)
+                .Include(c => c.images)
+                .Where(d => d.available == 1);
+
+            if (!string.IsNullOrEmpty(query))
+            {
+                queryable = queryable.Where(d => d.address.Contains(query));
+            }
+
+            if (!string.IsNullOrEmpty(model))
+            {
+                queryable = queryable.Where(d => d.model == model);
+            }
+
+            if (!string.IsNullOrEmpty(location))
+            {
+                queryable = queryable.Where(d => d.address.Contains(location));
+            }
+
+            if (minPrice.HasValue)
+            {
+                queryable = queryable.Where(d => d.Price >= minPrice);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                queryable = queryable.Where(d => d.Price <= maxPrice);
+            }
+
+            if (minSeat.HasValue)
+            {
+                queryable = queryable.Where(d => d.seat >= minSeat);
+            }
+
+            if (maxSeat.HasValue)
+            {
+                queryable = queryable.Where(d => d.seat <= maxSeat);
+            }
+
+            int recsCount = queryable.Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
-            this.ViewBag.Pager = pager;
-            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Include(c => c.images).Where(d => d.address.Contains(query) && d.available == 1).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
-            {
-                Id = c.id,
-                Model = c.model,
-                Brand = c.brand,
-                Price = c.Price,
-                address = c.address,
-                ImageName = c.images.FirstOrDefault(i => i.carId == c.id) != null ? c.images.FirstOrDefault(i => i.carId == c.id).nameFile : null
-            }).Skip(recSkip).Take(pager.PageSize).ToList();
+            ViewBag.Pager = pager;
+
+            var car_rentalContext = queryable
+                .Select(c => new CarViewModel
+                {
+                    Id = c.id,
+                    Model = c.model,
+                    Brand = c.brand,
+                    Price = c.Price,
+                    address = c.address,
+                    ImageName = c.images.FirstOrDefault(i => i.carId == c.id) != null ? c.images.FirstOrDefault(i => i.carId == c.id).nameFile : null
+                })
+                .Skip(recSkip)
+                .Take(pager.PageSize)
+                .ToList();
 
             ViewBag.query = query;
-            //Pass the results to the view
-            // if (car_rentalContext.Count() == 0)
-            // {
-            //     return RedirectToAction("Cars");
-            // }
+            ViewBag.model = model;
+            ViewBag.location = location;
+            ViewBag.minPrice = minPrice;
+            ViewBag.maxPrice = maxPrice;
+            ViewBag.minSeat = minSeat;
+            ViewBag.maxSeat = maxSeat;
+
             return View(car_rentalContext);
         }
+
 
         public IActionResult SetStatus(int userId, int carId)
         {
@@ -160,7 +210,9 @@ namespace Car_rental.Controllers
                     _context.Update(car);
                     _context.SaveChanges();
                 }
-            }else{
+            }
+            else
+            {
                 return BadRequest("Access denied: You don't have permission to perform this action.");
             }
             _context.Update(car);
