@@ -101,8 +101,6 @@ namespace Car_rental.Data
 
         public DbSet<Car_rental.Models.Images> Images { get; set; }
 
-        public DbSet<Car_rental.Models.VideoCar> VideoCar { get; set; }
-
         public DbSet<Car_rental.Models.Conversation> Conversation { get; set; } = default!;
 
         public DbSet<Car_rental.Models.Message> Message { get; set; } = default!;

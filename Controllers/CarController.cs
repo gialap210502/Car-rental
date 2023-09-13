@@ -277,12 +277,7 @@ namespace Car_rental.Controllers
             ViewBag.Layout = "_Layout";
             var listImages = _context.Images.Where(i => i.carId == id).ToList();
             ViewBag.listImages = listImages;
-            var Video = _context.VideoCar.FirstOrDefault(i => i.carId == id);
-            ViewBag.Video = "";
-            if (Video != null)
-            {
-                ViewBag.Video = Video.nameFile;
-            }
+     
 
 
             //random related cars base on category 
@@ -339,7 +334,7 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int userId, IFormFile myVideoFile, IFormFile myfile1, IFormFile myfile2, IFormFile myfile3, IFormFile myfile4, IFormFile myfile5, [Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,Description,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Create(int userId, IFormFile myfile1, IFormFile myfile2, IFormFile myfile3, IFormFile myfile4, IFormFile myfile5, [Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,Description,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
         {
             ViewBag.layout = "_AdminLayout";
 
@@ -348,20 +343,6 @@ namespace Car_rental.Controllers
                 car.user_id = userId;
                 _context.Add(car);
                 await _context.SaveChangesAsync();
-                if (myVideoFile != null)
-                {
-
-                    string filename = Path.GetFileName(myVideoFile.FileName);
-                    string replacedString = filename.Replace(" ", "");
-                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "Video");
-                    string fullPath = filePath + "\\" + replacedString;
-                    // Copy files to FileSystem using Streams
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
-                    {
-                        await myVideoFile.CopyToAsync(stream);
-                    }
-                    _context.VideoCar.Add(new VideoCar { nameFile = replacedString, carId = car.id });
-                }
                 if (myfile1 != null)
                 {
 

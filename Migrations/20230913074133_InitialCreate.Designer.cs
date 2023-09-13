@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Car_rental.Migrations
 {
     [DbContext(typeof(Car_rentalContext))]
-    [Migration("20230913042838_InitialCreate")]
+    [Migration("20230913074133_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -115,27 +115,6 @@ namespace Car_rental.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("Participation");
-                });
-
-            modelBuilder.Entity("Car_rental.Models.VideoCar", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<int>("carId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("nameFile")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("carId");
-
-                    b.ToTable("VideoCar");
                 });
 
             modelBuilder.Entity("Car_rental.Models.bookings", b =>
@@ -543,17 +522,6 @@ namespace Car_rental.Migrations
                     b.Navigation("user");
                 });
 
-            modelBuilder.Entity("Car_rental.Models.VideoCar", b =>
-                {
-                    b.HasOne("Car_rental.Models.car", "car")
-                        .WithMany("videoCars")
-                        .HasForeignKey("carId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("car");
-                });
-
             modelBuilder.Entity("Car_rental.Models.bookings", b =>
                 {
                     b.HasOne("Car_rental.Models.user", "user")
@@ -668,8 +636,6 @@ namespace Car_rental.Migrations
                     b.Navigation("payments");
 
                     b.Navigation("ratings");
-
-                    b.Navigation("videoCars");
                 });
 
             modelBuilder.Entity("Car_rental.Models.category", b =>

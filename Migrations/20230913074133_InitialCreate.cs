@@ -335,26 +335,6 @@ namespace Car_rental.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "VideoCar",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    nameFile = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    carId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_VideoCar", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_VideoCar_Car_carId",
-                        column: x => x.carId,
-                        principalTable: "Car",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_bookings_userId",
                 table: "bookings",
@@ -429,11 +409,6 @@ namespace Car_rental.Migrations
                 name: "IX_userRole_userId",
                 table: "userRole",
                 column: "userId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_VideoCar_carId",
-                table: "VideoCar",
-                column: "carId");
         }
 
         /// <inheritdoc />
@@ -458,19 +433,16 @@ namespace Car_rental.Migrations
                 name: "userRole");
 
             migrationBuilder.DropTable(
-                name: "VideoCar");
-
-            migrationBuilder.DropTable(
                 name: "Conversation");
 
             migrationBuilder.DropTable(
                 name: "bookings");
 
             migrationBuilder.DropTable(
-                name: "roles");
+                name: "Car");
 
             migrationBuilder.DropTable(
-                name: "Car");
+                name: "roles");
 
             migrationBuilder.DropTable(
                 name: "category");

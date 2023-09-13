@@ -39,11 +39,14 @@
 												<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"
 													style="background-color: #01d28e;"></li>
 												var slideIndex = 1; // Initialize the slide index with 1
-												for (var j = 1; j < ViewBag.listImages.Count + 1; j++)
+												if (ViewBag.listImages.Count > 1)
 												{
-													<li data-target="#carouselExampleIndicators" data-slide-to="@slideIndex"
-														style="background-color: #01d28e;"></li>
-													slideIndex++;
+													for (var j = 1; j < ViewBag.listImages.Count ; j++)
+													{
+														<li data-target="#carouselExampleIndicators" data-slide-to="@slideIndex"
+															style="background-color: #01d28e;"></li>
+														slideIndex++;
+													}
 												}
 											}
 										}
@@ -51,17 +54,6 @@
 									<!-- The slideshow -->
 									<div class="carousel-inner" style="width: 525px; height: 300px;">
 										@{
-											if (ViewBag.Video != null)
-											{
-												<div class="carousel-item active">
-													<div class="video-container" style="width: 525px; height: 300px;">
-														<video controls style="border: 1px solid #01d28e;">
-															<source src="/Video/@ViewBag.Video" type="video/mp4">
-															Your browser does not support the video tag.
-														</video>
-													</div>
-												</div>
-											}
 											// Check if there are any images
 											if (ViewBag.listImages != null && ViewBag.listImages.Count > 0)
 											{
