@@ -115,12 +115,48 @@ namespace Car_rental.Controllers
 
             ViewBag.query = query;
             //Pass the results to the view
-            // if (car_rentalContext.Count() == 0)
-            // {
-            //     return RedirectToAction("Cars");
-            // }
+            if (car_rentalContext.Count() == 0)
+            {
+                return RedirectToAction("Cars");
+            }
             return View(car_rentalContext);
         }
+
+        public IActionResult SetStatus(int userId, int carId)
+        {
+            ViewBag.Layout = "_Layout";
+            var car = _context.Car.Find(carId);
+            if (car == null)
+            {
+                // Xử lý khi không tìm thấy xe
+                return NotFound(); // Hoặc bất kỳ xử lý nào phù hợp
+            }
+            Console.WriteLine(userId);
+            Console.WriteLine(carId);
+            Console.WriteLine(car.user_id + "---------");
+            // check car match with user id
+            if (car.user_id == userId)
+            {
+                if (car.available == 0)
+                {
+                    Console.WriteLine("---------1");
+                    car.available = 1;
+                    _context.Update(car);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    Console.WriteLine(car.available + "---------2");
+                    car.available = 0;
+                    _context.Update(car);
+                    _context.SaveChanges();
+                }
+            }
+            _context.Update(car);
+            _context.SaveChanges();
+            return RedirectToAction("CarListForManager", new { userId = userId });
+        }
+
         public async Task<IActionResult> CreateCar()
         {
             ViewBag.Layout = "_AdminLayout";

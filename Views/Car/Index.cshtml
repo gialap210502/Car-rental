@@ -28,7 +28,7 @@
                                 @Html.DisplayNameFor(model => model.model)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.brand)
+                                State
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.seat)
@@ -46,19 +46,10 @@
                                 @Html.DisplayNameFor(model => model.address)
                             </th>
                             <th>
-                                State
-                            </th>
-                            <th>
                                 @Html.DisplayNameFor(model => model.Type)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Price)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Discount.code)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.user.email)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.category.type)
@@ -74,7 +65,16 @@
                                     @Html.DisplayFor(modelItem => item.model)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.brand)
+                                    @{
+                                        if (item.available == 1)
+                                        {
+                                            @Html.Raw("<span class='badge badge-success'>Available</span>")
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw("<span class='badge badge-danger'>Unavailable</span>")
+                                        }
+                                    }
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.seat)
@@ -92,28 +92,10 @@
                                     @Html.DisplayFor(modelItem => item.address)
                                 </td>
                                 <td>
-                                    @{
-                                        if (item.available == 1)
-                                        {
-                                            @Html.Raw("<span class='badge badge-success'>Available</span>")
-                                        }
-                                        else
-                                        {
-                                            @Html.Raw("<span class='badge badge-danger'>Unavailable</span>")
-                                        }
-                                    }
-                                </td>
-                                <td>
                                     @Html.DisplayFor(modelItem => item.Type)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Price)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Discount.code)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.user.email)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.category.type)
@@ -123,7 +105,9 @@
                                         asp-route-id="@item.id">Edit</a> |
                                     <a class="badge badge-info" asp-action="Details" asp-route-id="@item.id">Details</a> |
                                     <a class="badge badge-danger" asp-action="Delete" asp-route-userId="@Id"
-                                        asp-route-id="@item.id">Delete</a>
+                                        asp-route-id="@item.id">Delete</a> |
+                                    <a class="badge badge-primary" asp-action="SetStatus"
+                                     asp-route-carId="@item.id" asp-route-userId="@Id">Free or Busy</a>
                                 </td>
                             </tr>
                         }
