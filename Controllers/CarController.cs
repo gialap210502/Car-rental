@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Car_rental.Data;
 using Car_rental.Models;
 using Car_rental.ViewModels;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Car_rental.Controllers
 {
@@ -82,14 +83,25 @@ namespace Car_rental.Controllers
         public IActionResult CarListForManager(int UserId, int pg = 1)
         {
             ViewBag.layout = "_AdminLayout";
+            var userRole = _context.userRole.Include(u => u.role).FirstOrDefault(u => u.userId == UserId);
+            var userRoleName = _context.roles.FirstOrDefault(i => i.id == userRole.roleId).role;
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
+
             int recsCount = _context.Car.Where(u => u.user_id == UserId).Count();
+            if (userRoleName == "Admin")
+            {
+                recsCount = _context.Car.Count();
+            }
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
             var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Where(u => u.user_id == UserId).Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
+            if (userRoleName == "Admin")
+            {
+                car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Skip(recSkip).Take(pager.PageSize).ToList();
+            }
             return View(car_rentalContext);
         }
 
@@ -126,31 +138,30 @@ namespace Car_rental.Controllers
         {
             ViewBag.Layout = "_Layout";
             var car = _context.Car.Find(carId);
+            var userRole = _context.userRole.Include(u => u.role).FirstOrDefault(u => u.userId == userId);
+            var userRoleName = _context.roles.FirstOrDefault(i => i.id == userRole.roleId).role;
             if (car == null)
             {
                 // Xử lý khi không tìm thấy xe
-                return NotFound(); // Hoặc bất kỳ xử lý nào phù hợp
+                return NotFound();
             }
-            Console.WriteLine(userId);
-            Console.WriteLine(carId);
-            Console.WriteLine(car.user_id + "---------");
             // check car match with user id
-            if (car.user_id == userId)
+            if (car.user_id == userId || userRoleName == "Admin")
             {
                 if (car.available == 0)
                 {
-                    Console.WriteLine("---------1");
                     car.available = 1;
                     _context.Update(car);
                     _context.SaveChanges();
                 }
                 else
                 {
-                    Console.WriteLine(car.available + "---------2");
                     car.available = 0;
                     _context.Update(car);
                     _context.SaveChanges();
                 }
+            }else{
+                return BadRequest("Access denied: You don't have permission to perform this action.");
             }
             _context.Update(car);
             _context.SaveChanges();
