@@ -238,8 +238,19 @@ namespace Car_rental.Controllers
         {
             ViewBag.Layout = "_Layout";
             var UserExists = _context.user.FirstOrDefault(u => u.email == user.email);
-            TimeSpan time = (TimeSpan)(DateTime.Now - user.dob);
-            int yearGap = (int)(time.TotalDays / 365.25);
+            int yearGap = 0;
+            Console.WriteLine(user.dob + "-----");
+            if (user.dob == null)
+            {
+                ModelState.AddModelError("dob", "This field is required!");
+            }
+            else
+            {
+                TimeSpan time = (TimeSpan)(DateTime.Now - user.dob);
+                yearGap = (int)(time.TotalDays / 365.25);
+            }
+
+
             if (yearGap < 18)
             {
                 ModelState.AddModelError("dob", "Your age must be over 17 years");
@@ -259,93 +270,81 @@ namespace Car_rental.Controllers
             en_repassword = Encode.encode(repassword);
             if (en_password == en_repassword)
             {
-                if (Id == null)
+                user.password = en_password;
+                Send send = new Send();
+                if (avatar == null)
                 {
-                    user.citizen_identification = null;
+                    user.image = null;
+                }
+                else
+                {
+                    string filename = Path.GetFileName(avatar.FileName);
+                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "ImageUser");
+                    string fullPath = filePath + "\\" + filename;
+                    // Copy files to FileSystem using Streams
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await avatar.CopyToAsync(stream);
+                    }
+                    user.image = filename;
                 }
                 if (license == null)
                 {
                     user.driver_license = null;
                 }
-                if (avatar == null)
+                else
                 {
-                    user.image = null;
+                    string filename = Path.GetFileName(license.FileName);
+                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "DriveLicense");
+                    string fullPath = filePath + "\\" + filename;
+                    // Copy files to FileSystem using Streams
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await license.CopyToAsync(stream);
+                    }
+                    user.driver_license = filename;
                 }
-                if (ModelState.IsValid)
+                if (Id == null)
                 {
-                    user.password = en_password;
-                    Send send = new Send();
-                    if (avatar == null)
+                    user.citizen_identification = null;
+                }
+                else
+                {
+                    string filename = Path.GetFileName(Id.FileName);
+                    var filePath = Path.Combine(_hostEnvironment.WebRootPath, "Identify");
+                    string fullPath = filePath + "\\" + filename;
+                    // Copy files to FileSystem using Streams
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
-                        user.image = null;
+                        await Id.CopyToAsync(stream);
                     }
-                    else
-                    {
-                        string filename = Path.GetFileName(avatar.FileName);
-                        var filePath = Path.Combine(_hostEnvironment.WebRootPath, "ImageUser");
-                        string fullPath = filePath + "\\" + filename;
-                        // Copy files to FileSystem using Streams
-                        using (var stream = new FileStream(fullPath, FileMode.Create))
-                        {
-                            await avatar.CopyToAsync(stream);
-                        }
-                        user.image = filename;
-                    }
-                    if (license == null)
-                    {
-                        user.driver_license = null;
-                    }
-                    else
-                    {
-                        string filename = Path.GetFileName(license.FileName);
-                        var filePath = Path.Combine(_hostEnvironment.WebRootPath, "DriveLicense");
-                        string fullPath = filePath + "\\" + filename;
-                        // Copy files to FileSystem using Streams
-                        using (var stream = new FileStream(fullPath, FileMode.Create))
-                        {
-                            await license.CopyToAsync(stream);
-                        }
-                        user.driver_license = filename;
-                    }
-                    if (Id == null)
-                    {
-                        user.citizen_identification = null;
-                    }
-                    else
-                    {
-                        string filename = Path.GetFileName(Id.FileName);
-                        var filePath = Path.Combine(_hostEnvironment.WebRootPath, "Identify");
-                        string fullPath = filePath + "\\" + filename;
-                        // Copy files to FileSystem using Streams
-                        using (var stream = new FileStream(fullPath, FileMode.Create))
-                        {
-                            await Id.CopyToAsync(stream);
-                        }
-                        user.citizen_identification = filename;
-                    }
-                    _context.Add(user);
+                    user.citizen_identification = filename;
+                }
+                if (en_password != en_repassword)
+                {
+                    ViewBag.ErrorMessage = "Repeated Password does not match with Password";
+                }
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+                var users = _context.user.FirstOrDefault(p => p.id == user.id);
+                var Role = _context.roles.Where(r => r.role == "User").FirstOrDefault();
+                if (users != null)
+                {
+                    var userRoles = new userRole();
+                    userRoles.roleId = Role.id;
+                    userRoles.userId = users.id;
+                    _context.Add(userRoles);
                     await _context.SaveChangesAsync();
-                    var users = _context.user.FirstOrDefault(p => p.id == user.id);
-                    var Role = _context.roles.Where(r => r.role == "User").FirstOrDefault();
-                    if (users != null)
-                    {
-                        var userRoles = new userRole();
-                        userRoles.roleId = Role.id;
-                        userRoles.userId = users.id;
-                        _context.Add(userRoles);
-                        await _context.SaveChangesAsync();
-                    }
-                    var email = user.email.ToString();
-                    var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
-                    string body = "Please click the link below to confirm your account: " + "\n\n" + "https://localhost:7160/User/ConfirmAccount?email=" + email; ;
-                    send.SendEmail(email, subject, body);
-                    return RedirectToAction(nameof(Index));
+                }
+                var email = user.email.ToString();
+                var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
+                string body = "Please click the link below to confirm your account: " + "\n\n" + "https://localhost:7160/User/ConfirmAccount?email=" + email; ;
+                send.SendEmail(email, subject, body);
+                return RedirectToAction(nameof(Index));
 
-                }
-                else if (en_password != en_repassword)
-                {
-                    ViewBag.ErrorMessage = "Repeated Password does not match Original Password";
-                }
+
+
+
 
             }
             return View();

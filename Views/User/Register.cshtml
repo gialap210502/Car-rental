@@ -1,82 +1,107 @@
 @{
   ViewData["Title"] = "Home Page";
 }
-@model Car_rental.Models.user 
-    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/image_1.jpg');" data-stellar-background-ratio="0.5">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
-          <div class="col-md-9 ftco-animate pb-5">
-            <p class="breadcrumbs"><span class="mr-2"><a href="/">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Register <i class="ion-ios-arrow-forward"></i></span></p>
-            <h1 class="mb-3 bread">Register</h1>
-          </div>
-        </div>
+@model Car_rental.Models.user
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/image_1.jpg');"
+  data-stellar-background-ratio="0.5">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+      <div class="col-md-9 ftco-animate pb-5">
+        <p class="breadcrumbs"><span class="mr-2"><a href="/">Home <i class="ion-ios-arrow-forward"></i></a></span>
+          <span>Register <i class="ion-ios-arrow-forward"></i></span>
+        </p>
+        <h1 class="mb-3 bread">Register</h1>
       </div>
-    </section>
-
-    <section class="ftco-section contact-section">
-    <div class="container">
-  <div class="row justify-content-center bg-light p-5 contact-form">
-    <div class="col-md-8"> 
-      <form asp-action="Register" enctype="multipart/form-data" class="row">
-        <div class="col-md-6">
-          <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-          <div class="mb-2">
-            <label asp-for="name" class="form-label">Name</label>
-            <input asp-for="name" class="form-control" />
-            <span asp-validation-for="name" class="text-danger"></span>
-          </div>
-          <div class="mb-2">
-            <label asp-for="phone" class="form-label">Phone</label>
-            <input asp-for="phone" class="form-control" />
-            <span asp-validation-for="phone" class="text-danger"></span>
-          </div>
-          <div class="mb-2">
-            <label asp-for="email" class="form-label">Email</label>
-            <input asp-for="email" class="form-control" />
-            <span asp-validation-for="email" class="text-danger"></span>
-          </div>
-          <div class="mb-2">
-            <label asp-for="address" class="form-label">Address</label>
-            <input asp-for="address" class="form-control" />
-            <span asp-validation-for="address" class="text-danger"></span>
-          </div>
-          <div class="mb-2">
-            <label asp-for="dob" class="form-label">Date of Birth</label>
-            <input asp-for="dob" class="form-control" />
-            <span asp-validation-for="dob" class="text-danger"></span>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="mb-2">
-            <label class="form-label">Avatar</label>
-            <input type="file" name="avatar" class="form-control" accept="image/*" />
-          </div>
-          <div class="mb-2">
-            <label class="form-label">Citizen Identification</label>
-            <input type="file" name="Id" class="form-control" accept="image/*" />
-          </div>
-          <div class="mb-2">
-            <label class="form-label">Driver License</label>
-            <input type="file" name="license" class="form-control" accept="image/*" />
-          </div>
-          <div class="mb-2">
-            <label asp-for="password" class="form-label">Password</label>
-            <input type="password" asp-for="password" class="form-control" />
-            <span asp-validation-for="password" class="text-danger"></span>
-          </div>
-          <div class="mb-2">
-            <label class="form-label">Confirm Password</label>
-            <input type="password" name="repassword" class="form-control" />
-          </div>
-        </div>
-        <div class="col-md-12 text-center" style="padding-top: 15px">
-          <button type="submit" class="btn btn-primary btn-block">Register</button>
-        </div>
-      </form>
     </div>
   </div>
-</div>
+</section>
+
+<section class="ftco-section contact-section">
+  <div class="container">
+    <div style="justify-content: center; display: flex;">
+      <h2 style="font-size:38px; font-weight:bold">Register</h2>
+    </div>
+    <div class="row justify-content-center bg-light p-5 contact-form">
+      <div class="col-md-8">
+        <form asp-action="Register" enctype="multipart/form-data" class="row">
+          <span class="text-danger">@ViewBag.ErrorMessage</span>
+          <div class="col-md-6">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-2">
+              <label asp-for="name" class="form-label">Name</label>
+              <input asp-for="name" class="form-control" required />
+              <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="mb-2">
+              <label asp-for="phone" class="form-label">Phone</label>
+              <input asp-for="phone" class="form-control" required />
+              <span asp-validation-for="phone" class="text-danger"></span>
+            </div>
+            <div class="mb-2">
+              <label asp-for="email" class="form-label">Email</label>
+              <input asp-for="email" class="form-control" required />
+              <span asp-validation-for="email" class="text-danger"></span>
+            </div>
+            <div class="mb-2">
+              <label asp-for="address" class="form-label">Address</label>
+              <input asp-for="address" class="form-control" required />
+              <span asp-validation-for="address" class="text-danger"></span>
+            </div>
+            <div class="mb-2">
+              <label asp-for="dob" class="form-label">Date of Birth</label>
+              <input asp-for="dob" class="form-control" required />
+              <span asp-validation-for="dob" class="text-danger"></span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-2">
+              <label class="form-label">Avatar</label>
+              <input type="file" name="avatar" class="form-control" accept="image/*" />
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Citizen Identification</label>
+              <input type="file" name="Id" class="form-control" accept="image/*" />
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Driver License</label>
+              <input type="file" name="license" class="form-control" accept="image/*" />
+            </div>
+            <div class="mb-2">
+              <label asp-for="password" class="form-label">Password</label>
+              <input type="password" asp-for="password" class="form-control" id="password" required />
+              <span asp-validation-for="password" class="text-danger"></span>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Confirm Password</label>
+              <input type="password" name="repassword" class="form-control" id="confirmPassword" required />
+              <span id="confirmPasswordError" class="text-danger"></span>
+              <span asp-validation-for="password" class="text-danger"></span>
+            </div>
+          </div>
+          <div class="col-md-12 text-center" style="padding-top: 15px">
+            <button type="submit" id="" class="btn btn-primary btn-block">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
 
-    </section>
+</section>
+<script>
+  const passwordInput = document.getElementById('password');
+  const confirmPasswordInput = document.getElementById('confirmPassword');
+  const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+  confirmPasswordInput.addEventListener('input', () => {
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    if (password !== confirmPassword) {
+      confirmPasswordError.textContent = 'Passwords do not match';
+    } else {
+      confirmPasswordError.textContent = '';
+    }
+  });
+</script>
