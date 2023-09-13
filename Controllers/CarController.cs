@@ -40,7 +40,7 @@ namespace Car_rental.Controllers
         public async Task<IActionResult> Home()
         {
             ViewBag.Layout = "_Layout";
-            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Include(c => c.images).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
+            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Include(c => c.images).Where(c => c.available == 1).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
             {
                 Id = c.id,
                 Model = c.model,
@@ -64,10 +64,10 @@ namespace Car_rental.Controllers
             const int pageSize = 12;
             if (pg < 1)
                 pg = 1;
-            int recsCount = _context.Car.Count();
+            int recsCount = _context.Car.Where(c => c.available == 1).Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
-            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Include(c => c.images).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
+            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Include(c => c.images).Where(c => c.available == 1).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
             {
                 Id = c.id,
                 Model = c.model,
@@ -111,11 +111,11 @@ namespace Car_rental.Controllers
             const int pageSize = 12;
             if (pg < 1)
                 pg = 1;
-            int recsCount = _context.Car.Where(d => d.address.Contains(query)).Count();
+            int recsCount = _context.Car.Where(d => d.address.Contains(query) && d.available == 1).Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
             this.ViewBag.Pager = pager;
-            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Include(c => c.images).Where(d => d.address.Contains(query)).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
+            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Include(c => c.images).Where(d => d.address.Contains(query) && d.available == 1).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
             {
                 Id = c.id,
                 Model = c.model,
@@ -127,10 +127,10 @@ namespace Car_rental.Controllers
 
             ViewBag.query = query;
             //Pass the results to the view
-            if (car_rentalContext.Count() == 0)
-            {
-                return RedirectToAction("Cars");
-            }
+            // if (car_rentalContext.Count() == 0)
+            // {
+            //     return RedirectToAction("Cars");
+            // }
             return View(car_rentalContext);
         }
 

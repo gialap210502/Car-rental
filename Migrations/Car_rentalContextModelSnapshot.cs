@@ -355,6 +355,9 @@ namespace Car_rental.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("status")
+                        .HasColumnType("int");
+
                     b.HasKey("id");
 
                     b.HasIndex("booking_id");

@@ -284,6 +284,7 @@ namespace Car_rental.Migrations
                     amount = table.Column<double>(type: "float", nullable: false),
                     paymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     paymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    status = table.Column<int>(type: "int", nullable: true),
                     carId = table.Column<int>(type: "int", nullable: false),
                     booking_id = table.Column<int>(type: "int", nullable: false)
                 },

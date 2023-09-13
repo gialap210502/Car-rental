@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
     Pager pager = new Pager();
     int pageNo = 0;
-
+    var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
     if (ViewBag.Pager != null)
     {
         pager = ViewBag.Pager;
@@ -25,6 +25,9 @@
                         <tr>
                             <th>
                                 Total Amount
+                            </th>
+                            <th>
+                                Status
                             </th>
                             <th>
                                 Customer Email
@@ -51,6 +54,7 @@
                                 Return
                             </th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -59,6 +63,30 @@
                             <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.amount)
+                                </td>
+                                <td>
+                                    @{
+                                        if (item.status == 0)
+                                        {
+                                            @Html.Raw("<span class='badge badge-warning'>Waiting</span>")
+                                        }
+                                        else if (item.status == 1)
+                                        {
+                                            @Html.Raw("<span class='badge badge-primary'>Accepted</span>")
+                                        }
+                                        else if (item.status == 2)
+                                        {
+                                            @Html.Raw("<span class='badge badge-info'>In progress</span>")
+                                        }
+                                        else if (item.status == 3)
+                                        {
+                                            @Html.Raw("<span class='badge badge-success'>Accomplished</span>")
+                                        }
+                                        else if (item.status == 4)
+                                        {
+                                            @Html.Raw("<span class='badge badge-danger'>Cancel</span>")
+                                        }
+                                    }
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.booking.user.email)
@@ -87,7 +115,56 @@
                                 <td>
                                     <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
                                     <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                                    <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                                    <a asp-action="Delete" asp-route-id="@item.id">Delete</a> |
+
+                                </td>
+                                <td>
+                                    @{
+                                        if(item.status == 0 ||item.status == 1 ||item.status == 2){
+                                            if (item.status == 0)
+                                            {
+                                                <div class="dropdown">
+                                                    <button type="button" class="btn btn-primary dropdown-toggle"
+                                                        data-toggle="dropdown">
+                                                        Set Status
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item btn bg-success" asp-action="SetStatus" 
+                                                        asp-route-userId="@Id" asp-route-paymentId="@item.id" asp-route-status="1"><p class="text-white">Confirm Order</p></a>
+                                                        <a class="dropdown-item btn bg-danger" asp-action="SetStatus" 
+                                                        asp-route-userId="@Id" asp-route-paymentId="@item.id" asp-route-status="4"><p class="text-white">Cancel Order</p></a>
+                                                    </div>
+                                                </div>
+
+                                            }
+                                            else if (item.status == 1)
+                                            {         
+                                                <div class="dropdown">
+                                                    <button type="button" class="btn btn-primary dropdown-toggle"
+                                                        data-toggle="dropdown">
+                                                        Set Status
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item btn bg-primary" asp-action="SetStatus" 
+                                                        asp-route-userId="@Id" asp-route-paymentId="@item.id" asp-route-status="2"><p class="text-white">Set it In progress</p></a>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else if (item.status == 2)
+                                            {
+                                                <div class="dropdown">
+                                                    <button type="button" class="btn btn-primary dropdown-toggle"
+                                                        data-toggle="dropdown">
+                                                        Set Status
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item btn bg-success" asp-action="SetStatus" 
+                                                        asp-route-userId="@Id" asp-route-paymentId="@item.id" asp-route-status="3"><p class="text-white">Set it Accomplished</p></a>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    }
                                 </td>
                             </tr>
                         }

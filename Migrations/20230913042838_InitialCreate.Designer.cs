@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Car_rental.Migrations
 {
     [DbContext(typeof(Car_rentalContext))]
-    [Migration("20230907032046_InitialCreate")]
+    [Migration("20230913042838_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -357,6 +357,9 @@ namespace Car_rental.Migrations
                     b.Property<string>("paymentMethod")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("status")
+                        .HasColumnType("int");
 
                     b.HasKey("id");
 

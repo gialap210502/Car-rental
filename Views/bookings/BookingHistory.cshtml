@@ -3,19 +3,22 @@
   ViewData["Title"] = "Booking history";
   Pager pager = new Pager();
   int pageNo = 0;
-var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
+  var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
   if (ViewBag.Pager != null)
   {
     pager = ViewBag.Pager;
     pageNo = pager.CurrentPage;
   }
 }
-<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('../../user/images/image_1.jpg');" data-stellar-background-ratio="0.5">
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('../../user/images/image_1.jpg');"
+  data-stellar-background-ratio="0.5">
   <div class="overlay"></div>
   <div class="container">
     <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
       <div class="col-md-9 ftco-animate pb-5">
-        <p class="breadcrumbs"><span class="mr-2"><a href="/">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Booking history</span></p> <i class="ion-ios-arrow-forward"></i></span></p>
+        <p class="breadcrumbs"><span class="mr-2"><a href="/">Home <i class="ion-ios-arrow-forward"></i></a></span>
+          <span>Booking history</span>
+        </p> <i class="ion-ios-arrow-forward"></i></span></p>
         <h1 class="mb-3 bread">Booking history</h1>
       </div>
     </div>
@@ -24,100 +27,143 @@ var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID
 <section style="background-color: #eee;">
   <div class="container">
     <div class="row">
-        <div class="col-md-12 pills">
-            <div class="bd-example bd-example-tabs">
-                <div class="d-flex justify-content-center">
-                  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                    <li class="nav-item">
-                      <a class="nav-link active" id="pills-description-tab" data-toggle="pill" href="#pills-description" role="tab" aria-controls="pills-description" aria-expanded="true">Bookings History</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill" href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer" aria-expanded="true">Review History</a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab">
-                        <div class="row">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                   <thead style="background-color: #01d28e; color: white; font-weight: bold; text-align: center;">
-                                        <th>Car</th>
-                                        <th>Payment Date</th>
-                                        <th>
-                                            Start Date
-                                        </th>
-                                        <th>
-                                            End Date
-                                        </th>
-                                        <th>Payment Method</th>
-                                        <th>
-                                            Total Amount
-                                        </th>
-                                        <th></th>
-                                   </thead>
-                                   <tbody >
+      <div class="col-md-12 pills">
+        <div class="bd-example bd-example-tabs">
+          <div class="d-flex justify-content-center">
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="pills-description-tab" data-toggle="pill" href="#pills-description"
+                  role="tab" aria-controls="pills-description" aria-expanded="true">Bookings History</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill" href="#pills-manufacturer" role="tab"
+                  aria-controls="pills-manufacturer" aria-expanded="true">Review History</a>
+              </li>
+            </ul>
+          </div>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-description" role="tabpanel"
+              aria-labelledby="pills-description-tab">
+              <div class="row">
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead style="background-color: #01d28e; color: white; font-weight: bold; text-align: center;">
+                      <th>Car</th>
+                      <th>
+                        Payment status
+                      </th>
+                      <th>Payment Date</th>
+                      <th>
+                        Start Date
+                      </th>
+                      <th>
+                        End Date
+                      </th>
+                      <th>
+                        Total Amount
+                      </th>
+                      <th></th>
+                      <th></th>
+                    </thead>
+                    <tbody>
                       @foreach (var item in Model)
                       {
-                                            <tr style="text-align: center; border-bottom: 1px solid black;">
-                                              <td >
+                        <tr style="text-align: center; border-bottom: 1px solid black;">
+                          <td>
                             @foreach (var paymentItem in item.payments)
                             {
                               @Html.DisplayFor(modelItem => paymentItem.car.model)
 
-                                  <br />
+                              <br />
                             }
-                                              </td>
-                                              <td >
+                          </td>
+                          <td>
+                            @foreach (var paymentItem in item.payments)
+                            {
+                              if (paymentItem.status == 0)
+                              {
+                                @Html.Raw("<span class='badge badge-warning'>Waiting</span>")
+                              }
+                              else if (paymentItem.status == 1)
+                              {
+                                @Html.Raw("<span class='badge badge-Primary'>Accepted</span>")
+                              }
+                              else if (paymentItem.status == 2)
+                              {
+                                @Html.Raw("<span class='badge badge-info'>In progress</span>")
+                              }
+                              else if (paymentItem.status == 3)
+                              {
+                                @Html.Raw("<span class='badge badge-success'>Accomplished</span>")
+                              }
+                              else if (paymentItem.status == 4)
+                              {
+                                @Html.Raw("<span class='badge badge-danger'>Cancel</span>")
+                              }
+                              <br />
+                            }
+                          </td>
+                          <td>
                             @foreach (var paymentItem in item.payments)
                             {
                               @Html.DisplayFor(modelItem => paymentItem.paymentDate)
-
-                                  <br />
+                              <br />
                             }
-                                              </td>
-                                              <td >
+                          </td>
+                          <td>
                             @Html.DisplayFor(modelItem => item.startDate)
-                                              </td>
-                                              <td >
+                          </td>
+                          <td>
                             @Html.DisplayFor(modelItem => item.endDate)
-                                              </td>
-                                              <td >
-                            @foreach (var paymentItem in item.payments)
-                            {
-                              @Html.DisplayFor(modelItem => paymentItem.paymentMethod)
-
-                                  <br />
-                            }
-                                              </td>
-                                              <td >
+                          </td>
+                          <td>
                             @Html.DisplayFor(modelItem => item.totalAmount)
-                                              </td>
-                                              <td>
+                          </td>
+                          <td>
                             @foreach (var paymentItem in item.payments)
                             {
-                              <a class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal" data-carid="@Html.DisplayFor(modelItem => paymentItem.car.id)"> Review </a>
+                              if (paymentItem.status == 3 || paymentItem.status == 4)
+                              {
+                                <a class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal"
+                                  data-carid="@Html.DisplayFor(modelItem => paymentItem.car.id)"> Review </a>
+                              }
                             }
-                                              </td>
-                                            </tr>
+                          </td>
+                          <td>
+                            @{
+                              foreach (var paymentItem in item.payments)
+                              {
+                                if (paymentItem.status == 0)
+                                {
+                                  <a class="btn btn-danger" asp-asp-controller="Payment" asp-controller="Payment" asp-action="SetStatus"
+                                    asp-route-userId="@Id" asp-route-paymentId="@paymentItem.id" asp-route-status="4">
+                                    Cancel
+                                  </a>
+                                }
+                              }
+                            }
+                          </td>
+                        </tr>
                       }
-                                   </tbody>
-                                 </table>
-                            </div>
-                        </div>
-                        <div class="row mt-5">
-                          <div class="col text-center">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="row mt-5">
+                <div class="col text-center">
                   @if (pager.TotalPages > 0)
                   {
                     var pre = 1;
                     var next = pager.CurrentPage + 1;
-                                      <div class="block-27">
-                                        <ul>
-                                            <li><a type="button" class="button break-page" asp-controller="bookings" asp-action="BookingHistory" asp-route-pg="@pre">&lt;</a></li>
+                    <div class="block-27">
+                      <ul>
+                        <li><a type="button" class="button break-page" asp-controller="bookings"
+                            asp-action="BookingHistory" asp-route-pg="@pre">&lt;</a></li>
                         @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
                         {
 
-                                                    <li><a type="button" class="button break-page" asp-controller="bookings" asp-action="BookingHistory" asp-route-pg="@pge">@pge</a></li>
+                          <li><a type="button" class="button break-page" asp-controller="bookings"
+                              asp-action="BookingHistory" asp-route-pg="@pge">@pge</a></li>
                           pre = pge - 1;
                           if (pre == 1 || pre == 0)
                           {
@@ -133,109 +179,111 @@ var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID
                             next = pager.EndPage;
                           }
                         }
-                                            <li><a type="button" class="button break-page" asp-controller="bookings" asp-action="BookingHistory" asp-route-pg="@next">&gt;</a></li>
-                                        </ul>
-                                      </div>
+                        <li><a type="button" class="button break-page" asp-controller="bookings"
+                            asp-action="BookingHistory" asp-route-pg="@next">&gt;</a></li>
+                      </ul>
+                    </div>
                   }
-                          </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="pills-manufacturer" role="tabpanel" aria-labelledby="pills-manufacturer-tab">
-                        <p>two</p>
-                    </div>
-                    <div class="tab-pane fade" id="pills-rate" role="tabpanel" aria-labelledby="pills-rate-tab">
-                        three
-                    </div>
-                  <div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
-                    <div class="row">
-                           four
-                       </div>
-                  </div>
                 </div>
+              </div>
             </div>
+            <div class="tab-pane fade" id="pills-manufacturer" role="tabpanel" aria-labelledby="pills-manufacturer-tab">
+              <p>two</p>
+            </div>
+            <div class="tab-pane fade" id="pills-rate" role="tabpanel" aria-labelledby="pills-rate-tab">
+              three
+            </div>
+            <div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
+              <div class="row">
+                four
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
     <div class="modal" id="myModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
+      <div class="modal-dialog">
+        <div class="modal-content">
 
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Modal Heading</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Modal Heading</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
 
-      <!-- Modal body -->
-      <div class="modal-body">
-        <form method="post" asp-controller="rating" asp-action="Rate">
-                    <!-- Add a select element for the status if needed -->
-                    <!--
+          <!-- Modal body -->
+          <div class="modal-body">
+            <form method="post" asp-controller="rating" asp-action="Rate">
+              <!-- Add a select element for the status if needed -->
+              <!--
                     <select name="status" style="margin-bottom:20px">
                         <option value="0">Public</option>
                         <option value="1">Stay anonymous</option>
                     </select>
                     -->
-                    <input type="hidden" name="Carid" value="" data-carid-input/>
-                  <div class="form-group">
-                      <label for="star">Rating</label>
-                      <div class="star-rating">
-                          <input type="radio" id="star5" name="Star" value="1" required hidden />
-                          <label for="star5" >&#9733;</label>
-                          <input type="radio" id="star4" name="Star" value="2" required hidden />
-                          <label for="star4" >&#9733;</label>
-                          <input type="radio" id="star3" name="Star" value="3" required hidden />
-                          <label for="star3" >&#9733;</label>
-                          <input type="radio" id="star2" name="Star" value="4" required hidden />
-                          <label for="star2" >&#9733;</label>
-                          <input type="radio" id="star1" name="Star" value="5" required hidden />
-                          <label for="star1" >&#9733;</label>
-                      </div>
-                  </div>
-                  <div class="form-group">
-                        <label for="comment">Comment</label>
-                        <textarea class="form-control" id="comment" name="comment" placeholder="Enter your comment" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-user btn-block"
-                            style="margin-left: auto; margin-right: auto; margin-bottom: 20px;">
-                        Comment
-                    </button>
-                </form>
-      </div>
+              <input type="hidden" name="Carid" value="" data-carid-input />
+              <div class="form-group">
+                <label for="star">Rating</label>
+                <div class="star-rating">
+                  <input type="radio" id="star5" name="Star" value="1" required hidden />
+                  <label for="star5">&#9733;</label>
+                  <input type="radio" id="star4" name="Star" value="2" required hidden />
+                  <label for="star4">&#9733;</label>
+                  <input type="radio" id="star3" name="Star" value="3" required hidden />
+                  <label for="star3">&#9733;</label>
+                  <input type="radio" id="star2" name="Star" value="4" required hidden />
+                  <label for="star2">&#9733;</label>
+                  <input type="radio" id="star1" name="Star" value="5" required hidden />
+                  <label for="star1">&#9733;</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="comment">Comment</label>
+                <textarea class="form-control" id="comment" name="comment" placeholder="Enter your comment"
+                  required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-user btn-block"
+                style="margin-left: auto; margin-right: auto; margin-bottom: 20px;">
+                Comment
+              </button>
+            </form>
+          </div>
 
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-      </div>
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
 
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 </section>
 <script>
-// JavaScript to handle the click event and change the star color
-document.addEventListener('DOMContentLoaded', function() {
-  var stars = document.querySelectorAll('.star-rating input[type="radio"] + label');
-  stars.forEach(function(star, index) {
-    star.addEventListener('click', function() {
-      for (var i = 0; i <= index; i++) {
-        stars[i].style.color = '#ffe234'; /* Set the color of the clicked star and the preceding stars */
-      }
-      for (var j = index + 1; j < stars.length; j++) {
-        stars[j].style.color = '#5f6f6aa7'; /* Reset the color of the remaining stars */
-      }
+  // JavaScript to handle the click event and change the star color
+  document.addEventListener('DOMContentLoaded', function () {
+    var stars = document.querySelectorAll('.star-rating input[type="radio"] + label');
+    stars.forEach(function (star, index) {
+      star.addEventListener('click', function () {
+        for (var i = 0; i <= index; i++) {
+          stars[i].style.color = '#ffe234'; /* Set the color of the clicked star and the preceding stars */
+        }
+        for (var j = index + 1; j < stars.length; j++) {
+          stars[j].style.color = '#5f6f6aa7'; /* Reset the color of the remaining stars */
+        }
+      });
     });
   });
-});
 </script>
 <script>
-    $(document).ready(function() {
-        // Xử lý sự kiện khi modal được hiển thị
-        $('#myModal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget); // Nút "Review" được nhấn
-            var carId = button.data('carid'); // Lấy giá trị từ thuộc tính data-carid
-            
-            // Gán giá trị vào trường ẩn trong modal
-            $("input[data-carid-input]").val(carId);
-        });
+  $(document).ready(function () {
+    // Xử lý sự kiện khi modal được hiển thị
+    $('#myModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget); // Nút "Review" được nhấn
+      var carId = button.data('carid'); // Lấy giá trị từ thuộc tính data-carid
+
+      // Gán giá trị vào trường ẩn trong modal
+      $("input[data-carid-input]").val(carId);
     });
+  });
 </script>

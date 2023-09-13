@@ -31,7 +31,7 @@ namespace Car_rental.Controllers
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
-            int recsCount = _context.bookings.Count();
+            int recsCount = _context.bookings.Where(d => d.userId == id).Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
             this.ViewBag.Pager = pager;
@@ -110,13 +110,20 @@ namespace Car_rental.Controllers
                 bookings.CarBack = CarBack;
                 _context.Add(bookings);
                 await _context.SaveChangesAsync();
+
                 var payment = new payment();
                 payment.amount = (double)bookings.totalAmount;
+                payment.status = 0;
                 payment.booking_id = bookings.id;
                 payment.carId = cardId;
                 payment.paymentDate = DateTime.Now;
                 payment.paymentMethod = "COD";
                 _context.payment.Add(payment);
+                await _context.SaveChangesAsync();
+
+                var car = _context.Car.Find(cardId);
+                car.available = 0;
+                _context.Update(car);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("BookingHistory", "bookings", new { id = userId });
             }

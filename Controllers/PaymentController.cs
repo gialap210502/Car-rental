@@ -22,7 +22,7 @@ namespace Car_rental.Controllers
         // GET: Payment
         public async Task<IActionResult> Index(int pg = 1)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
@@ -35,12 +35,11 @@ namespace Car_rental.Controllers
         }
         public async Task<IActionResult> OrderList(int UserId, int pg = 1)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
 
-            //var usercar = _context.ca
             int recsCount = _context.payment.Include(p => p.car).ThenInclude(c => c.user).Where(p => p.car.user.id == UserId).Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
@@ -52,7 +51,7 @@ namespace Car_rental.Controllers
         // GET: Payment/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (id == null || _context.payment == null)
             {
                 return NotFound();
@@ -70,10 +69,64 @@ namespace Car_rental.Controllers
             return View(payment);
         }
 
+        public IActionResult SetStatus(int userId, int paymentId, int status)
+        {
+            ViewBag.layout = "_AdminLayout";
+            var payment = _context.payment.Include(p => p.car).FirstOrDefault(p => p.id == paymentId);
+            var userRole = _context.userRole.Include(u => u.role).FirstOrDefault(u => u.userId == userId);
+            if (userRole == null)
+            {
+                // Xử lý khi không tìm thấy 
+                return BadRequest("Access denied: You don't have permission to perform this action.");
+            }
+            var userRoleName = _context.roles.FirstOrDefault(i => i.id == userRole.roleId)?.role;
+
+            if (payment == null)
+            {
+                // Xử lý khi không tìm thấy 
+                return NotFound();
+            }
+
+            if (payment.car == null || payment.car.user_id == null)
+            {
+                // Handle the case where payment or user_id is null
+                return BadRequest("Payment or user_id is null.");
+            }
+
+            var car = _context.Car.Find(payment.carId);
+
+            // check payment match with user id
+            if (payment.car.user_id == userId || userRoleName == "Admin")
+            {
+                if (status >= 0 && status <= 4)
+                {
+                    if(status == 4){
+                        car.available = 1;
+                        _context.Update(car);
+                        _context.SaveChanges();
+                    }
+                    payment.status = status;
+                    _context.Update(payment);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    return BadRequest("Invalid status value.");
+                }
+            }
+            else
+            {
+                return BadRequest("Access denied: You don't have permission to perform this action.");
+            }
+
+            return RedirectToAction("OrderList", new { userId = userId });
+        }
+
+
         // GET: Payment/Create
         public IActionResult Create()
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             ViewData["booking_id"] = new SelectList(_context.bookings, "id", "id");
             ViewData["carId"] = new SelectList(_context.Car, "id", "id");
             return View();
@@ -86,7 +139,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,amount,paymentDate,paymentMethod,carId,booking_id")] payment payment)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (ModelState.IsValid)
             {
                 _context.Add(payment);
@@ -101,7 +154,7 @@ namespace Car_rental.Controllers
         // GET: Payment/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (id == null || _context.payment == null)
             {
                 return NotFound();
@@ -124,7 +177,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,amount,paymentDate,paymentMethod,carId,booking_id")] payment payment)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (id != payment.id)
             {
                 return NotFound();
@@ -158,7 +211,7 @@ namespace Car_rental.Controllers
         // GET: Payment/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (id == null || _context.payment == null)
             {
                 return NotFound();
@@ -181,7 +234,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (_context.payment == null)
             {
                 return Problem("Entity set 'Car_rentalContext.payment'  is null.");
@@ -191,15 +244,15 @@ namespace Car_rental.Controllers
             {
                 _context.payment.Remove(payment);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool paymentExists(int id)
         {
-        ViewBag.layout="_AdminLayout";
-          return (_context.payment?.Any(e => e.id == id)).GetValueOrDefault();
+            ViewBag.layout = "_AdminLayout";
+            return (_context.payment?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }
