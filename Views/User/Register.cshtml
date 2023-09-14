@@ -25,33 +25,27 @@
     <div class="row justify-content-center bg-light p-5 contact-form">
       <div class="col-md-8">
         <form asp-action="Register" enctype="multipart/form-data" class="row">
-          <span class="text-danger">@ViewBag.ErrorMessage</span>
+          <span class="text-danger col-md-10">@ViewBag.ErrorMessage</span>
           <div class="col-md-6">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="mb-2">
-              <label asp-for="name" class="form-label">Name</label>
-              <input asp-for="name" class="form-control" required />
-              <span asp-validation-for="name" class="text-danger"></span>
+              <label class="form-label">Name</label>
+              <input name="name" class="form-control" required />
             </div>
             <div class="mb-2">
-              <label asp-for="phone" class="form-label">Phone</label>
-              <input asp-for="phone" class="form-control" required />
-              <span asp-validation-for="phone" class="text-danger"></span>
+              <label class="form-label">Phone</label>
+              <input name="phone" class="form-control" required />
             </div>
             <div class="mb-2">
-              <label asp-for="email" class="form-label">Email</label>
-              <input asp-for="email" class="form-control" required />
-              <span asp-validation-for="email" class="text-danger"></span>
+              <label class="form-label">Email</label>
+              <input name="emailUser" class="form-control" required />
             </div>
             <div class="mb-2">
-              <label asp-for="address" class="form-label">Address</label>
-              <input asp-for="address" class="form-control" required />
-              <span asp-validation-for="address" class="text-danger"></span>
+              <label class="form-label">Address</label>
+              <input name="address" class="form-control" required />
             </div>
             <div class="mb-2">
-              <label asp-for="dob" class="form-label">Date of Birth</label>
-              <input asp-for="dob" class="form-control" required />
-              <span asp-validation-for="dob" class="text-danger"></span>
+              <label class="form-label">Date of Birth</label>
+              <input type="date" name="dob" class="form-control" required />
             </div>
           </div>
           <div class="col-md-6">
@@ -68,15 +62,13 @@
               <input type="file" name="license" class="form-control" accept="image/*" />
             </div>
             <div class="mb-2">
-              <label asp-for="password" class="form-label">Password</label>
-              <input type="password" asp-for="password" class="form-control" id="password" required />
-              <span asp-validation-for="password" class="text-danger"></span>
+              <label class="form-label">Password</label>
+              <input type="password" name="password" class="form-control" id="password" required />
             </div>
             <div class="mb-2">
               <label class="form-label">Confirm Password</label>
               <input type="password" name="repassword" class="form-control" id="confirmPassword" required />
               <span id="confirmPasswordError" class="text-danger"></span>
-              <span asp-validation-for="password" class="text-danger"></span>
             </div>
           </div>
           <div class="col-md-12 text-center" style="padding-top: 15px">
@@ -89,19 +81,3 @@
 
 
 </section>
-<script>
-  const passwordInput = document.getElementById('password');
-  const confirmPasswordInput = document.getElementById('confirmPassword');
-  const confirmPasswordError = document.getElementById('confirmPasswordError');
-
-  confirmPasswordInput.addEventListener('input', () => {
-    const password = passwordInput.value;
-    const confirmPassword = confirmPasswordInput.value;
-
-    if (password !== confirmPassword) {
-      confirmPasswordError.textContent = 'Passwords do not match';
-    } else {
-      confirmPasswordError.textContent = '';
-    }
-  });
-</script>

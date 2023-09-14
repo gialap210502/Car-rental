@@ -234,42 +234,45 @@ namespace Car_rental.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(IFormFile avatar, IFormFile license, IFormFile Id, [Bind("id,name,citizen_identification,driver_license,phone,dob,email,address,password,flag,image")] user user, String repassword)
+        public async Task<IActionResult> Register(IFormFile avatar, IFormFile license, IFormFile Id, string name
+        , string phone, string address, DateTime dob, string emailUser, string password, int flag, String repassword)
         {
             ViewBag.Layout = "_Layout";
-            var UserExists = _context.user.FirstOrDefault(u => u.email == user.email);
-            int yearGap = 0;
-            Console.WriteLine(user.dob + "-----");
-            if (user.dob == null)
-            {
-                ModelState.AddModelError("dob", "This field is required!");
-            }
-            else
-            {
-                TimeSpan time = (TimeSpan)(DateTime.Now - user.dob);
-                yearGap = (int)(time.TotalDays / 365.25);
-            }
 
 
-            if (yearGap < 18)
-            {
-                ModelState.AddModelError("dob", "Your age must be over 17 years");
-            }
-            if (UserExists != null)
-            {
-                ModelState.AddModelError("email", "Your Email is already in use");
-            }
+            var UserExists = _context.user.FirstOrDefault(u => u.email == emailUser);
+
+            TimeSpan time = (TimeSpan)(DateTime.Now - dob);
+            int yearGap = (int)(time.TotalDays / 365.25);
+
             var Encode = new Encode();
             string en_password;
             string en_repassword;
-            if (user.password == null || repassword == null)
-            {
-                ModelState.AddModelError("password", "ErrorInputPasswordMessageForUser");
-            }
-            en_password = Encode.encode(user.password.ToString());
+            en_password = Encode.encode(password.ToString());
             en_repassword = Encode.encode(repassword);
-            if (en_password == en_repassword)
+
+            if (en_password != en_repassword)
             {
+                ViewBag.ErrorMessage = "Repeated Password does not match with Password";
+            }
+            else if (yearGap < 18)
+            {
+                ViewBag.ErrorMessage = "Your age must be over 17 years";
+            }
+            else if (UserExists != null)
+            {
+                ViewBag.ErrorMessage = "Your Email is already in use";
+            }
+            else if (en_password == en_repassword)
+            {
+                var user = new user();
+
+                user.address = address;
+                user.name = name;
+                user.dob = dob;
+                user.email = emailUser;
+                user.flag = 0;
+                user.phone = phone;
                 user.password = en_password;
                 Send send = new Send();
                 if (avatar == null)
@@ -320,10 +323,7 @@ namespace Car_rental.Controllers
                     }
                     user.citizen_identification = filename;
                 }
-                if (en_password != en_repassword)
-                {
-                    ViewBag.ErrorMessage = "Repeated Password does not match with Password";
-                }
+
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 var users = _context.user.FirstOrDefault(p => p.id == user.id);
@@ -340,12 +340,7 @@ namespace Car_rental.Controllers
                 var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
                 string body = "Please click the link below to confirm your account: " + "\n\n" + "https://localhost:7160/User/ConfirmAccount?email=" + email; ;
                 send.SendEmail(email, subject, body);
-                return RedirectToAction(nameof(Index));
-
-
-
-
-
+                return RedirectToAction(nameof(Login));
             }
             return View();
         }
