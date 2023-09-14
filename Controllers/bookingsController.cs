@@ -98,9 +98,21 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Booking(int userId, int cardId, DateTime? startDate, DateTime? endDate, double? totalAmount, string TakeCar, string CarBack)
         {
+            // Set ViewBag.Layout to null (not sure why this is done, consider removing)
             ViewBag.Layout = null;
-            if (ModelState.IsValid)
+
+            // Check for input validation and show appropriate error messages
+            if (startDate > endDate)
             {
+                ViewBag.ErrorMessage = "Start date must be equal or before end date.";
+            }
+            else if (startDate < DateTime.Now.Date)
+            {
+                ViewBag.ErrorMessage = "Start date must be at least 3 hours from now.";
+            }
+            else if (ModelState.IsValid)
+            {
+                // If all input is valid, proceed with booking
                 var bookings = new bookings();
                 bookings.userId = userId;
                 bookings.startDate = startDate;
@@ -108,27 +120,38 @@ namespace Car_rental.Controllers
                 bookings.totalAmount = totalAmount;
                 bookings.TakeCar = TakeCar;
                 bookings.CarBack = CarBack;
+
+                // Add the booking to the context and save changes
                 _context.Add(bookings);
                 await _context.SaveChangesAsync();
 
+                // Create a new payment record
                 var payment = new payment();
                 payment.amount = (double)bookings.totalAmount;
                 payment.status = 0;
                 payment.booking_id = bookings.id;
                 payment.carId = cardId;
                 payment.paymentDate = DateTime.Now;
-                payment.paymentMethod = "COD";
+                payment.paymentMethod = "Coin";
+
+                // Add the payment record to the context and save changes
                 _context.payment.Add(payment);
                 await _context.SaveChangesAsync();
 
+                // Update the availability of the selected car
                 var car = _context.Car.Find(cardId);
                 car.available = 0;
                 _context.Update(car);
                 await _context.SaveChangesAsync();
+
+                // Redirect to the booking history page
                 return RedirectToAction("BookingHistory", "bookings", new { id = userId });
             }
+
+            // If there are validation errors or ModelState is not valid, return to the view
             return RedirectToAction("BookingHistory", "bookings", new { id = userId });
         }
+
 
 
         // GET: bookings/Edit/5
