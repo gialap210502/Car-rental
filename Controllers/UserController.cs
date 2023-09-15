@@ -366,6 +366,10 @@ namespace Car_rental.Controllers
             return RedirectToAction("Login", "user");
         }
 
+        public IActionResult TermAndCondition(){
+            ViewBag.Layout = "_Layout";
+            return View();
+        }
         [HttpPost]
         public async Task<IActionResult> Login(String UserName, String Password)
         {
