@@ -5,52 +5,56 @@
 }
 
 <div class="col-lg-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">User Table</h4>
-                  <p class="card-description">
-                    <a asp-action="Create">Create New</a>
-                  </p>
-                  <div class="table-responsive">
-                    <table class="table table-striped">
-                      <thead>
-        <tr>
-            <th>
-                
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.name)
-            </th>
-            <th>
-                Citizen Identification
-            </th>
-            <th>
-                Driver License
-            </th>
-            <th>
-                Phone
-            </th>
-            <th>
-                DoB
-            </th>
-            <th>
-                Email
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.flag)
-            </th>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">User Table</h4>
+            <p class="card-description">
+                <a asp-action="Create">Create New</a>
+            </p>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
 
-            <th></th>
-        </tr>
-    </thead>
-    
-                      <tbody>
-                        @foreach (var item in Model) {
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.name)
+                            </th>
+                            <th>
+                                Citizen Identification
+                            </th>
+                            <th>
+                                Driver License
+                            </th>
+                            <th>
+                                Phone
+                            </th>
+                            <th>
+                                DoB
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.flag)
+                            </th>
+
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
                             <tr>
                                 <td class="py-1">
-                                    @if(item.image == null) {
+                                    @if (item.image == null)
+                                    {
                                         <img src="~/ImageUser/@@@@@@@@.png" alt="" />
-                                    }else{
+                                    }
+                                    else
+                                    {
                                         <img src="~/ImageUser/@Html.DisplayFor(modelItem => item.image)" alt="" />
                                     }
                                 </td>
@@ -74,10 +78,12 @@
                                 </td>
                                 <td>
                                     @{
-                                        if(item.flag == 1){
+                                        if (item.flag == 1)
+                                        {
                                             @Html.Raw("<span class='badge badge-success'>Verified</span>")
                                         }
-                                        else{
+                                        else
+                                        {
                                             @Html.Raw("<span class='badge badge-danger'>Unverified</span>")
                                         }
                                     }
@@ -88,11 +94,10 @@
                                     <a class="badge badge-danger" asp-action="Delete" asp-route-id="@item.id">Delete</a>
                                 </td>
                             </tr>
-                    }
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
+                        }
+                    </tbody>
+                </table>
             </div>
-
+        </div>
+    </div>
+</div>

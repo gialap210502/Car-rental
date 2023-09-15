@@ -36,6 +36,8 @@ var conversationsOfUser = _context.Conversation
   <link rel="stylesheet" href="~/user/css/bootstrap-datepicker.css">
   <link rel="stylesheet" href="~/user/css/jquery.timepicker.css">
 
+  <link rel="stylesheet" href="https://sandbox.megapay.vn/pg_was/css/payment/layer/paymentClient.css ">
+  <script src="https://sandbox.megapay.vn/pg_was/js/payment/layer/paymentClient.js"></script>
 
   <link rel="stylesheet" href="~/user/css/flaticon.css">
   <link rel="stylesheet" href="~/user/css/icomoon.css">
@@ -134,7 +136,7 @@ var conversationsOfUser = _context.Conversation
                     <a class="dropdown-item" href="/Car/CarListForManager?UserId=@Id">Manager</a>
                   }
                   <a class="dropdown-item" asp-controller="User" asp-action="Profile" asp-route-id="@Id">Profile</a>
-                  <a class="dropdown-item" asp-controller="User" asp-action="Message" >Message</a>
+                  <a class="dropdown-item" asp-controller="User" asp-action="Message">Message</a>
                   <a class="dropdown-item" asp-controller="bookings" asp-action="BookingHistory" asp-route-id="@Id">Booking
                     History</a>
                   <a class="dropdown-item" asp-controller="User" asp-action="Logout">Log out</a>
@@ -148,22 +150,22 @@ var conversationsOfUser = _context.Conversation
             }
           }
           @* <li class="nav-item dropdown" style="margin-left: 10px;">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fa-solid fa-message" style="color: #ffffff;"></i>
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background: rgba(222, 255, 227, 0.5);">
-              @foreach (var item in conversationsOfUser)
-              {
-                <a href="/user/Chat?conversationId=@item.ConversationID" class="dropdown-item">
-                  <div>
-                    <h6>
-                      @item.Name
-                    </h6>
-                  </div>
-                </a>
-              }
-            </div>
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa-solid fa-message" style="color: #ffffff;"></i>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background: rgba(222, 255, 227, 0.5);">
+          @foreach (var item in conversationsOfUser)
+          {
+          <a href="/user/Chat?conversationId=@item.ConversationID" class="dropdown-item">
+          <div>
+          <h6>
+          @item.Name
+          </h6>
+          </div>
+          </a>
+          }
+          </div>
           </li> *@
         </ul>
       </div>
@@ -171,6 +173,7 @@ var conversationsOfUser = _context.Conversation
   </nav>
   <!-- END nav -->
   @RenderBody()
+
   <footer class="ftco-footer ftco-bg-dark ftco-section">
     <div class="container">
       <div class="row mb-5">
@@ -216,8 +219,8 @@ var conversationsOfUser = _context.Conversation
                 <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San
                     Francisco, California, USA</span></li>
                 <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
-                <li><a href="#"><span class="icon icon-envelope"></span><span
-                      class="text">info@carrental.com</span></a></li>
+                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@carrental.com</span></a>
+                </li>
               </ul>
             </div>
           </div>
