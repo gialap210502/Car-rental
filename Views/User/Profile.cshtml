@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Profile";
+    var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
 }
     <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('../images/image_1.jpg');" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
@@ -29,7 +30,8 @@
             <p class="text-muted mb-1">@Html.DisplayFor(model => model.email)</p>
             <p class="text-muted mb-4">@Html.DisplayFor(model => model.phone)</p>
             <div class="d-flex justify-content-center mb-2">
-              <button type="button" class="btn btn-outline-primary ms-1">Edit profile (chưa làm)</button>
+              <a type="button" class="btn btn-outline-primary ms-1" 
+              asp-controller="user" asp-action="edit" asp-route-id="@Id">Edit profile (chưa làm)</a>
             </div>
           </div>
         </div>

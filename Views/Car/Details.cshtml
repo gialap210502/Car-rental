@@ -208,10 +208,6 @@
 									aria-expanded="true">Description</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" id="pills-rate-tab" data-toggle="pill" href="#pills-rate" role="tab"
-									aria-controls="pills-rate" aria-expanded="true">Rate</a>
-							</li>
-							<li class="nav-item">
 								<a class="nav-link" id="pills-review-tab" data-toggle="pill" href="#pills-review"
 									role="tab" aria-controls="pills-review" aria-expanded="true">Review</a>
 							</li>
@@ -367,42 +363,6 @@
 						<div class="tab-pane fade" id="pills-manufacturer" role="tabpanel"
 							aria-labelledby="pills-manufacturer-tab">
 							<p>@Html.DisplayFor(model => model.Description)</p>
-						</div>
-						<div class="tab-pane fade" id="pills-rate" role="tabpanel" aria-labelledby="pills-rate-tab">
-							<form method="post" asp-controller="rating" asp-action="Rate">
-								<!-- Add a select element for the status if needed -->
-								<!--
-									<select name="status" style="margin-bottom:20px">
-										<option value="0">Public</option>
-										<option value="1">Stay anonymous</option>
-									</select>
-									-->
-								<input type="hidden" name="Carid" value="@Html.DisplayFor(model => model.id)" />
-								<div class="form-group">
-									<label for="star">Rating</label>
-									<div class="star-rating">
-										<input type="radio" id="star5" name="Star" value="1" required hidden />
-										<label for="star5">&#9733;</label>
-										<input type="radio" id="star4" name="Star" value="2" required hidden />
-										<label for="star4">&#9733;</label>
-										<input type="radio" id="star3" name="Star" value="3" required hidden />
-										<label for="star3">&#9733;</label>
-										<input type="radio" id="star2" name="Star" value="4" required hidden />
-										<label for="star2">&#9733;</label>
-										<input type="radio" id="star1" name="Star" value="5" required hidden />
-										<label for="star1">&#9733;</label>
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="comment">Comment</label>
-									<textarea class="form-control" id="comment" name="comment"
-										placeholder="Enter your comment" required></textarea>
-								</div>
-								<button type="submit" class="btn btn-primary btn-user btn-block"
-									style="margin-left: auto; margin-right: auto; margin-bottom: 20px;">
-									Comment
-								</button>
-							</form>
 						</div>
 						<div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
 							<div class="row">
