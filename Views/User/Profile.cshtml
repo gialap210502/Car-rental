@@ -31,7 +31,9 @@
             <p class="text-muted mb-4">@Html.DisplayFor(model => model.phone)</p>
             <div class="d-flex justify-content-center mb-2">
               <a type="button" class="btn btn-outline-primary ms-1" 
-              asp-controller="user" asp-action="edit" asp-route-id="@Id">Edit profile (chưa làm)</a>
+              asp-controller="user" asp-action="edit" asp-route-id="@Id">Edit profile</a>
+              <a type="button" class="btn btn-outline-primary ms-1" 
+              asp-controller="user" asp-action="BusinessRegister" asp-route-userId="@Id">Business Registration</a>
             </div>
           </div>
         </div>

@@ -344,6 +344,21 @@ namespace Car_rental.Controllers
             }
             return View();
         }
+
+        public IActionResult BusinessRegister(int userId)
+        {
+            var user = _context.user.Find(userId);
+            Send send = new Send();
+            var email = user.email.ToString();
+            var subject = user.name + "WANT TO REGISTER A BUSINESS ACCOUNT";
+            string body = user.name + "have ID : " + user.id + "\n\n" + "want to register a business account, please check this information and call to this user phone: " + user.phone;
+            send.SendEmailRegister(email, subject, body);
+
+            var subjectForUser = "YOUR REQUEST HAVE BEEN SENT";
+            string bodyForUser = "Your request have been sent."+ "\n\n" +  "We will call you soon, please check your phone";
+            send.SendEmail(email, subjectForUser, bodyForUser);
+            return RedirectToAction("Profile", new { id = userId });
+        }
         public IActionResult Logout()
         {
             ViewBag.layout = "_AdminLayout";
@@ -507,7 +522,7 @@ namespace Car_rental.Controllers
                 }
                 return RedirectToAction("Profile", new { id = user.id });
             }
-            return View(user);
+            return RedirectToAction("Profile", new { id = user.id });
         }
 
         // GET: User/Delete/5
