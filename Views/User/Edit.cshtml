@@ -19,19 +19,14 @@
                 <span asp-validation-for="name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="citizen_identification" class="control-label"></label>
-                <input asp-for="citizen_identification" class="form-control" />
-                <span asp-validation-for="citizen_identification" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="driver_license" class="control-label"></label>
-                <input asp-for="driver_license" class="form-control" />
-                <span asp-validation-for="driver_license" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="phone" class="control-label"></label>
                 <input asp-for="phone" class="form-control" />
                 <span asp-validation-for="phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="address" class="control-label"></label>
+                <input asp-for="address" class="form-control" />
+                <span asp-validation-for="address" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="dob" class="control-label"></label>
@@ -54,14 +49,14 @@
                 <input type="file" name="myfile" class="form-control" accept="image/*" />
             </div>
             <div class="form-group">
-                <label asp-for="image" class="control-label"></label>
+                <label class="control-label"> Citizen Identification</label>
                 <br />
-                <input type="file" name="myfile" class="form-control" accept="image/*" />
+                <input type="file" name="CI" class="form-control" accept="image/*" />
             </div>
             <div class="form-group">
-                <label asp-for="image" class="control-label"></label>
+                <label class="control-label">Drive License</label>
                 <br />
-                <input type="file" name="myfile" class="form-control" accept="image/*" />
+                <input type="file" name="Drive" class="form-control" accept="image/*" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

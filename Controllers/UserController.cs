@@ -417,14 +417,14 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, IFormFile ID, IFormFile Drive, IFormFile myfile, [Bind("id,name,citizen_identification,driver_license,phone,dob,email,password,flag,image")] user user)
+        public async Task<IActionResult> Edit(int id, IFormFile CI, IFormFile Drive, IFormFile myfile, [Bind("id,name,phone,address,dob,email,password,flag")] user user)
         {
             ViewBag.layout = "_Layout";
             var userTempImage = _context.user.Find(id).image;
             _context.Entry(_context.user.Find(id)).State = EntityState.Detached;
-            var userTempID = _context.user.Find(id).image;
+            var userTempID = _context.user.Find(id).citizen_identification;
             _context.Entry(_context.user.Find(id)).State = EntityState.Detached;
-            var userTempDrive= _context.user.Find(id).image;
+            var userTempDrive = _context.user.Find(id).driver_license;
             _context.Entry(_context.user.Find(id)).State = EntityState.Detached;
             if (id != user.id)
             {
@@ -441,7 +441,6 @@ namespace Car_rental.Controllers
                         user.image = userTempImage;
 
                         _context.Update(user);
-                        await _context.SaveChangesAsync();
                     }
                     else
                     {
@@ -455,52 +454,45 @@ namespace Car_rental.Controllers
                         }
                         user.image = filename;
                         _context.Update(user);
-                        await _context.SaveChangesAsync();
                     }
-                    if (ID == null)
+                    if (CI == null)
                     {
                         user.citizen_identification = userTempID;
-
                         _context.Update(user);
-                        await _context.SaveChangesAsync();
                     }
                     else
                     {
-                        string filename = Path.GetFileName(ID.FileName);
+                        string filename = Path.GetFileName(CI.FileName);
                         var filePath = Path.Combine(_hostEnvironment.WebRootPath, "Identify");
                         string fullPath = filePath + "\\" + filename;
                         // Copy files to FileSystem using Streams
                         using (var stream = new FileStream(fullPath, FileMode.Create))
                         {
-                            await ID.CopyToAsync(stream);
+                            await CI.CopyToAsync(stream);
                         }
                         user.citizen_identification = filename;
                         _context.Update(user);
-                        await _context.SaveChangesAsync();
                     }
-                    if (myfile == null)
+                    if (Drive == null)
                     {
-                        user.image = userTempImage;
-
+                        user.driver_license = userTempDrive;
                         _context.Update(user);
-                        await _context.SaveChangesAsync();
                     }
                     else
                     {
                         string filename = Path.GetFileName(myfile.FileName);
-                        var filePath = Path.Combine(_hostEnvironment.WebRootPath, "ImageUser");
+                        var filePath = Path.Combine(_hostEnvironment.WebRootPath, "DriveLicense");
                         string fullPath = filePath + "\\" + filename;
                         // Copy files to FileSystem using Streams
                         using (var stream = new FileStream(fullPath, FileMode.Create))
                         {
                             await myfile.CopyToAsync(stream);
                         }
-                        user.image = filename;
+                        user.driver_license = filename;
                         _context.Update(user);
-                        await _context.SaveChangesAsync();
                     }
 
-
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -513,7 +505,7 @@ namespace Car_rental.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Profile", new { id = user.id });
             }
             return View(user);
         }
