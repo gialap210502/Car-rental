@@ -1,0 +1,130 @@
+
+@{
+  ViewData["Title"] = "Payment";
+  Pager pager = new Pager();
+  int pageNo = 0;
+  var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
+  if (ViewBag.Pager != null)
+  {
+    pager = ViewBag.Pager;
+    pageNo = pager.CurrentPage;
+  }
+}
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('../../user/images/image_1.jpg');"
+  data-stellar-background-ratio="0.5">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+      <div class="col-md-9 ftco-animate pb-5">
+        <p class="breadcrumbs"><span class="mr-2"><a href="/">Home <i class="ion-ios-arrow-forward"></i></a></span>
+          <span>Get coins status</span>
+        </p> <i class="ion-ios-arrow-forward"></i></span></p>
+        <h1 class="mb-3 bread">Get coins status</h1>
+      </div>
+    </div>
+  </div>
+</section>
+<section style="background-color: #eee;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 pills">
+        <div class="bd-example bd-example-tabs">
+          <div class="d-flex justify-content-center">
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="pills-description-tab" data-toggle="pill" href="#pills-description"
+                  role="tab" aria-controls="pills-description" aria-expanded="true">Bookings History</a>
+              </li>
+            </ul>
+          </div>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-description" role="tabpanel"
+              aria-labelledby="pills-description-tab">
+              <div class="row">
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead style="background-color: #01d28e; color: white; font-weight: bold; text-align: center;">
+                      <th>Car</th>
+                      <th>
+                        Payment status
+                      </th>
+                      <th>Payment Date</th>
+                      <th>
+                        Start Date
+                      </th>
+                      <th>
+                        End Date
+                      </th>
+                      <th>
+                        Total Amount
+                      </th>
+                      <th></th>
+                      <th></th>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Modal Heading</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <form method="post" asp-controller="rating" asp-action="Rate">
+              <!-- Add a select element for the status if needed -->
+              <!--
+                    <select name="status" style="margin-bottom:20px">
+                        <option value="0">Public</option>
+                        <option value="1">Stay anonymous</option>
+                    </select>
+                    -->
+              <input type="hidden" name="Carid" value="" data-carid-input />
+              <div class="form-group">
+                <label for="star">Rating</label>
+                <div class="star-rating">
+                  <input type="radio" id="star5" name="Star" value="1" required hidden />
+                  <label for="star5">&#9733;</label>
+                  <input type="radio" id="star4" name="Star" value="2" required hidden />
+                  <label for="star4">&#9733;</label>
+                  <input type="radio" id="star3" name="Star" value="3" required hidden />
+                  <label for="star3">&#9733;</label>
+                  <input type="radio" id="star2" name="Star" value="4" required hidden />
+                  <label for="star2">&#9733;</label>
+                  <input type="radio" id="star1" name="Star" value="5" required hidden />
+                  <label for="star1">&#9733;</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="comment">Comment</label>
+                <textarea class="form-control" id="comment" name="comment" placeholder="Enter your comment"
+                  required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-user btn-block"
+                style="margin-left: auto; margin-right: auto; margin-bottom: 20px;">
+                Comment
+              </button>
+            </form>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+</section>

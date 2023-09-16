@@ -44,6 +44,10 @@ namespace Car_rental.Controllers
                         View(await _context.user.ToListAsync()) :
                         Problem("Entity set 'Car_rentalContext.user'  is null.");
         }
+        public IActionResult OrderInfor(){
+            ViewBag.layout = "_Layout";
+            return View();
+        }
 
         // GET: User/Details/5
         public async Task<IActionResult> Details(int? id)

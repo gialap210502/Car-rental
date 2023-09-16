@@ -1,8 +1,23 @@
 @model Car_rental.Models.user
-
+@using System.Security.Cryptography
+@using System.Text
 @{
   ViewData["Title"] = "Profile";
   var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
+  var timeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+  var encodeKey = "rf8whwaejNhJiQG2bsFubSzccfRc/iRYyGUn6SPmT6y/L7A2XABbu9y4GvCoSTOTpvJykFi6b1G0crU8et2O0Q==";
+  var merId = "EPAY000001";
+  var amount = "500000";
+  var merTrxId = merId + timeStamp;
+  var merchantToken = "";
+  // Calculate the SHA-256 hash for merchantToken
+  using (SHA256 sha256Hash = SHA256.Create())
+  {
+    byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(timeStamp + merTrxId + merId + amount + encodeKey));
+    merchantToken = BitConverter.ToString(bytes).Replace("-", "").ToLower();
+    // Now, 'merchantToken' contains the SHA-256 hash in lowercase hex format
+  }
+
 }
 <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('../images/image_1.jpg');"
   data-stellar-background-ratio="0.5">
@@ -36,6 +51,7 @@
             <h5 class="my-3">@Html.DisplayFor(model => model.name)</h5>
             <p class="text-muted mb-1">@Html.DisplayFor(model => model.email)</p>
             <p class="text-muted mb-4">@Html.DisplayFor(model => model.phone)</p>
+            <p>@merchantToken</p>
             <div class="d-flex justify-content-center mb-2">
               <a type="button" class="btn btn-outline-primary ms-1" asp-controller="user" asp-action="edit"
                 asp-route-id="@Id">Edit profile</a>
@@ -234,10 +250,12 @@
         </div>
 
         <form id="megapayForm" name="megapayForm" method="POST">
+          <input type="hidden" name="buyerFirstNm" value="@Html.DisplayFor(model => model.name)">
+          <input type="hidden" name="buyerEmail" value="@Html.DisplayFor(model => model.email)">
           <input type="hidden" name="merId" value="EPAY000001" />
           <input type="hidden" name="currency" value="VND" />
-          <input type="hidden" name="amount" value='30000' />
-          <input type="hidden" name="invoiceNo" value="testing" />
+          <input type="hidden" name="amount" value='500000' />
+          <input type="hidden" name="invoiceNo" value="testing+@timeStamp" />
           <input type="hidden" name="goodsNm" value="test" />
           <input type="hidden" name="payType" value="NO" />
           <input type="hidden" name="callBackUrl" value="https://localhost:7160/" />
@@ -245,12 +263,12 @@
           <input type="hidden" name="reqDomain" value="https://localhost:7160/" />
           <input type="hidden" name="fee" value="0" />
           <input type="hidden" name="description" value="testsystem" />
-          <input type="hidden" name="userLanguage" value="VN" />
-          <input type="hidden" name="timeStamp" value="20230817153020" />
-          <input type="hidden" name="merTrxId" value={merTrxId} />
+          <input type="hidden" name="userLanguage" value="EN" />
+          <input type="hidden" name="timeStamp" value="@timeStamp" />
+          <input type="hidden" name="merTrxId" value="@merTrxId" />
           <input type="hidden" name="windowColor" value="#ef5459" />
           <input type="hidden" name="windowType" value="0" />
-          <input type="hidden" name="merchantToken" value={merchantToken} />
+          <input type="hidden" name="merchantToken" value="@merchantToken" />
         </form>
 
       </div>
