@@ -278,6 +278,7 @@ namespace Car_rental.Controllers
                 user.flag = 0;
                 user.phone = phone;
                 user.password = en_password;
+                user.coins = 0;
                 Send send = new Send();
                 if (avatar == null)
                 {
@@ -591,6 +592,19 @@ namespace Car_rental.Controllers
             return View();
         }
 
+        public IActionResult GetCoinsHistory(int userId, int pg = 1){
+            ViewBag.Layout = "_Layout";
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+
+            int recsCount = _context.paymentHistory.Where(u => u.UserID == userId).Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var data = _context.paymentHistory.Include(c => c.user).Where(u => u.UserID == userId).Skip(recSkip).Take(pager.PageSize).ToList();
+            this.ViewBag.Pager = pager;
+            return View(data);
+        }
         private bool userExists(int id)
         {
             ViewBag.layout = "_AdminLayout";

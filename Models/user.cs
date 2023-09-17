@@ -37,6 +37,7 @@ public class user
     public int flag { get; set; } = 0;
 
     public string? image { get; set; }
+    public int? coins { get; set; }
 
     public ICollection<userRole> userRoles { get; } = new List<userRole>();
 
@@ -45,5 +46,6 @@ public class user
 
     public ICollection<car>? cars { get; } = new List<car>();
     public ICollection<Message>? Messages { get; } = new List<Message>();
+    public ICollection<paymentHistory>? paymentHistory { get; } = new List<paymentHistory>();
     public ICollection<Participation>? Participations { get; } = new List<Participation>();
 }

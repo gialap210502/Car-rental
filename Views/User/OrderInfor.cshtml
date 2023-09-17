@@ -1,12 +1,70 @@
 @{
   ViewData["Title"] = "Payment";
-  Pager pager = new Pager();
+  @using Car_rental.Data;
+  @inject Car_rentalContext _context
+Pager pager = new Pager();
   int pageNo = 0;
   var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
   if (ViewBag.Pager != null)
   {
     pager = ViewBag.Pager;
     pageNo = pager.CurrentPage;
+  }
+  var resultCd = Context.Request.Query["resultCd"].FirstOrDefault();
+  if (resultCd == "00_000" && Id.HasValue)
+  {
+    int userId = Id.Value; // Unwrap the nullable int into a non-nullable int
+    var userGetCoin = _context.user.Find(userId);
+
+
+    var checkPaymentHistory = _context.paymentHistory.FirstOrDefault(p => p.Code ==
+    Context.Request.Query["merTrxId"].FirstOrDefault());
+    if (checkPaymentHistory == null)
+    {
+      var paymentHistory = new paymentHistory();
+      paymentHistory.Code = Context.Request.Query["merTrxId"];
+      paymentHistory.timeStamp = DateTime.Now;
+      paymentHistory.Amount = Context.Request.Query["amount"];
+      paymentHistory.Status = Context.Request.Query["resultMsg"];
+      paymentHistory.UserID = Id.HasValue ? Id.Value : 0; // Assuming 0 is a default or sentinel value for an unset user ID
+      _context.Add(paymentHistory);
+
+
+      if (Context.Request.Query["amount"] == "100000")
+      {
+        userGetCoin.coins = userGetCoin.coins + 100;
+        _context.Update(userGetCoin);
+      }
+      else if (Context.Request.Query["amount"] == "200000")
+      {
+        userGetCoin.coins = userGetCoin.coins + 200;
+        _context.Update(userGetCoin);
+      }
+      else
+      if (Context.Request.Query["amount"] == "500000")
+      {
+        userGetCoin.coins = userGetCoin.coins + 500;
+        _context.Update(userGetCoin);
+      }
+      else if (Context.Request.Query["amount"] == "1000000")
+      {
+        userGetCoin.coins = userGetCoin.coins + 1000;
+        _context.Update(userGetCoin);
+      }
+      else if (Context.Request.Query["amount"] == "2000000")
+      {
+        userGetCoin.coins = userGetCoin.coins + 2000;
+        _context.Update(userGetCoin);
+      }
+      else if (Context.Request.Query["amount"] == "3000000")
+      {
+        userGetCoin.coins = userGetCoin.coins + 3000;
+        _context.Update(userGetCoin);
+      }
+
+      _context.SaveChanges();
+    }
+
   }
 
 }
@@ -33,7 +91,7 @@
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
               <li class="nav-item">
                 <a class="nav-link active" id="pills-description-tab" data-toggle="pill" href="#pills-description"
-                  role="tab" aria-controls="pills-description" aria-expanded="true">Bookings History</a>
+                  role="tab" aria-controls="pills-description" aria-expanded="true">Payment Infor</a>
               </li>
             </ul>
           </div>
@@ -65,10 +123,10 @@
                         <td style="text-weight: bold; text-align: center;">
                           @Context.Request.Query["invoiceNo"]
                         </td>
-                        <td style="text-weight: bold; text-align: center;"> 
+                        <td style="text-weight: bold; text-align: center;">
                           @Context.Request.Query["timeStamp"]
                         </td>
-                        <td style="text-weight: bold; text-align: center;"> 
+                        <td style="text-weight: bold; text-align: center;">
                           @Context.Request.Query["invoiceNo"]
                         </td>
                         <td style="text-weight: bold; text-align: center;">

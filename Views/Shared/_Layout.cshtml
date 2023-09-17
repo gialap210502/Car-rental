@@ -136,6 +136,7 @@ var conversationsOfUser = _context.Conversation
                     <a class="dropdown-item" href="/Car/CarListForManager?UserId=@Id">Manager</a>
                   }
                   <a class="dropdown-item" asp-controller="User" asp-action="Profile" asp-route-id="@Id">Profile</a>
+                  <a class="dropdown-item" asp-controller="User" asp-action="GetCoinsHistory" asp-route-userId="@Id">Get Coins History</a>
                   <a class="dropdown-item" asp-controller="User" asp-action="Message">Message</a>
                   <a class="dropdown-item" asp-controller="bookings" asp-action="BookingHistory" asp-route-id="@Id">Booking
                     History</a>

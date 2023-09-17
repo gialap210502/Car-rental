@@ -84,7 +84,8 @@ namespace Car_rental.Migrations
                     email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     flag = table.Column<int>(type: "int", nullable: false),
-                    image = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    coins = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -223,6 +224,29 @@ namespace Car_rental.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Participation_user_UserID",
+                        column: x => x.UserID,
+                        principalTable: "user",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "paymentHistory",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    timeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Amount = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_paymentHistory", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_paymentHistory_user_UserID",
                         column: x => x.UserID,
                         principalTable: "user",
                         principalColumn: "id",
@@ -391,6 +415,11 @@ namespace Car_rental.Migrations
                 column: "carId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_paymentHistory_UserID",
+                table: "paymentHistory",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_rating_carId",
                 table: "rating",
                 column: "carId");
@@ -425,6 +454,9 @@ namespace Car_rental.Migrations
 
             migrationBuilder.DropTable(
                 name: "payment");
+
+            migrationBuilder.DropTable(
+                name: "paymentHistory");
 
             migrationBuilder.DropTable(
                 name: "rating");

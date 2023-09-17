@@ -346,6 +346,39 @@ namespace Car_rental.Migrations
                     b.ToTable("payment");
                 });
 
+            modelBuilder.Entity("Car_rental.Models.paymentHistory", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("Amount")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("timeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("paymentHistory");
+                });
+
             modelBuilder.Entity("Car_rental.Models.rating", b =>
                 {
                     b.Property<int>("id")
@@ -413,6 +446,9 @@ namespace Car_rental.Migrations
 
                     b.Property<string>("citizen_identification")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("coins")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("dob")
                         .HasColumnType("datetime2");
@@ -576,6 +612,17 @@ namespace Car_rental.Migrations
                     b.Navigation("car");
                 });
 
+            modelBuilder.Entity("Car_rental.Models.paymentHistory", b =>
+                {
+                    b.HasOne("Car_rental.Models.user", "user")
+                        .WithMany("paymentHistory")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("user");
+                });
+
             modelBuilder.Entity("Car_rental.Models.rating", b =>
                 {
                     b.HasOne("Car_rental.Models.car", "car")
@@ -659,6 +706,8 @@ namespace Car_rental.Migrations
                     b.Navigation("bookings");
 
                     b.Navigation("cars");
+
+                    b.Navigation("paymentHistory");
 
                     b.Navigation("ratings");
 

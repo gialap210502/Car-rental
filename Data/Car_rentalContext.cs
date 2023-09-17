@@ -104,6 +104,7 @@ namespace Car_rental.Data
         public DbSet<Car_rental.Models.Conversation> Conversation { get; set; } = default!;
 
         public DbSet<Car_rental.Models.Message> Message { get; set; } = default!;
+        public DbSet<Car_rental.Models.paymentHistory> paymentHistory { get; set; } = default!;
         
         public DbSet<Car_rental.Models.Participation> Participation { get; set; } = default!;
         
