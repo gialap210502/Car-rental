@@ -7,7 +7,7 @@
   var timeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
   var encodeKey = "rf8whwaejNhJiQG2bsFubSzccfRc/iRYyGUn6SPmT6y/L7A2XABbu9y4GvCoSTOTpvJykFi6b1G0crU8et2O0Q==";
   var merId = "EPAY000001";
-  var amount = "500000";
+  var amount = "200000";
   var merTrxId = merId + timeStamp;
   var merchantToken = "";
   // Calculate the SHA-256 hash for merchantToken
@@ -180,8 +180,7 @@
                     100,000 VND
                   </td>
                   <td style="font-weight: bold; text-align: center;">
-                    <a type="button" class="btn btn-primary"
-                      onclick="window.openPayment(1, 'https://sandbox.megapay.vn')">Buy</a>
+                    <a class="btn btn-primary" onclick="calculateAndOpenPayment1('https://sandbox.megapay.vn')">Buy</a>
                   </td>
                 </tr>
                 <tr>
@@ -192,8 +191,7 @@
                     200,000 VND
                   </td>
                   <td style="font-weight: bold; text-align: center;">
-                    <a type="button" class="btn btn-primary"
-                      onclick="window.openPayment(1, 'https://sandbox.megapay.vn')">Buy</a>
+                    <a class="btn btn-primary" onclick="calculateAndOpenPayment2('https://sandbox.megapay.vn')">Buy</a>
                   </td>
                 </tr>
                 <tr>
@@ -204,8 +202,7 @@
                     500,000 VND
                   </td>
                   <td style="font-weight: bold; text-align: center;">
-                    <a type="button" class="btn btn-primary"
-                      onclick="window.openPayment(1, 'https://sandbox.megapay.vn')">Buy</a>
+                    <a class="btn btn-primary" onclick="calculateAndOpenPayment3('https://sandbox.megapay.vn')">Buy</a>
                   </td>
                 </tr>
                 <tr>
@@ -216,8 +213,7 @@
                     1,000,000 VND
                   </td>
                   <td style="font-weight: bold; text-align: center;">
-                    <a type="button" class="btn btn-primary"
-                      onclick="window.openPayment(1, 'https://sandbox.megapay.vn')">Buy</a>
+                    <a class="btn btn-primary" onclick="calculateAndOpenPayment4('https://sandbox.megapay.vn')">Buy</a>
                   </td>
                 </tr>
                 <tr>
@@ -228,8 +224,7 @@
                     2,000,000 VND
                   </td>
                   <td style="font-weight: bold; text-align: center;">
-                    <a type="button" class="btn btn-primary"
-                      onclick="window.openPayment(1, 'https://sandbox.megapay.vn')">Buy</a>
+                    <a class="btn btn-primary" onclick="calculateAndOpenPayment5('https://sandbox.megapay.vn')">Buy</a>
                   </td>
                 </tr>
                 <tr>
@@ -240,8 +235,7 @@
                     3,000,000 VND
                   </td>
                   <td style="font-weight: bold; text-align: center;">
-                    <a type="button" class="btn btn-primary"
-                      onclick="window.openPayment(1, 'https://sandbox.megapay.vn')">Buy</a>
+                    <a class="btn btn-primary" onclick="calculateAndOpenPayment6('https://sandbox.megapay.vn')">Buy</a>
                   </td>
                 </tr>
               </tbody>
@@ -252,15 +246,15 @@
         <form id="megapayForm" name="megapayForm" method="POST">
           <input type="hidden" name="buyerFirstNm" value="@Html.DisplayFor(model => model.name)">
           <input type="hidden" name="buyerEmail" value="@Html.DisplayFor(model => model.email)">
-          <input type="hidden" name="merId" value="EPAY000001" />
+          <input type="hidden" name="merId" value="@merId" />
           <input type="hidden" name="currency" value="VND" />
-          <input type="hidden" name="amount" value='500000' />
-          <input type="hidden" name="invoiceNo" value="testing+@timeStamp" />
+          <input type="hidden" name="amount" id="amount" />
+          <input type="hidden" name="invoiceNo" value="@timeStamp@merId" />
           <input type="hidden" name="goodsNm" value="test" />
           <input type="hidden" name="payType" value="NO" />
-          <input type="hidden" name="callBackUrl" value="https://localhost:7160/" />
-          <input type="hidden" name="notiUrl" value="https://localhost:7160/" />
-          <input type="hidden" name="reqDomain" value="https://localhost:7160/" />
+          <input type="hidden" name="callBackUrl" value="https://localhost:7160/user/OrderInfor" />
+          <input type="hidden" name="notiUrl" value="https://localhost:7160/user/OrderInfor" />
+          <input type="hidden" name="reqDomain" value="https://localhost:7160/user/OrderInfor" />
           <input type="hidden" name="fee" value="0" />
           <input type="hidden" name="description" value="testsystem" />
           <input type="hidden" name="userLanguage" value="EN" />
@@ -268,7 +262,7 @@
           <input type="hidden" name="merTrxId" value="@merTrxId" />
           <input type="hidden" name="windowColor" value="#ef5459" />
           <input type="hidden" name="windowType" value="0" />
-          <input type="hidden" name="merchantToken" value="@merchantToken" />
+          <input type="hidden" name="merchantToken" id="merchantToken" />
         </form>
 
       </div>
@@ -281,7 +275,150 @@
     </div>
   </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/2.0.2/sha.js"></script>
+<script>
+  function calculateAndOpenPayment1(paymentUrl) {
+    // Thay đổi giá trị của amount
+    var amount = '100000';
 
+    // Tính toán merchantToken trực tiếp trong JavaScript
+    var timeStamp = new Date().toISOString().replace(/\D/g, '');
+    var merTrxId = "@merId" + "@timeStamp";
+    var dataToHash = "@timeStamp" + "@merTrxId" + "@merId" + amount + "@encodeKey";
 
+    var sha256Hash = new jsSHA("SHA-256", "TEXT");
+    sha256Hash.update(dataToHash);
+    var merchantToken = sha256Hash.getHash("HEX").toLowerCase();
 
-@* onclick="window.openPayment(1, 'https://sandbox.megapay.vn')" *@
+    // Đặt giá trị của amount và merchantToken vào các trường input nếu chúng tồn tại
+    if (document.getElementById('amount')) {
+      document.getElementById('amount').value = amount;
+    }
+    if (document.getElementById('merchantToken')) {
+      document.getElementById('merchantToken').value = merchantToken;
+    }
+
+    // Gọi hàm window.openPayment với giá trị mới của amount, merchantToken và URL
+    window.openPayment(1, paymentUrl);
+  }
+  function calculateAndOpenPayment2(paymentUrl) {
+    // Thay đổi giá trị của amount
+    var amount = '200000';
+
+    // Tính toán merchantToken trực tiếp trong JavaScript
+    var timeStamp = new Date().toISOString().replace(/\D/g, '');
+    var merTrxId = "@merId" + "@timeStamp";
+    var dataToHash = "@timeStamp" + "@merTrxId" + "@merId" + amount + "@encodeKey";
+
+    var sha256Hash = new jsSHA("SHA-256", "TEXT");
+    sha256Hash.update(dataToHash);
+    var merchantToken = sha256Hash.getHash("HEX").toLowerCase();
+
+    // Đặt giá trị của amount và merchantToken vào các trường input nếu chúng tồn tại
+    if (document.getElementById('amount')) {
+      document.getElementById('amount').value = amount;
+    }
+    if (document.getElementById('merchantToken')) {
+      document.getElementById('merchantToken').value = merchantToken;
+    }
+
+    // Gọi hàm window.openPayment với giá trị mới của amount, merchantToken và URL
+    window.openPayment(1, paymentUrl);
+  }
+  function calculateAndOpenPayment3(paymentUrl) {
+    // Thay đổi giá trị của amount
+    var amount = '500000';
+
+    // Tính toán merchantToken trực tiếp trong JavaScript
+    var timeStamp = new Date().toISOString().replace(/\D/g, '');
+    var merTrxId = "@merId" + "@timeStamp";
+    var dataToHash = "@timeStamp" + "@merTrxId" + "@merId" + amount + "@encodeKey";
+
+    var sha256Hash = new jsSHA("SHA-256", "TEXT");
+    sha256Hash.update(dataToHash);
+    var merchantToken = sha256Hash.getHash("HEX").toLowerCase();
+
+    // Đặt giá trị của amount và merchantToken vào các trường input nếu chúng tồn tại
+    if (document.getElementById('amount')) {
+      document.getElementById('amount').value = amount;
+    }
+    if (document.getElementById('merchantToken')) {
+      document.getElementById('merchantToken').value = merchantToken;
+    }
+
+    // Gọi hàm window.openPayment với giá trị mới của amount, merchantToken và URL
+    window.openPayment(1, paymentUrl);
+  }
+  function calculateAndOpenPayment4(paymentUrl) {
+    // Thay đổi giá trị của amount
+    var amount = '1000000';
+
+    // Tính toán merchantToken trực tiếp trong JavaScript
+    var timeStamp = new Date().toISOString().replace(/\D/g, '');
+    var merTrxId = "@merId" + "@timeStamp";
+    var dataToHash = "@timeStamp" + "@merTrxId" + "@merId" + amount + "@encodeKey";
+
+    var sha256Hash = new jsSHA("SHA-256", "TEXT");
+    sha256Hash.update(dataToHash);
+    var merchantToken = sha256Hash.getHash("HEX").toLowerCase();
+
+    // Đặt giá trị của amount và merchantToken vào các trường input nếu chúng tồn tại
+    if (document.getElementById('amount')) {
+      document.getElementById('amount').value = amount;
+    }
+    if (document.getElementById('merchantToken')) {
+      document.getElementById('merchantToken').value = merchantToken;
+    }
+
+    // Gọi hàm window.openPayment với giá trị mới của amount, merchantToken và URL
+    window.openPayment(1, paymentUrl);
+  }
+  function calculateAndOpenPayment5(paymentUrl) {
+    // Thay đổi giá trị của amount
+    var amount = '2000000';
+
+    // Tính toán merchantToken trực tiếp trong JavaScript
+    var timeStamp = new Date().toISOString().replace(/\D/g, '');
+    var merTrxId = "@merId" + "@timeStamp";
+    var dataToHash = "@timeStamp" + "@merTrxId" + "@merId" + amount + "@encodeKey";
+
+    var sha256Hash = new jsSHA("SHA-256", "TEXT");
+    sha256Hash.update(dataToHash);
+    var merchantToken = sha256Hash.getHash("HEX").toLowerCase();
+
+    // Đặt giá trị của amount và merchantToken vào các trường input nếu chúng tồn tại
+    if (document.getElementById('amount')) {
+      document.getElementById('amount').value = amount;
+    }
+    if (document.getElementById('merchantToken')) {
+      document.getElementById('merchantToken').value = merchantToken;
+    }
+
+    // Gọi hàm window.openPayment với giá trị mới của amount, merchantToken và URL
+    window.openPayment(1, paymentUrl);
+  }
+  function calculateAndOpenPayment6(paymentUrl) {
+    // Thay đổi giá trị của amount
+    var amount = '3000000';
+
+    // Tính toán merchantToken trực tiếp trong JavaScript
+    var timeStamp = new Date().toISOString().replace(/\D/g, '');
+    var merTrxId = "@merId" + "@timeStamp";
+    var dataToHash = "@timeStamp" + "@merTrxId" + "@merId" + amount + "@encodeKey";
+
+    var sha256Hash = new jsSHA("SHA-256", "TEXT");
+    sha256Hash.update(dataToHash);
+    var merchantToken = sha256Hash.getHash("HEX").toLowerCase();
+
+    // Đặt giá trị của amount và merchantToken vào các trường input nếu chúng tồn tại
+    if (document.getElementById('amount')) {
+      document.getElementById('amount').value = amount;
+    }
+    if (document.getElementById('merchantToken')) {
+      document.getElementById('merchantToken').value = merchantToken;
+    }
+
+    // Gọi hàm window.openPayment với giá trị mới của amount, merchantToken và URL
+    window.openPayment(1, paymentUrl);
+  }
+</script>
