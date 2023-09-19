@@ -13,8 +13,7 @@
           <h1 class="mb-4">Fast &amp; Easy Way To Rent A Car</h1>
           <p style="font-size: 18px;">A small river named Duden flows by their place and supplies it with the necessary
             regelialia. It is a paradisematic country, in which roasted parts</p>
-          <a href="~/videoAds.mp4"
-            class="icon-wrap popup-vimeo d-flex align-items-center mt-4 justify-content-center">
+          <a href="~/videoAds.mp4" class="icon-wrap popup-vimeo d-flex align-items-center mt-4 justify-content-center">
             <div class="icon d-flex align-items-center justify-content-center">
               <span class="ion-ios-play"></span>
             </div>
@@ -34,7 +33,8 @@
       <div class="col-md-12	featured-top">
         <div class="row no-gutters">
           <div class="col-md-4 flex align-items-center " style="max-height: 400px; overflow-y: auto;">
-            <form asp-controller="Car" asp-action="SearchforUser" class="request-form ftco-animate bg-primary">
+            <form asp-controller="Car" asp-action="SearchforUser" class="request-form ftco-animate bg-primary"
+              onsubmit="return validateForm()">
               <h2>Make your trip</h2>
               <div class="form-group">
                 <label for="" class="label">Pick-up location</label>
@@ -63,6 +63,14 @@
               <div class="form-group">
                 <label for="" class="label">Max Seat</label>
                 <input type="number" name="maxSeat" class="form-control" placeholder="Maximum Seat">
+              </div>
+              <div class="form-group">
+                <label for="" class="label">Start Date</label>
+                <input type="date" name="startDate" id="startDate" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="" class="label">End Date</label>
+                <input type="date" name="endDate" id="endDate" class="form-control">
               </div>
               <div class="form-group">
                 <input type="submit" value="Filter" class="btn btn-secondary py-3 px-4">
@@ -132,7 +140,8 @@
             }
             <div class="item">
               <div class="car-wrap rounded ftco-animate">
-                <div class="img rounded d-flex align-items-end" href="/car/details/@item.Id" style="background-image: url( /images/@item.ImageName);">
+                <div class="img rounded d-flex align-items-end" href="/car/details/@item.Id"
+                  style="background-image: url( /images/@item.ImageName);">
                 </div>
                 <div class="text">
                   <h2 class="mb-0"><a asp-action="Details" asp-route-id="@item.Id">@item.Model</a></h2>
@@ -364,3 +373,26 @@
     </div>
   </div>
 </section>
+<script>
+  function validateForm() {
+    var startDate = document.getElementById("startDate").value;
+    var endDate = document.getElementById("endDate").value;
+
+    if (!startDate && !endDate) {
+      // Case 1: Both fields are empty, continue
+      return true;
+    }
+
+    if ((startDate && !endDate) || (!startDate && endDate)) {
+      // Case 2: One field is filled, the other must not be empty
+      alert("Please fill in both Start Date and End Date, or leave both empty.");
+      event.preventDefault(); // Prevent the form from being submitted
+      return false; // Prevent form submission
+    }
+
+    // Case 3: Both fields are filled, continue
+    return true;
+  }
+</script>
+
+

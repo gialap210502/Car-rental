@@ -132,6 +132,15 @@
     <p class="card-title text-center shadow mb-5 rounded">Car Booking Form</p>
 
     <hr>
+    @if (TempData.ContainsKey("ErrorMessage"))
+    {
+      <script>
+        alert('@TempData["ErrorMessage"]');
+        console.log("not work")
+      </script>
+    }
+
+
     <!--Second Row-->
     <form method="post" asp-controller="bookings" asp-action="Booking" onsubmit="return validateForm()">
       <div asp-validation-summary="ModelOnly" class="text-danger"></div>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Car_rental.Data;
 using Car_rental.Models;
+using JetBrains.Annotations;
 
 namespace Car_rental.Controllers
 {
@@ -112,40 +113,51 @@ namespace Car_rental.Controllers
             }
             else if (ModelState.IsValid)
             {
-                // If all input is valid, proceed with booking
-                var bookings = new bookings();
-                bookings.userId = userId;
-                bookings.startDate = startDate;
-                bookings.endDate = endDate;
-                bookings.totalAmount = totalAmount;
-                bookings.TakeCar = TakeCar;
-                bookings.CarBack = CarBack;
 
-                // Add the booking to the context and save changes
-                _context.Add(bookings);
-                await _context.SaveChangesAsync();
+                var paymentsWithCarId = _context.payment
+                                        .Where(p => p.carId == cardId) // Filter payments by carId
+                                        .Where(p =>
+                                                    (p.booking.startDate <= endDate && p.booking.endDate >= startDate) ||
+                                                    (p.booking.startDate >= startDate && p.booking.startDate <= endDate) ||
+                                                    (p.booking.endDate >= startDate && p.booking.endDate <= endDate)
+                                                )
+                                        .ToList();
+                if (paymentsWithCarId.Count() == 0)
+                {
+                    // If all input is valid, proceed with booking
+                    var bookings = new bookings();
+                    bookings.userId = userId;
+                    bookings.startDate = startDate;
+                    bookings.endDate = endDate;
+                    bookings.totalAmount = totalAmount;
+                    bookings.TakeCar = TakeCar;
+                    bookings.CarBack = CarBack;
 
-                // Create a new payment record
-                var payment = new payment();
-                payment.amount = (double)bookings.totalAmount;
-                payment.status = 0;
-                payment.booking_id = bookings.id;
-                payment.carId = cardId;
-                payment.paymentDate = DateTime.Now;
-                payment.paymentMethod = "Coin";
+                    // Add the booking to the context and save changes
+                    _context.Add(bookings);
+                    await _context.SaveChangesAsync();
 
-                // Add the payment record to the context and save changes
-                _context.payment.Add(payment);
-                await _context.SaveChangesAsync();
+                    // Create a new payment record
+                    var payment = new payment();
+                    payment.amount = (double)bookings.totalAmount;
+                    payment.status = 0;
+                    payment.booking_id = bookings.id;
+                    payment.carId = cardId;
+                    payment.paymentDate = DateTime.Now;
+                    payment.paymentMethod = "Coin";
 
-                // Update the availability of the selected car
-                var car = _context.Car.Find(cardId);
-                car.available = 0;
-                _context.Update(car);
-                await _context.SaveChangesAsync();
+                    // Add the payment record to the context and save changes
+                    _context.payment.Add(payment);
+                    await _context.SaveChangesAsync();
 
-                // Redirect to the booking history page
-                return RedirectToAction("BookingHistory", "bookings", new { id = userId });
+                    // Redirect to the booking history page
+                    return RedirectToAction("BookingHistory", "bookings", new { id = userId });
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Car is busy!";
+                }
+
             }
 
             // If there are validation errors or ModelState is not valid, return to the view

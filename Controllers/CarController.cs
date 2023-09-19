@@ -105,7 +105,7 @@ namespace Car_rental.Controllers
             return View(car_rentalContext);
         }
 
-        public ActionResult SearchforUser(string query, string model, string location, double? minPrice, double? maxPrice, int? minSeat, int? maxSeat, int pg = 1)
+        public ActionResult SearchforUser(string query, string model, string location, double? minPrice, double? maxPrice, int? minSeat, int? maxSeat, DateTime? startDate, DateTime? endDate, int pg = 1)
         {
             ViewBag.Layout = "_Layout";
             const int pageSize = 12;
@@ -151,6 +151,17 @@ namespace Car_rental.Controllers
             if (maxSeat.HasValue)
             {
                 queryable = queryable.Where(d => d.seat <= maxSeat);
+            }
+
+            if (startDate.HasValue && endDate.HasValue)
+            {
+                queryable = queryable.Where(c =>
+                    !c.payments.Any(p =>
+                        (p.booking.startDate >= startDate && p.booking.startDate <= endDate) ||
+                        (p.booking.endDate >= startDate && p.booking.endDate <= endDate) ||
+                        (p.booking.startDate <= startDate && p.booking.endDate >= endDate)
+                    )
+                );
             }
 
             int recsCount = queryable.Count();
@@ -277,7 +288,7 @@ namespace Car_rental.Controllers
             ViewBag.Layout = "_Layout";
             var listImages = _context.Images.Where(i => i.carId == id).ToList();
             ViewBag.listImages = listImages;
-     
+
 
 
             //random related cars base on category 
