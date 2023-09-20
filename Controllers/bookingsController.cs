@@ -117,11 +117,12 @@ namespace Car_rental.Controllers
                 var paymentsWithCarId = _context.payment
                                         .Where(p => p.carId == cardId) // Filter payments by carId
                                         .Where(p =>
-                                                    (p.booking.startDate <= endDate && p.booking.endDate >= startDate) ||
-                                                    (p.booking.startDate >= startDate && p.booking.startDate <= endDate) ||
-                                                    (p.booking.endDate >= startDate && p.booking.endDate <= endDate)
+                                                    (p.booking.startDate <= endDate && p.booking.endDate >= startDate && (p.status == 0 || p.status == 1 || p.status == 2)) ||
+                                                    (p.booking.startDate >= startDate && p.booking.startDate <= endDate && (p.status == 0 || p.status == 1 || p.status == 2)) ||
+                                                    (p.booking.endDate >= startDate && p.booking.endDate <= endDate && (p.status == 0 || p.status == 1 || p.status == 2))
                                                 )
                                         .ToList();
+            
                 if (paymentsWithCarId.Count() == 0)
                 {
                     // If all input is valid, proceed with booking

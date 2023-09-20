@@ -157,9 +157,9 @@ namespace Car_rental.Controllers
             {
                 queryable = queryable.Where(c =>
                     !c.payments.Any(p =>
-                        (p.booking.startDate >= startDate && p.booking.startDate <= endDate) ||
-                        (p.booking.endDate >= startDate && p.booking.endDate <= endDate) ||
-                        (p.booking.startDate <= startDate && p.booking.endDate >= endDate)
+                        (p.booking.startDate >= startDate && p.booking.startDate <= endDate && (p.status == 0 || p.status == 1 || p.status == 2)) ||
+                        (p.booking.endDate >= startDate && p.booking.endDate <= endDate && (p.status == 0 || p.status == 1 || p.status == 2)) ||
+                        (p.booking.startDate <= startDate && p.booking.endDate >= endDate && (p.status == 0 || p.status == 1 || p.status == 2))
                     )
                 );
             }
