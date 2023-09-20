@@ -77,32 +77,32 @@
                                                         @{
                                                             if (item.Amount == "100000")
                                                             {
-                                                                @Html.Display("100")
+                                                                @Html.Raw("100");
                                                             }
                                                             else if (item.Amount == "200000")
                                                             {
-                                                                @Html.Display("200")
+                                                                @Html.Raw("200");
                                                             }
                                                             else if (item.Amount == "500000")
                                                             {
-                                                                @Html.Display("500")
+                                                                @Html.Raw("500")
                                                             }
                                                             else if (item.Amount == "1000000")
                                                             {
-                                                                @Html.Display("1000")
+                                                                @Html.Raw("1000")
                                                             }
                                                             else if (item.Amount == "2000000")
                                                             {
-                                                                @Html.Display("2000")
+                                                               @Html.Raw("2000")
                                                             }
                                                             else if (item.Amount == "3000000")
                                                             {
-                                                                @Html.Display("3000")
+                                                                @Html.Raw("3000")
                                                             }
                                                             }
                                                         </td>
                                                         <td>
-                                                            @Html.DisplayFor(modelItem => item.Amount)
+                                                            @Html.DisplayFor(modelItem => item.Amount)VND
                                                         </td>
                                                         <td>
                                                             @Html.DisplayFor(modelItem => item.Status)
