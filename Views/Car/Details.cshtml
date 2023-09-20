@@ -2,8 +2,9 @@
 @{
 	ViewData["Title"] = "Details";
 	@using Car_rental.Data;
-	var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
 	@inject Car_rentalContext _context
+	var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
+	
 
 }
 

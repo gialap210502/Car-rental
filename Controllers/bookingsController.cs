@@ -113,7 +113,6 @@ namespace Car_rental.Controllers
             }
             else if (ModelState.IsValid)
             {
-
                 var paymentsWithCarId = _context.payment
                                         .Where(p => p.carId == cardId) // Filter payments by carId
                                         .Where(p =>
@@ -122,37 +121,40 @@ namespace Car_rental.Controllers
                                                     (p.booking.endDate >= startDate && p.booking.endDate <= endDate && (p.status == 0 || p.status == 1 || p.status == 2))
                                                 )
                                         .ToList();
-            
+                var car = _context.Car.Find(cardId);
                 if (paymentsWithCarId.Count() == 0)
                 {
-                    // If all input is valid, proceed with booking
-                    var bookings = new bookings();
-                    bookings.userId = userId;
-                    bookings.startDate = startDate;
-                    bookings.endDate = endDate;
-                    bookings.totalAmount = totalAmount;
-                    bookings.TakeCar = TakeCar;
-                    bookings.CarBack = CarBack;
+                    if (car.user_id != userId)
+                    {
+                        // If all input is valid, proceed with booking
+                        var bookings = new bookings();
+                        bookings.userId = userId;
+                        bookings.startDate = startDate;
+                        bookings.endDate = endDate;
+                        bookings.totalAmount = totalAmount;
+                        bookings.TakeCar = TakeCar;
+                        bookings.CarBack = CarBack;
 
-                    // Add the booking to the context and save changes
-                    _context.Add(bookings);
-                    await _context.SaveChangesAsync();
+                        // Add the booking to the context and save changes
+                        _context.Add(bookings);
+                        await _context.SaveChangesAsync();
 
-                    // Create a new payment record
-                    var payment = new payment();
-                    payment.amount = (double)bookings.totalAmount;
-                    payment.status = 0;
-                    payment.booking_id = bookings.id;
-                    payment.carId = cardId;
-                    payment.paymentDate = DateTime.Now;
-                    payment.paymentMethod = "Coin";
+                        // Create a new payment record
+                        var payment = new payment();
+                        payment.amount = (double)bookings.totalAmount;
+                        payment.status = 0;
+                        payment.booking_id = bookings.id;
+                        payment.carId = cardId;
+                        payment.paymentDate = DateTime.Now;
+                        payment.paymentMethod = "Coin";
 
-                    // Add the payment record to the context and save changes
-                    _context.payment.Add(payment);
-                    await _context.SaveChangesAsync();
+                        // Add the payment record to the context and save changes
+                        _context.payment.Add(payment);
+                        await _context.SaveChangesAsync();
 
-                    // Redirect to the booking history page
-                    return RedirectToAction("BookingHistory", "bookings", new { id = userId });
+                        // Redirect to the booking history page
+                        return RedirectToAction("BookingHistory", "bookings", new { id = userId });
+                    }
                 }
                 else
                 {

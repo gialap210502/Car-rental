@@ -1,6 +1,8 @@
 @model Car_rental.Models.user
 @using System.Security.Cryptography
 @using System.Text
+@using Car_rental.Data
+@inject Car_rentalContext _context
 @{
   ViewData["Title"] = "Profile";
   var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
@@ -55,8 +57,17 @@
             <div class="d-flex justify-content-center mb-2">
               <a type="button" class="btn btn-outline-primary ms-1" asp-controller="user" asp-action="edit"
                 asp-route-id="@Id">Edit profile</a>
-              <a type="button" class="btn btn-outline-primary ms-1" asp-controller="user" asp-action="BusinessRegister"
-                asp-route-userId="@Id">Business Registration</a>
+              @{
+                var role = _context.userRole.Where(r => r.userId == Model.id).ToList();
+                foreach (var item in role)
+                {
+                  if (item.roleId == 3)
+                  {
+                    <a type="button" class="btn btn-outline-primary ms-1" asp-controller="user" asp-action="BusinessRegister"
+                      asp-route-userId="@Id">Business Registration</a>
+                  }
+                }
+              }
               <a class="btn btn-outline-primary ms-1" type="button" data-toggle="modal" data-target="#myModal">get
                 coin</a>
             </div>

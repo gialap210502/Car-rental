@@ -2,8 +2,14 @@
 
 @{
   ViewData["Title"] = "Create";
+  @using Car_rental.Data;
+  @inject Car_rentalContext _context
+
   var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
   string message = "You need to login to continue booking!";
+  string messageUserBook = "You need to login to continue booking!";
+  var car = _context.Car.Find(ViewBag.cardId);
+
   if (Id == null)
   {
     <script>
@@ -11,6 +17,14 @@
       window.location.href = "/User/login";
     </script>
   }
+  if (car.user_id == ViewBag.userId) 
+  {
+    <script>
+      alert("@messageUserBook");
+      window.location.href = "/car/details/@ViewBag.cardId";
+    </script>
+  }
+
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -230,8 +244,6 @@
         startDate.getMonth() === currentDateTime.getMonth() &&
         startDate.getDate() < currentDateTime.getDate())) {
       errorMessage = "Start date must be at least 3 hours from now.";
-      console.log(startDate.getDay.toString());
-      console.log(currentDateTime.getDay.toString())
     }
 
     if (errorMessage) {
