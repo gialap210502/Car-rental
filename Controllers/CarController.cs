@@ -125,7 +125,7 @@ namespace Car_rental.Controllers
 
             if (!string.IsNullOrEmpty(model))
             {
-                queryable = queryable.Where(d => d.model == model);
+                queryable = queryable.Where(d => d.model.Contains(model));
             }
 
             if (!string.IsNullOrEmpty(location))
@@ -250,7 +250,7 @@ namespace Car_rental.Controllers
                     available = 1,
                     ReleaseDate = DateTime.Now.AddDays(i),
                     Type = "Type " + i,
-                    Price = 10000 * i,
+                    Price = 1000 * (i + 1),
                     Description = "Description " + i,
                     AirConditioning = i % 2 == 0,
                     ChildSeat = i % 2 == 0,

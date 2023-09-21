@@ -17,13 +17,21 @@
       window.location.href = "/User/login";
     </script>
   }
-  if (car.user_id == ViewBag.userId) 
+  if (car.user_id == ViewBag.userId)
   {
     <script>
       alert("@messageUserBook");
       window.location.href = "/car/details/@ViewBag.cardId";
     </script>
   }
+  if (ViewBag.Message != null)
+  {
+    <script>
+      alert("@ViewBag.Message");
+      window.location.href = "/car/details/@ViewBag.cardId";
+    </script>
+  }
+
 
 }
 
@@ -146,14 +154,6 @@
     <p class="card-title text-center shadow mb-5 rounded">Car Booking Form</p>
 
     <hr>
-    @if (TempData.ContainsKey("ErrorMessage"))
-    {
-      <script>
-        alert('@TempData["ErrorMessage"]');
-        console.log("not work")
-      </script>
-    }
-
 
     <!--Second Row-->
     <form method="post" asp-controller="bookings" asp-action="Booking" onsubmit="return validateForm()">
@@ -213,17 +213,13 @@
   </div>
 </div>
 
-@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-{
-  <script>
-  alert('@ViewBag.ErrorMessage');
-</script>
-}
+
 @section Scripts {
   @{
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
   }
 }
+
 <script>
   function validateForm() {
     var startDate = new Date(document.querySelector('[name="startDate"]').value);
@@ -260,4 +256,5 @@
   document.querySelector('[name="endDate"]').addEventListener('change', validateForm);
   document.querySelector('[name="TakeCar"]').addEventListener('change', validateForm);
   document.querySelector('[name="CarBack"]').addEventListener('change', validateForm);
+
 </script>

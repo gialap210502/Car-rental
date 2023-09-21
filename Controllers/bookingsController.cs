@@ -102,16 +102,8 @@ namespace Car_rental.Controllers
             // Set ViewBag.Layout to null (not sure why this is done, consider removing)
             ViewBag.Layout = null;
 
-            // Check for input validation and show appropriate error messages
-            if (startDate > endDate)
-            {
-                ViewBag.ErrorMessage = "Start date must be equal or before end date.";
-            }
-            else if (startDate < DateTime.Now.Date)
-            {
-                ViewBag.ErrorMessage = "Start date must be at least 3 hours from now.";
-            }
-            else if (ModelState.IsValid)
+
+            if (ModelState.IsValid)
             {
                 var paymentsWithCarId = _context.payment
                                         .Where(p => p.carId == cardId) // Filter payments by carId
@@ -122,10 +114,15 @@ namespace Car_rental.Controllers
                                                 )
                                         .ToList();
                 var car = _context.Car.Find(cardId);
+                var user = _context.user.Find(userId);
                 if (paymentsWithCarId.Count() == 0)
                 {
-                    if (car.user_id != userId)
+                    if (car.user_id != userId && user.coins >= car.Price)
                     {
+                        user.coins = user.coins - car.Price;
+                        _context.Update(user);
+                        await _context.SaveChangesAsync();
+
                         // If all input is valid, proceed with booking
                         var bookings = new bookings();
                         bookings.userId = userId;
@@ -148,17 +145,37 @@ namespace Car_rental.Controllers
                         payment.paymentDate = DateTime.Now;
                         payment.paymentMethod = "Coin";
 
+
+
                         // Add the payment record to the context and save changes
                         _context.payment.Add(payment);
                         await _context.SaveChangesAsync();
 
+                        Console.WriteLine(car.Price + "------");
+                        Console.WriteLine(user.coins + "------");
+
                         // Redirect to the booking history page
                         return RedirectToAction("BookingHistory", "bookings", new { id = userId });
+                    }
+                    else if (user.coins < car.Price)
+                    {
+
+                        // Generate JavaScript code to show an alert on the client-side
+                        string script = $"<script>alert('Your amount is not enough!');window.location.href = '/car/details/{car.id}';</script>";
+                        return Content(script, "text/html");
+                    }
+                    else
+                    {
+                        // Generate JavaScript code to show an alert on the client-side
+                        string script = $"<script>alert('You are own this car!');window.location.href = '/car/details/{car.id}';</script>";
+                        return Content(script, "text/html");
                     }
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Car is busy!";
+                    // Generate JavaScript code to show an alert on the client-side
+                    string script = $"<script>alert('Car is busy that day!');window.location.href = '/car/details/{car.id}';</script>";
+                    return Content(script, "text/html");
                 }
 
             }

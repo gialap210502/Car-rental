@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Car_rental.Migrations
 {
     [DbContext(typeof(Car_rentalContext))]
-    [Migration("20230917082300_InitialCreate")]
+    [Migration("20230921044132_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -450,8 +450,8 @@ namespace Car_rental.Migrations
                     b.Property<string>("citizen_identification")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("coins")
-                        .HasColumnType("int");
+                    b.Property<double?>("coins")
+                        .HasColumnType("float");
 
                     b.Property<DateTime?>("dob")
                         .HasColumnType("datetime2");

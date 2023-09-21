@@ -87,20 +87,18 @@ namespace Car_rental.Controllers
                 return NotFound();
             }
 
-            if (payment.car == null || payment.car.user_id == null)
-            {
-                // Handle the case where payment or user_id is null
-                return BadRequest("Payment or user_id is null.");
-            }
+            var booking = _context.bookings.Find(payment.booking_id);
 
             var car = _context.Car.Find(payment.carId);
-
+            var user = _context.user.Find(userId);
+            Console.WriteLine(booking.userId+"-------");
             // check payment match with user id
-            if (payment.car.user_id == userId || userRoleName == "Admin")
+            if (booking.userId == userId || userRoleName == "Admin")
             {
                 if (status >= 0 && status <= 4)
                 {
-                    if(status == 4){
+                    if (status == 4)
+                    {
                         car.available = 1;
                         _context.Update(car);
                         _context.SaveChanges();
@@ -108,6 +106,12 @@ namespace Car_rental.Controllers
                     payment.status = status;
                     _context.Update(payment);
                     _context.SaveChanges();
+
+                    user.coins = user.coins + car.Price;
+                    _context.Update(user);
+                    _context.SaveChanges();
+
+                    return RedirectToAction("BookingHistory", "bookings", new { id = userId });
                 }
                 else
                 {

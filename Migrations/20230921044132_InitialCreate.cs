@@ -85,7 +85,7 @@ namespace Car_rental.Migrations
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     flag = table.Column<int>(type: "int", nullable: false),
                     image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    coins = table.Column<int>(type: "int", nullable: true)
+                    coins = table.Column<double>(type: "float", nullable: true)
                 },
                 constraints: table =>
                 {

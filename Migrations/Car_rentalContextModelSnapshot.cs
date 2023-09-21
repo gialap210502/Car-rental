@@ -447,8 +447,8 @@ namespace Car_rental.Migrations
                     b.Property<string>("citizen_identification")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("coins")
-                        .HasColumnType("int");
+                    b.Property<double?>("coins")
+                        .HasColumnType("float");
 
                     b.Property<DateTime?>("dob")
                         .HasColumnType("datetime2");
