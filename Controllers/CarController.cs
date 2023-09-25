@@ -421,7 +421,7 @@ namespace Car_rental.Controllers
                     _context.Images.Add(new Images { nameFile = replacedString, carId = car.id });
                 }
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("CarListForManager", new {UserId = userId});
             }
             ViewData["discount_id"] = new SelectList(_context.discount, "id", "code", car.discount_id);
             ViewData["category_id"] = new SelectList(_context.category, "id", "type", car.category_id);

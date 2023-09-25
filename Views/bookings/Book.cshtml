@@ -7,7 +7,7 @@
 
   var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
   string message = "You need to login to continue booking!";
-  string messageUserBook = "You need to login to continue booking!";
+  string messageUserBook = "You own this car!";
   var car = _context.Car.Find(ViewBag.cardId);
 
   if (Id == null)

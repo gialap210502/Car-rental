@@ -2,7 +2,7 @@
   ViewData["Title"] = "Payment";
   @using Car_rental.Data;
   @inject Car_rentalContext _context
-Pager pager = new Pager();
+  Pager pager = new Pager();
   int pageNo = 0;
   var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
   if (ViewBag.Pager != null)

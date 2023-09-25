@@ -86,7 +86,7 @@
                               }
                               else if (paymentItem.status == 1)
                               {
-                                @Html.Raw("<span class='badge badge-Primary'>Accepted</span>")
+                                @Html.Raw("<span class='badge badge-primary'>Accepted</span>")
                               }
                               else if (paymentItem.status == 2)
                               {
@@ -135,7 +135,7 @@
                               {
                                 if (paymentItem.status == 0)
                                 {
-                                  <a class="btn btn-danger" asp-asp-controller="Payment" asp-controller="Payment" asp-action="SetStatus"
+                                  <a class="btn btn-danger"  asp-controller="Payment" asp-action="SetStatus"
                                     asp-route-userId="@Id" asp-route-paymentId="@paymentItem.id" asp-route-status="4">
                                     Cancel
                                   </a>

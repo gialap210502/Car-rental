@@ -504,13 +504,13 @@ namespace Car_rental.Controllers
                     }
                     else
                     {
-                        string filename = Path.GetFileName(myfile.FileName);
+                        string filename = Path.GetFileName(Drive.FileName);
                         var filePath = Path.Combine(_hostEnvironment.WebRootPath, "DriveLicense");
                         string fullPath = filePath + "\\" + filename;
                         // Copy files to FileSystem using Streams
                         using (var stream = new FileStream(fullPath, FileMode.Create))
                         {
-                            await myfile.CopyToAsync(stream);
+                            await Drive.CopyToAsync(stream);
                         }
                         user.driver_license = filename;
                         _context.Update(user);

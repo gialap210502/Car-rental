@@ -127,9 +127,9 @@
                                                         Set Status
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item btn bg-success" asp-action="SetStatus" 
+                                                        <a class="dropdown-item btn bg-success" asp-controller="Payment" asp-action="SetStatus" 
                                                         asp-route-userId="@Id" asp-route-paymentId="@item.id" asp-route-status="1"><p class="text-white">Confirm Order</p></a>
-                                                        <a class="dropdown-item btn bg-danger" asp-action="SetStatus" 
+                                                        <a class="dropdown-item btn bg-danger" asp-controller="Payment" asp-action="SetStatus" 
                                                         asp-route-userId="@Id" asp-route-paymentId="@item.id" asp-route-status="4"><p class="text-white">Cancel Order</p></a>
                                                     </div>
                                                 </div>
@@ -143,7 +143,7 @@
                                                         Set Status
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item btn bg-primary" asp-action="SetStatus" 
+                                                        <a class="dropdown-item btn bg-primary" asp-controller="Payment" asp-action="SetStatus" 
                                                         asp-route-userId="@Id" asp-route-paymentId="@item.id" asp-route-status="2"><p class="text-white">Set it In progress</p></a>
                                                     </div>
                                                 </div>
@@ -156,7 +156,7 @@
                                                         Set Status
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item btn bg-success" asp-action="SetStatus" 
+                                                        <a class="dropdown-item btn bg-success" asp-controller="Payment" asp-action="SetStatus" 
                                                         asp-route-userId="@Id" asp-route-paymentId="@item.id" asp-route-status="3"><p class="text-white">Set it Accomplished</p></a>
                                                     </div>
                                                 </div>

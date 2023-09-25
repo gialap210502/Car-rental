@@ -73,7 +73,7 @@ namespace Car_rental.Controllers
         {
             ViewBag.layout = "_AdminLayout";
             var payment = _context.payment.Include(p => p.car).FirstOrDefault(p => p.id == paymentId);
-            var userRole = _context.userRole.Include(u => u.role).FirstOrDefault(u => u.userId == userId);
+            var userRole = _context.userRole.Include(u => u.role).Include(u => u.user).Where(u => u.userId == userId).FirstOrDefault();
             if (userRole == null)
             {
                 // Xử lý khi không tìm thấy 
@@ -91,11 +91,22 @@ namespace Car_rental.Controllers
 
             var car = _context.Car.Find(payment.carId);
             var user = _context.user.Find(userId);
-            Console.WriteLine(booking.userId+"-------");
             // check payment match with user id
-            if (booking.userId == userId || userRoleName == "Admin")
+            if (booking.userId == userId || userRoleName == "Admin" || userRoleName == "Owner" && booking.payments.FirstOrDefault().carId == car.id)
             {
-                if (status >= 0 && status <= 4)
+                if (status >= 0 && status <= 4 && userRoleName == "Owner" && booking.payments.FirstOrDefault().carId == car.id)
+                {
+                    payment.status = status;
+                    _context.Update(payment);
+                    _context.SaveChanges();
+
+                    user.coins = user.coins + car.Price;
+                    _context.Update(user);
+                    _context.SaveChanges();
+
+                    return RedirectToAction("OrderList", "Payment", new { UserId = userId });
+                }
+                else if (status >= 0 && status <= 4)
                 {
                     if (status == 4)
                     {
@@ -120,7 +131,7 @@ namespace Car_rental.Controllers
             }
             else
             {
-                return BadRequest("Access denied: You don't have permission to perform this action.");
+                return BadRequest("Access denied: You don't have permission to perform this action.1");
             }
 
             return RedirectToAction("OrderList", new { userId = userId });
