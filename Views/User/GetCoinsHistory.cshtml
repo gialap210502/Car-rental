@@ -77,11 +77,13 @@
                                                         @{
                                                             if (item.Amount == "100000")
                                                             {
-                                                                @Html.Raw("100");
+                                                                @Html.Raw("100")
+                                                                ;
                                                             }
                                                             else if (item.Amount == "200000")
                                                             {
-                                                                @Html.Raw("200");
+                                                                @Html.Raw("200")
+                                                                ;
                                                             }
                                                             else if (item.Amount == "500000")
                                                             {
@@ -93,21 +95,21 @@
                                                             }
                                                             else if (item.Amount == "2000000")
                                                             {
-                                                               @Html.Raw("2000")
+                                                                @Html.Raw("2000")
                                                             }
                                                             else if (item.Amount == "3000000")
                                                             {
                                                                 @Html.Raw("3000")
                                                             }
-                                                            }
-                                                        </td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.Amount)VND
-                                                        </td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.Status)
-                                                        </td>
-                                                    </tr>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Amount)VND
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Status)
+                                                    </td>
+                                                </tr>
                                             }
                                         </tbody>
                                     </table>
@@ -122,12 +124,14 @@
                                         <div class="block-27">
                                             <ul>
                                                 <li><a type="button" class="button break-page" asp-controller="user"
-                                                        asp-action="GetCoinsHistory" asp-route-userId="@Id" asp-route-pg="@pre">&lt;</a></li>
+                                                        asp-action="GetCoinsHistory" asp-route-userId="@Id"
+                                                        asp-route-pg="@pre">&lt;</a></li>
                                                 @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
                                                 {
 
                                                     <li><a type="button" class="button break-page" asp-controller="user"
-                                                            asp-action="GetCoinsHistory" asp-route-userId="@Id" asp-route-pg="@pge">@pge</a></li>
+                                                            asp-action="GetCoinsHistory" asp-route-userId="@Id"
+                                                            asp-route-pg="@pge">@pge</a></li>
                                                     pre = pge - 1;
                                                     if (pre == 1 || pre == 0)
                                                     {
@@ -144,7 +148,8 @@
                                                     }
                                                 }
                                                 <li><a type="button" class="button break-page" asp-controller="user"
-                                                        asp-action="GetCoinsHistory" asp-route-userId="@Id" asp-route-pg="@next">&gt;</a></li>
+                                                        asp-action="GetCoinsHistory" asp-route-userId="@Id"
+                                                        asp-route-pg="@next">&gt;</a></li>
                                             </ul>
                                         </div>
                                     }
@@ -155,4 +160,5 @@
                 </div>
             </div>
         </div>
-
+    </div>
+</section>
