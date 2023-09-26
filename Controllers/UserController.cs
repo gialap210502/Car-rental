@@ -40,7 +40,7 @@ namespace Car_rental.Controllers
         public async Task<IActionResult> Index(int pg = 1)
         {
             ViewBag.layout = "_AdminLayout";
-             const int pageSize = 5;
+            const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
             int recsCount = _context.user.Count();
@@ -51,6 +51,34 @@ namespace Car_rental.Controllers
             return _context.user != null ?
                         View(await data.ToListAsync()) :
                         Problem("Entity set 'Car_rentalContext.user'  is null.");
+        }
+
+        public IActionResult SetUserStatus(int userId, int flag)
+        {
+            var user = _context.user.Find(userId);
+            // 2.warning
+            // 3.ban
+            user.flag = flag;
+            _context.Update(user);
+            _context.SaveChanges();
+            //send mail
+            Send send = new Send();
+            if (flag == 2)
+            {
+                var email = user.email.ToString();
+                var subject = "Your account has been warned!";
+                string body = "Your account has been warned that you are at risk of being banned. We detect that you have violated community regulations; please be more careful. If you do it again, your account will be banned.";
+                send.SendEmail(email, subject, body);
+            }
+            else
+            {
+                var email = user.email.ToString();
+                var subject = "Your account has been banned!";
+                string body = "We discovered that you have violated community rules. Your account has been banned.";
+                send.SendEmail(email, subject, body);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
         public IActionResult OrderInfor()
         {
@@ -395,7 +423,7 @@ namespace Car_rental.Controllers
                 var en_password = Encode.encode(Password);
                 var user = await _context.user.FirstOrDefaultAsync(u => u.email == UserName && u.password == en_password);
 
-                if (user != null /*&& user.flag == 1*/)
+                if (user != null && user?.flag == 1 || user?.flag == 2)
                 {
                     var userRole = _context.userRole.Include(u => u.role).FirstOrDefault(u => u.userId == user.id);
                     var userRoleName = _context.roles.FirstOrDefault(i => i.id == userRole.roleId);
@@ -417,9 +445,13 @@ namespace Car_rental.Controllers
                 {
                     ViewBag.ErrorMessage = "Your username or password is incorrect !";
                 }
-                else if (user != null && user.flag == 0)
+                else if (user != null && user?.flag == 0)
                 {
                     ViewBag.ErrorMessage = "Your are not yet confirm your email, please Confirm Your email !";
+                }
+                else if (user != null && user?.flag == 3)
+                {
+                    ViewBag.ErrorMessage = "Your account has been banned!";
                 }
             }
             else

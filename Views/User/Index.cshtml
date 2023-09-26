@@ -98,6 +98,22 @@
                                     <a class="badge badge-info" asp-action="Details" asp-route-id="@item.id">Details</a> |
                                     <a class="badge badge-danger" asp-action="Delete" asp-route-id="@item.id">Delete</a>
                                 </td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn btn-primary dropdown-toggle"
+                                            data-toggle="dropdown">
+                                            Set Status
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item btn bg-warning" style="color: #fff; text-align: center;"
+                                                asp-action="SetUserStatus" asp-route-userId="@item.id"
+                                                asp-route-flag="2">Warning</a>
+                                            <a class="dropdown-item btn bg-danger" style="color: #fff; text-align: center;"
+                                                asp-action="SetUserStatus" asp-route-userId="@item.id"
+                                                asp-route-flag="3">Ban</a>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         }
                     </tbody>

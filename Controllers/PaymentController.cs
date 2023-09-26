@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Car_rental.Data;
 using Car_rental.Models;
+using Car_rental.Untils;
 
 namespace Car_rental.Controllers
 {
@@ -91,11 +92,17 @@ namespace Car_rental.Controllers
 
             var car = _context.Car.Find(payment.carId);
             var user = _context.user.Find(userId);
+            var owner = _context.user.Find(car.user_id);
             // check payment match with user id
             if (booking.userId == userId || userRoleName == "Admin" || userRoleName == "Owner" && booking.payments.FirstOrDefault().carId == car.id)
             {
                 if (status >= 0 && status <= 4 && userRoleName == "Owner" && booking.payments.FirstOrDefault().carId == car.id)
                 {
+                    // 0. waiting
+                    // 1. accepted
+                    // 2. in progress
+                    // 3. completed
+                    // 4. Cancel
                     payment.status = status;
                     _context.Update(payment);
                     _context.SaveChanges();
@@ -104,15 +111,77 @@ namespace Car_rental.Controllers
                     _context.Update(user);
                     _context.SaveChanges();
 
+                    //send mail
+                    if (status == 1)
+                    {
+                        Send send = new Send();
+                        var email = user.email.ToString();
+                        var subject = "Your booking request has been accepted!";
+                        string body = "Your booking request has been accepted, please click the link below to see the details: " + "\n\n" + "https://localhost:7160/bookings/BookingHistory/" + user.id; ;
+
+                        var emailOwner = user.email.ToString();
+                        var subjectOwner = "You have accepted the car rental request!";
+                        string bodyOwner = "You have accepted the car rental request, please click the link below to see the details: " + "\n\n" + "https://localhost:7160//Payment/OrderList?userId=" + car.user_id; ;
+
+                        send.SendEmail(email, subject, body);
+                        send.SendEmail(emailOwner, subjectOwner, bodyOwner);
+                    }
+                    if (status == 3)
+                    {
+                        Send send = new Send();
+                        var email = user.email.ToString();
+                        var subject = "You have just completed the car rental service!";
+                        string body = "You have just completed the car rental service, please click the link below to see the details: " + "\n\n" + "https://localhost:7160/bookings/BookingHistory/" + user.id; ;
+
+                        var emailOwner = user.email.ToString();
+                        var subjectOwner = "Your customer has just completed a car rental service!";
+                        string bodyOwner = "Your customer has just completed a car rental service, please click the link below to see the details: " + "\n\n" + "https://localhost:7160//Payment/OrderList?userId=" + car.user_id; ;
+
+                        send.SendEmail(email, subject, body);
+                        send.SendEmail(emailOwner, subjectOwner, bodyOwner);
+                    }
+                    if (status == 4)
+                    {
+                        Send send = new Send();
+                        var email = user.email.ToString();
+                        var subject = "Your car rental request has been canceled!";
+                        string body = "Your car rental request has been canceled, please click the link below to see the details: " + "\n\n" + "https://localhost:7160/bookings/BookingHistory/" + user.id; ;
+
+                        var emailOwner = owner.email.ToString();
+                        var subjectOwner = "The customer has canceled the car rental request!";
+                        string bodyOwner = "The customer has canceled the car rental request, please click the link below to see the details: " + "\n\n" + "https://localhost:7160/Payment/OrderList?userId=" + car.user_id; ;
+
+                        send.SendEmail(email, subject, body);
+                        send.SendEmail(emailOwner, subjectOwner, bodyOwner);
+                    }
+
+
                     return RedirectToAction("OrderList", "Payment", new { UserId = userId });
                 }
                 else if (status >= 0 && status <= 4)
                 {
+                    // 0. waiting
+                    // 1. accepted
+                    // 2. in progress
+                    // 3. completed
+                    // 4. Cancel
                     if (status == 4)
                     {
                         car.available = 1;
                         _context.Update(car);
                         _context.SaveChanges();
+
+                        Send send = new Send();
+                        var email = user.email.ToString();
+                        var subject = "You have canceled your car rental request!";
+                        string body = "You have canceled your car rental request, please click the link below to see the details: " + "\n\n" + "https://localhost:7160/bookings/BookingHistory/" + user.id; ;
+
+                        var emailOwner = owner.email.ToString();
+                        var subjectOwner = "The customer has canceled the car rental request!";
+                        string bodyOwner = "The customer has canceled the car rental request, please click the link below to see the details: " + "\n\n" + "https://localhost:7160/Payment/OrderList?userId=" + car.user_id; ;
+
+                        send.SendEmail(email, subject, body);
+                        send.SendEmail(emailOwner, subjectOwner, bodyOwner);
                     }
                     payment.status = status;
                     _context.Update(payment);
@@ -131,7 +200,7 @@ namespace Car_rental.Controllers
             }
             else
             {
-                return BadRequest("Access denied: You don't have permission to perform this action.1");
+                return BadRequest("Access denied: You don't have permission to perform this action.");
             }
 
             return RedirectToAction("OrderList", new { userId = userId });

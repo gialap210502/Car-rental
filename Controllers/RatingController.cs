@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Car_rental.Data;
 using Car_rental.Models;
+using Car_rental.Untils;
 
 namespace Car_rental.Controllers
 {
@@ -39,22 +40,43 @@ namespace Car_rental.Controllers
         {
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
             var existRatingCheck = _context.rating.Where(i => i.carId == carId && i.userId == userId).ToList();
-            if(existRatingCheck.Count() == 0){
+            Send send = new Send();
+            var user = _context.user.Find(userId);
+            var car = _context.Car.Find(carId);
+            var owner = _context.user.Find(car.user_id);
+            if (existRatingCheck.Count() == 0)
+            {
                 rating.Status = 1;
                 rating.carId = carId;
                 rating.userId = userId;
                 rating.dateRating = DateTime.Now;
                 _context.Add(rating);
                 await _context.SaveChangesAsync();
+
+                //send mail
+
+                var email = owner.email.ToString();
+                var subject = "Someone has reviewed your car!";
+                string body = "Someone has reviewed your car. Click the link below to see details: " + "https://localhost:7160/Car/Details/" + carId;
+                send.SendEmail(email, subject, body);
+
                 return RedirectToAction("BookingHistory", "bookings", new { id = userId });
             }
-            if(existRatingCheck.Count() > 0){
+            if (existRatingCheck.Count() > 0)
+            {
                 var ratingExists = _context.rating.Where(i => i.carId == carId && i.userId == userId).FirstOrDefault();
                 ratingExists.dateRating = DateTime.Now;
                 ratingExists.comment = rating.comment;
                 ratingExists.Star = rating.Star;
                 _context.Update(ratingExists);
                 await _context.SaveChangesAsync();
+
+                //send mail
+                var email = owner.email.ToString();
+                var subject = "Someone has reviewed your car!";
+                string body = "Someone has reviewed your car. Click the link below to see details: " + "https://localhost:7160/Car/Details/" + carId;
+                send.SendEmail(email, subject, body);
+
                 return RedirectToAction("BookingHistory", "bookings", new { id = userId });
             }
             return RedirectToAction("Login", "User");

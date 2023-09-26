@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Car_rental.Data;
 using Car_rental.Models;
 using JetBrains.Annotations;
+using Car_rental.Untils;
 
 namespace Car_rental.Controllers
 {
@@ -102,7 +103,6 @@ namespace Car_rental.Controllers
             // Set ViewBag.Layout to null (not sure why this is done, consider removing)
             ViewBag.Layout = null;
 
-
             if (ModelState.IsValid)
             {
                 var paymentsWithCarId = _context.payment
@@ -115,6 +115,7 @@ namespace Car_rental.Controllers
                                         .ToList();
                 var car = _context.Car.Find(cardId);
                 var user = _context.user.Find(userId);
+                var owner = _context.user.Find(car.user_id);
                 if (paymentsWithCarId.Count() == 0)
                 {
                     if (car.user_id != userId && user.coins >= car.Price)
@@ -151,8 +152,18 @@ namespace Car_rental.Controllers
                         _context.payment.Add(payment);
                         await _context.SaveChangesAsync();
 
-                        Console.WriteLine(car.Price + "------");
-                        Console.WriteLine(user.coins + "------");
+                        //send mail
+                        Send send = new Send();
+                        var email = user.email.ToString();
+                        var subject = "You have successfully booked your car rental!";
+                        string body = "You have successfully booked your car rental, please click the link below to see the details: " + "\n\n" + "https://localhost:7160/bookings/BookingHistory/" + user.id; ;
+
+                        var emailOwner = owner.email.ToString();
+                        var subjectOwner = "Your car has been booked!";
+                        string bodyOwner = "Your car has been booked, please click the link below to see the details: " + "\n\n" + "https://localhost:7160/Payment/OrderList?userId=" + car.user_id; ;
+
+                        send.SendEmail(email, subject, body);
+                        send.SendEmail(emailOwner, subjectOwner, bodyOwner);
 
                         // Redirect to the booking history page
                         return RedirectToAction("BookingHistory", "bookings", new { id = userId });
