@@ -235,9 +235,6 @@ namespace Car_rental.Migrations
                     b.Property<string>("color")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("discount_id")
-                        .HasColumnType("int");
-
                     b.Property<string>("model")
                         .HasColumnType("nvarchar(max)");
 
@@ -250,8 +247,6 @@ namespace Car_rental.Migrations
                     b.HasKey("id");
 
                     b.HasIndex("category_id");
-
-                    b.HasIndex("discount_id");
 
                     b.HasIndex("user_id");
 
@@ -297,15 +292,19 @@ namespace Car_rental.Migrations
                         .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("percentage")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("percentage")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("startDate")
                         .IsRequired()
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
                     b.HasKey("id");
+
+                    b.HasIndex("userId");
 
                     b.ToTable("discount");
                 });
@@ -574,21 +573,24 @@ namespace Car_rental.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Car_rental.Models.discount", "Discount")
-                        .WithMany("cars")
-                        .HasForeignKey("discount_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Car_rental.Models.user", "user")
                         .WithMany("cars")
                         .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Discount");
-
                     b.Navigation("category");
+
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("Car_rental.Models.discount", b =>
+                {
+                    b.HasOne("Car_rental.Models.user", "user")
+                        .WithMany("discount")
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("user");
                 });
@@ -687,11 +689,6 @@ namespace Car_rental.Migrations
                     b.Navigation("cars");
                 });
 
-            modelBuilder.Entity("Car_rental.Models.discount", b =>
-                {
-                    b.Navigation("cars");
-                });
-
             modelBuilder.Entity("Car_rental.Models.roles", b =>
                 {
                     b.Navigation("userRoles");
@@ -706,6 +703,8 @@ namespace Car_rental.Migrations
                     b.Navigation("bookings");
 
                     b.Navigation("cars");
+
+                    b.Navigation("discount");
 
                     b.Navigation("paymentHistory");
 

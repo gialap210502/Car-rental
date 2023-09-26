@@ -33,14 +33,14 @@ namespace Car_rental.Controllers
             int recsCount = _context.Car.Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
-            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Skip(recSkip).Take(pager.PageSize).ToList();
+            var car_rentalContext = _context.Car.Include(c => c.category).Include(c => c.user).Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
             return View(car_rentalContext);
         }
         public async Task<IActionResult> Home()
         {
             ViewBag.Layout = "_Layout";
-            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Include(c => c.images).Where(c => c.available == 1).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
+            var car_rentalContext = _context.Car.Include(c => c.category).Include(c => c.user).Include(c => c.images).Where(c => c.available == 1).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
             {
                 Id = c.id,
                 Model = c.model,
@@ -67,7 +67,7 @@ namespace Car_rental.Controllers
             int recsCount = _context.Car.Where(c => c.available == 1).Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
-            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Include(c => c.images).Where(c => c.available == 1).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
+            var car_rentalContext = _context.Car.Include(c => c.category).Include(c => c.user).Include(c => c.images).Where(c => c.available == 1).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
             {
                 Id = c.id,
                 Model = c.model,
@@ -96,11 +96,11 @@ namespace Car_rental.Controllers
             }
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
-            var car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Where(u => u.user_id == UserId).Skip(recSkip).Take(pager.PageSize).ToList();
+            var car_rentalContext = _context.Car.Include(c => c.category).Include(c => c.user).Where(u => u.user_id == UserId).Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
             if (userRoleName == "Admin")
             {
-                car_rentalContext = _context.Car.Include(c => c.Discount).Include(c => c.category).Include(c => c.user).Skip(recSkip).Take(pager.PageSize).ToList();
+                car_rentalContext = _context.Car.Include(c => c.category).Include(c => c.user).Skip(recSkip).Take(pager.PageSize).ToList();
             }
             return View(car_rentalContext);
         }
@@ -112,7 +112,7 @@ namespace Car_rental.Controllers
             if (pg < 1)
                 pg = 1;
 
-            var queryable = _context.Car.Include(c => c.Discount)
+            var queryable = _context.Car
                 .Include(c => c.category)
                 .Include(c => c.user)
                 .Include(c => c.images)
@@ -269,7 +269,6 @@ namespace Car_rental.Controllers
                     ClimateControl = i % 2 == 0,
                     user_id = 1, // Set the appropriate user ID
                     category_id = 1,
-                    discount_id = 1,
 
                 };
 
@@ -318,7 +317,6 @@ namespace Car_rental.Controllers
             }
 
             var car = await _context.Car
-                .Include(c => c.Discount)
                 .Include(c => c.category)
                 .Include(c => c.user)
                 .FirstOrDefaultAsync(m => m.id == id);
@@ -423,7 +421,7 @@ namespace Car_rental.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("CarListForManager", new {UserId = userId});
             }
-            ViewData["discount_id"] = new SelectList(_context.discount, "id", "code", car.discount_id);
+            
             ViewData["category_id"] = new SelectList(_context.category, "id", "type", car.category_id);
             ViewData["user_id"] = new SelectList(_context.user, "id", "id", car.user_id);
 
@@ -451,7 +449,7 @@ namespace Car_rental.Controllers
             {
                 return NotFound();
             }
-            ViewData["discount_id"] = new SelectList(_context.discount, "id", "code", car.discount_id);
+            
             ViewData["category_id"] = new SelectList(_context.category, "id", "type", car.category_id);
             ViewData["user_id"] = new SelectList(_context.user, "id", "email", car.user_id);
             return View(car);
@@ -502,7 +500,7 @@ namespace Car_rental.Controllers
                 }
             }
 
-            ViewData["discount_id"] = new SelectList(_context.discount, "id", "code", car.discount_id);
+            
             ViewData["category_id"] = new SelectList(_context.category, "id", "type", car.category_id);
             ViewData["user_id"] = new SelectList(_context.user, "id", "email", car.user_id);
             return View(car);
@@ -517,7 +515,6 @@ namespace Car_rental.Controllers
                 return NotFound();
             }
             var car = await _context.Car
-                .Include(c => c.Discount)
                 .Include(c => c.category)
                 .Include(c => c.user)
                 .FirstOrDefaultAsync(m => m.id == id);

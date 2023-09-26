@@ -39,8 +39,7 @@ public class car
     public ICollection<payment>? payments { get; } = new List<payment>();
     public ICollection<rating>? ratings { get; } = new List<rating>();
     public ICollection<Images> images { get; } = new List<Images>();
-    public int discount_id { get; set; }
-    public discount? Discount { get; set; }
+
     [Required]
     public int user_id { get; set; }
     public user? user { get; set; }

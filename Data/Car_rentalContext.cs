@@ -56,10 +56,10 @@ namespace Car_rental.Data
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey(c => c.category_id);
 
-            modelBuilder.Entity<discount>()
-                .HasMany(d => d.cars)
-                .WithOne(r => r.Discount)
-                .HasForeignKey(r => r.discount_id);
+            modelBuilder.Entity<user>()
+                .HasMany(d => d.discount)
+                .WithOne(r => r.user)
+                .HasForeignKey(r => r.userId);
 
             modelBuilder.Entity<user>()
                 .HasMany(u => u.ratings)

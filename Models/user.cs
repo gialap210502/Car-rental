@@ -39,6 +39,7 @@ public class user
     public string? image { get; set; }
     public double? coins { get; set; }
 
+    public ICollection<discount> discount { get; } = new List<discount>();
     public ICollection<userRole> userRoles { get; } = new List<userRole>();
 
     public ICollection<rating>? ratings { get; } = new List<rating>();

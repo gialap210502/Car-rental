@@ -23,7 +23,7 @@ namespace Car_rental.Controllers
         // GET: Roles
         public async Task<IActionResult> Index()
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             return _context.roles != null ?
                         View(await _context.roles.ToListAsync()) :
                         Problem("Entity set 'Car_rentalContext.roles'  is null.");
@@ -32,7 +32,7 @@ namespace Car_rental.Controllers
         // GET: Roles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (id == null || _context.roles == null)
             {
                 return NotFound();
@@ -51,7 +51,7 @@ namespace Car_rental.Controllers
         // GET: Roles/Create
         public IActionResult Create()
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             return View();
         }
 
@@ -62,7 +62,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,role")] roles roles)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (ModelState.IsValid)
             {
                 _context.Add(roles);
@@ -75,7 +75,7 @@ namespace Car_rental.Controllers
         // GET: Roles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (id == null || _context.roles == null)
             {
                 return NotFound();
@@ -96,7 +96,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,role")] roles roles)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (id != roles.id)
             {
                 return NotFound();
@@ -128,7 +128,7 @@ namespace Car_rental.Controllers
         // GET: Roles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (id == null || _context.roles == null)
             {
                 return NotFound();
@@ -149,7 +149,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (_context.roles == null)
             {
                 return Problem("Entity set 'Car_rentalContext.roles'  is null.");
@@ -166,13 +166,13 @@ namespace Car_rental.Controllers
 
         private bool rolesExists(int id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             return (_context.roles?.Any(e => e.id == id)).GetValueOrDefault();
         }
 
         public async Task<IActionResult> CreateRole()
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             var Encode = new Encode();
             if (!_context.roles.Any())
             {
@@ -189,13 +189,7 @@ namespace Car_rental.Controllers
                     flag = 0,
                     image = "@@@@.png"
                 };
-                var discount1 = new discount
-                {
-                    code = "SUMMER2023",
-                    percentage = "10%",
-                    startDate = new DateTime(2023, 6, 1),
-                    endDate = new DateTime(2023, 8, 31)
-                };
+
                 var category1 = new category
                 {
                     type = "Sedan",
@@ -208,9 +202,28 @@ namespace Car_rental.Controllers
                 _context.user.Add(user1);
 
                 _context.category.Add(category1);
+
+                await _context.SaveChangesAsync();
+
+                var setRole = new userRole
+                {
+                    userId = 1,
+                    roleId = 1
+                };
+                _context.userRole.Add(setRole);
+                var discount1 = new discount
+                {
+                    code = "SUMMER2023",
+                    percentage = 10,
+                    startDate = new DateTime(2023, 6, 1),
+                    endDate = new DateTime(2023, 8, 31),
+                    userId = 1
+                };
                 _context.discount.Add(discount1);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("index", "roles");
+
+
+                return RedirectToAction("CreateCar", "Car");
             }
             return View();
         }

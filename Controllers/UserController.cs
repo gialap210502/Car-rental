@@ -37,14 +37,23 @@ namespace Car_rental.Controllers
         }
 
         // GET: User
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pg = 1)
         {
             ViewBag.layout = "_AdminLayout";
+             const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = _context.user.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            this.ViewBag.Pager = pager;
+            var data = _context.user.Skip(recSkip).Take(pager.PageSize);
             return _context.user != null ?
-                        View(await _context.user.ToListAsync()) :
+                        View(await data.ToListAsync()) :
                         Problem("Entity set 'Car_rentalContext.user'  is null.");
         }
-        public IActionResult OrderInfor(){
+        public IActionResult OrderInfor()
+        {
             ViewBag.layout = "_Layout";
             return View();
         }
@@ -360,7 +369,7 @@ namespace Car_rental.Controllers
             send.SendEmailRegister(email, subject, body);
 
             var subjectForUser = "YOUR REQUEST HAVE BEEN SENT";
-            string bodyForUser = "Your request have been sent."+ "\n\n" +  "We will call you soon, please check your phone";
+            string bodyForUser = "Your request have been sent." + "\n\n" + "We will call you soon, please check your phone";
             send.SendEmail(email, subjectForUser, bodyForUser);
             return RedirectToAction("Profile", new { id = userId });
         }
@@ -371,7 +380,8 @@ namespace Car_rental.Controllers
             return RedirectToAction("Login", "user");
         }
 
-        public IActionResult TermAndCondition(){
+        public IActionResult TermAndCondition()
+        {
             ViewBag.Layout = "_Layout";
             return View();
         }
@@ -592,7 +602,8 @@ namespace Car_rental.Controllers
             return View();
         }
 
-        public IActionResult GetCoinsHistory(int userId, int pg = 1){
+        public IActionResult GetCoinsHistory(int userId, int pg = 1)
+        {
             ViewBag.Layout = "_Layout";
             const int pageSize = 5;
             if (pg < 1)

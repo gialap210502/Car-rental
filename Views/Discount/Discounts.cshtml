@@ -18,6 +18,7 @@
             <p class="card-description">
                 <a asp-action="Create">Create New</a>
             </p>
+
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -64,18 +65,18 @@
                 </table>
             </div>
         </div>
-                <div class="card-body">
+        <div class="card-body">
             <div class="btn-group" role="group" aria-label="Basic example">
                 @if (pager.TotalPages > 0)
                 {
                     var pre = 1;
                     var next = pager.CurrentPage + 1;
-                    <a type="button" class="btn btn-outline-secondary" asp-controller="Discount" asp-action="Index"
+                    <a type="button" class="btn btn-outline-secondary" asp-controller="Discount" asp-action="Discounts"
                         asp-route-pg="@pre">&lt;</a>
                     @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
                     {
 
-                        <a type="button" class="btn btn-outline-secondary" asp-controller="Discount" asp-action="Index"
+                        <a type="button" class="btn btn-outline-secondary" asp-controller="Discount" asp-action="Discounts"
                             asp-route-pg="@pge">@pge</a>
                         pre = pge - 1;
                         if (pre == 1 || pre == 0)
@@ -87,7 +88,7 @@
                             next = pager.EndPage;
                         }
                     }
-                    <a type="button" class="btn btn-outline-secondary" asp-controller="Discount" asp-action="Index"
+                    <a type="button" class="btn btn-outline-secondary" asp-controller="Discount" asp-action="Discounts"
                         asp-route-pg="@next">&gt;</a>
 
                 }

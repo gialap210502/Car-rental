@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
 }
 
 <h1>Create</h1>
@@ -12,6 +13,8 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <span class="text-danger">@ViewBag.message</span>
+            <input type="hidden" asp-for="userId" value="@Id" />
             <div class="form-group">
                 <label asp-for="code" class="control-label"></label>
                 <input asp-for="code" class="form-control" />
@@ -44,5 +47,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

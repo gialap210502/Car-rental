@@ -148,11 +148,7 @@
                     <input class="form-check-input" asp-for="ClimateControl" /> @Html.DisplayNameFor(model => model.ClimateControl)
                 </label>
             </div>
-            <div class="form-group">
-                <label asp-for="discount_id" class="control-label"></label>
-                <select asp-for="discount_id" class="form-control" asp-items="ViewBag.discount_id"></select>
-                <span asp-validation-for="discount_id" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="user_id" class="control-label"></label>
                 <select asp-for="user_id" class="form-control" asp-items="ViewBag.user_id"></select>
