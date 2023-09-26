@@ -187,7 +187,8 @@ namespace Car_rental.Controllers
                     address = "AnPhu,AnGiang",
                     password = Encode.encode("123"),
                     flag = 0,
-                    image = "@@@@.png"
+                    image = "@@@@.png",
+                    coins = 3000000
                 };
 
                 var category1 = new category
