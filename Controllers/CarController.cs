@@ -57,7 +57,6 @@ namespace Car_rental.Controllers
             ViewBag.Layout = "_Layout";
             return View();
         }
-
         public async Task<IActionResult> Cars(int pg = 1)
         {
             ViewBag.Layout = "_Layout";
@@ -79,7 +78,6 @@ namespace Car_rental.Controllers
             this.ViewBag.Pager = pager;
             return View(car_rentalContext);
         }
-
         public IActionResult CarListForManager(int UserId, int pg = 1)
         {
             ViewBag.layout = "_AdminLayout";
@@ -104,7 +102,6 @@ namespace Car_rental.Controllers
             }
             return View(car_rentalContext);
         }
-
         public ActionResult SearchforUser(string query, string model, string location, double? minPrice, double? maxPrice, int? minSeat, int? maxSeat, DateTime? startDate, DateTime? endDate, int pg = 1)
         {
             ViewBag.Layout = "_Layout";
@@ -193,8 +190,6 @@ namespace Car_rental.Controllers
 
             return View(car_rentalContext);
         }
-
-
         public IActionResult SetStatus(int userId, int carId)
         {
             ViewBag.Layout = "_Layout";
@@ -230,7 +225,6 @@ namespace Car_rental.Controllers
             _context.SaveChanges();
             return RedirectToAction("CarListForManager", new { userId = userId });
         }
-
         public async Task<IActionResult> CreateCar()
         {
             ViewBag.Layout = "_AdminLayout";
@@ -419,9 +413,9 @@ namespace Car_rental.Controllers
                     _context.Images.Add(new Images { nameFile = replacedString, carId = car.id });
                 }
                 await _context.SaveChangesAsync();
-                return RedirectToAction("CarListForManager", new {UserId = userId});
+                return RedirectToAction("CarListForManager", new { UserId = userId });
             }
-            
+
             ViewData["category_id"] = new SelectList(_context.category, "id", "type", car.category_id);
             ViewData["user_id"] = new SelectList(_context.user, "id", "id", car.user_id);
 
@@ -449,7 +443,7 @@ namespace Car_rental.Controllers
             {
                 return NotFound();
             }
-            
+
             ViewData["category_id"] = new SelectList(_context.category, "id", "type", car.category_id);
             ViewData["user_id"] = new SelectList(_context.user, "id", "email", car.user_id);
             return View(car);
@@ -500,7 +494,7 @@ namespace Car_rental.Controllers
                 }
             }
 
-            
+
             ViewData["category_id"] = new SelectList(_context.category, "id", "type", car.category_id);
             ViewData["user_id"] = new SelectList(_context.user, "id", "email", car.user_id);
             return View(car);
@@ -599,6 +593,17 @@ namespace Car_rental.Controllers
                 labels[i] = data[i].RoleName;
                 count[i] = data[i].Percentage; // Use roleStatistics instead of listUserRole
             }
+            ////////////////////////
+            var brandCounts = await _context.Car
+    .GroupBy(c => c.brand)
+    .Select(g => new { Brand = g.Key, Count = g.Count() })
+    .ToListAsync();
+
+            var labelsCarBrand = brandCounts.Select(bc => bc.Brand).ToList();
+            var dataCarBrand = brandCounts.Select(bc => bc.Count).ToList();
+
+            ViewBag.BrandLabels = labelsCarBrand;
+            ViewBag.BrandData = dataCarBrand;
 
             ViewData["labels"] = String.Format("'{0}'", String.Join("','", labels));
             ViewData["Percent"] = String.Join(",", count);

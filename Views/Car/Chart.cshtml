@@ -1,12 +1,26 @@
 <div class="container">
   <div class="row">
     <div class="col-6">
-      <div class="card">      
+      <div class="card">
         <div class="card-header">
           <h6 style="text-align:center; weight: bold; color: rgb(113, 107, 107);">Percent of account in role</h6>
         </div>
         <div style="display: flex; justify-content: center; align-items: center; height: 450px;">
-          <canvas id="myChart"></canvas>
+          <canvas id="userPercent"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <div class="card">
+        <div class="card-header">
+          <h6 style="text-align:center; weight: bold; color: rgb(113, 107, 107);">Car brand count</h6>
+        </div>
+        <div style="display: flex; justify-content: center; align-items: center; height: 450px;">
+          <canvas id="carBrand"></canvas>
         </div>
       </div>
     </div>
@@ -17,7 +31,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-  const ctx = document.getElementById('myChart');
+  const ctx = document.getElementById('userPercent');
 
   new Chart(ctx, {
     type: 'polarArea',
@@ -34,5 +48,49 @@
       }
     }
   });
-</script>
+  //car brand
+  const carBrand = document.getElementById('carBrand');
+  var brandLabels = @Html.Raw(Json.Serialize(ViewBag.BrandLabels));
+  var brandData = @Html.Raw(Json.Serialize(ViewBag.BrandData));
+  var backgroundColors = generateBackgroundColors(brandLabels.length);
+  new Chart(carBrand, {
+    type: 'pie',
+    data: {
+      labels: brandLabels,
+      datasets: [{
+        label: 'Quantity: ',
+        data: brandData,
+        backgroundColor: backgroundColors,
+      }]
+    },
+    options: {
+      scales: {
+      }
+    }
+  });
+  // create background color
+  function generateBackgroundColors(count) {
+    var colors = [];
+    for (var i = 0; i < count; i++) {
+      // use random color
+      var randomColor = getRandomColor();
+      colors.push(randomColor);
+    }
+    return colors;
+  }
 
+  // Random color
+  function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+
+
+
+
+</script>
