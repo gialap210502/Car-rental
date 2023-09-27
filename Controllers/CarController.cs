@@ -593,7 +593,7 @@ namespace Car_rental.Controllers
                 labels[i] = data[i].RoleName;
                 count[i] = data[i].Percentage; // Use roleStatistics instead of listUserRole
             }
-            ////////////////////////
+            //brand count
             var brandCounts = await _context.Car
     .GroupBy(c => c.brand)
     .Select(g => new { Brand = g.Key, Count = g.Count() })
