@@ -186,7 +186,7 @@ namespace Car_rental.Controllers
                     email = "lap@gmail.com",
                     address = "AnPhu,AnGiang",
                     password = Encode.encode("123"),
-                    flag = 0,
+                    flag = 1,
                     image = "@@@@.png",
                     coins = 3000000
                 };
@@ -212,15 +212,6 @@ namespace Car_rental.Controllers
                     roleId = 1
                 };
                 _context.userRole.Add(setRole);
-                var discount1 = new discount
-                {
-                    code = "SUMMER2023",
-                    percentage = 10,
-                    startDate = new DateTime(2023, 6, 1),
-                    endDate = new DateTime(2023, 8, 31),
-                    userId = 1
-                };
-                _context.discount.Add(discount1);
                 await _context.SaveChangesAsync();
 
 

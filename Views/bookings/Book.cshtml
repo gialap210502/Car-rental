@@ -159,7 +159,7 @@
     <form method="post" asp-controller="bookings" asp-action="Booking" onsubmit="return validateForm()">
       <div asp-validation-summary="ModelOnly" class="text-danger"></div>
       <input type="hidden" name="cardId" value="@ViewBag.cardId" />
-      <input type="hidden" name="totalAmount" value="@ViewBag.totalAmount" />
+      @* <input type="hidden" name="totalAmount" value="@ViewBag.totalAmount" /> *@
       <input type="hidden" name="userId" value="@ViewBag.userId" />
       <!--Third Row-->
       <span class="text-danger" id="errMsg"></span>
@@ -195,13 +195,15 @@
           </div>
         </div>
       </div>
+
+
       <div class="form-group">
-        <label asp-for="totalAmount" class="control-label"></label>
+        <label class="control-label">Totals</label>
         <div class="input-group">
           <div class="input-group-prepend">
             <span class="input-group-text bg-primary text-white">$</span>
           </div>
-          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
+          <input name="totalAmount" type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
             value="@ViewBag.totalAmount" readonly />
         </div>
         <span asp-validation-for="totalAmount" class="text-danger"></span>
@@ -256,5 +258,10 @@
   document.querySelector('[name="endDate"]').addEventListener('change', validateForm);
   document.querySelector('[name="TakeCar"]').addEventListener('change', validateForm);
   document.querySelector('[name="CarBack"]').addEventListener('change', validateForm);
+
+  
+  
+
+
 
 </script>

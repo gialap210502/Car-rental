@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Car_rental.Migrations
 {
     [DbContext(typeof(Car_rentalContext))]
-    [Migration("20230926085916_InitialCreate")]
+    [Migration("20231003130209_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -277,39 +277,6 @@ namespace Car_rental.Migrations
                     b.HasKey("id");
 
                     b.ToTable("category");
-                });
-
-            modelBuilder.Entity("Car_rental.Models.discount", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("endDate")
-                        .IsRequired()
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("percentage")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("startDate")
-                        .IsRequired()
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("userId")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("discount");
                 });
 
             modelBuilder.Entity("Car_rental.Models.payment", b =>
@@ -587,17 +554,6 @@ namespace Car_rental.Migrations
                     b.Navigation("user");
                 });
 
-            modelBuilder.Entity("Car_rental.Models.discount", b =>
-                {
-                    b.HasOne("Car_rental.Models.user", "user")
-                        .WithMany("discount")
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("user");
-                });
-
             modelBuilder.Entity("Car_rental.Models.payment", b =>
                 {
                     b.HasOne("Car_rental.Models.bookings", "booking")
@@ -706,8 +662,6 @@ namespace Car_rental.Migrations
                     b.Navigation("bookings");
 
                     b.Navigation("cars");
-
-                    b.Navigation("discount");
 
                     b.Navigation("paymentHistory");
 

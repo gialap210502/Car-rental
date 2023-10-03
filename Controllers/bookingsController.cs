@@ -90,6 +90,7 @@ namespace Car_rental.Controllers
             ViewBag.cardId = cardId;
             ViewBag.totalAmount = totalAmount;
             ViewBag.userId = userId;
+
             return View();
         }
 

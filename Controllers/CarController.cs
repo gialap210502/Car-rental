@@ -326,7 +326,6 @@ namespace Car_rental.Controllers
         public IActionResult Create()
         {
             ViewBag.layout = "_AdminLayout";
-            ViewData["discount_id"] = new SelectList(_context.discount, "id", "code");
             ViewData["category_id"] = new SelectList(_context.category, "id", "type");
             ViewData["user_id"] = new SelectList(_context.user, "id", "email");
             return View();

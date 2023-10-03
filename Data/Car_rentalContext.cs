@@ -57,11 +57,6 @@ namespace Car_rental.Data
                 .HasForeignKey(c => c.category_id);
 
             modelBuilder.Entity<user>()
-                .HasMany(d => d.discount)
-                .WithOne(r => r.user)
-                .HasForeignKey(r => r.userId);
-
-            modelBuilder.Entity<user>()
                 .HasMany(u => u.ratings)
                 .WithOne(r => r.user)
                 .HasForeignKey(r => r.userId)
@@ -95,8 +90,6 @@ namespace Car_rental.Data
 
         public DbSet<Car_rental.Models.rating> rating { get; set; } = default!;
 
-        public DbSet<Car_rental.Models.discount> discount { get; set; } = default!;
-
         public DbSet<Car_rental.Models.category> category { get; set; } = default!;
 
         public DbSet<Car_rental.Models.Images> Images { get; set; }
@@ -105,9 +98,9 @@ namespace Car_rental.Data
 
         public DbSet<Car_rental.Models.Message> Message { get; set; } = default!;
         public DbSet<Car_rental.Models.paymentHistory> paymentHistory { get; set; } = default!;
-        
+
         public DbSet<Car_rental.Models.Participation> Participation { get; set; } = default!;
-        
+
 
     }
 }

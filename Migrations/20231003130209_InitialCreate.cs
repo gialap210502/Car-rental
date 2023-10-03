@@ -154,29 +154,6 @@ namespace Car_rental.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "discount",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    percentage = table.Column<int>(type: "int", nullable: false),
-                    startDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    endDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    userId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_discount", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_discount_user_userId",
-                        column: x => x.userId,
-                        principalTable: "user",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Message",
                 columns: table => new
                 {
@@ -375,11 +352,6 @@ namespace Car_rental.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_discount_userId",
-                table: "discount",
-                column: "userId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Images_carId",
                 table: "Images",
                 column: "carId");
@@ -443,9 +415,6 @@ namespace Car_rental.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "discount");
-
             migrationBuilder.DropTable(
                 name: "Images");
 
