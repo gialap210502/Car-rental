@@ -444,7 +444,6 @@ namespace Car_rental.Controllers
             }
 
             ViewData["category_id"] = new SelectList(_context.category, "id", "type", car.category_id);
-            ViewData["user_id"] = new SelectList(_context.user, "id", "email", car.user_id);
             return View(car);
         }
 
@@ -460,37 +459,32 @@ namespace Car_rental.Controllers
             {
                 return NotFound();
             }
-            var userCheck = _context.user.Find(userId);
-            // Check if the userId matches the user associated with the car
-            if (car.user_id != userId)
+            var carTemp = await _context.Car.FindAsync(id);
+            _context.Entry(carTemp).State = EntityState.Detached;
+            if (ModelState.IsValid && userId == carTemp.user_id)
             {
-                if (userCheck.userRoles.FirstOrDefault().role.role == "Admin")
+                try
                 {
-                    if (ModelState.IsValid)
+                    car.user_id = carTemp.user_id;
+                    _context.Update(car);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!carExists(car.id))
                     {
-                        try
-                        {
-                            _context.Update(car);
-                            await _context.SaveChangesAsync();
-                        }
-                        catch (DbUpdateConcurrencyException)
-                        {
-                            if (!carExists(car.id))
-                            {
-                                return NotFound();
-                            }
-                            else
-                            {
-                                throw;
-                            }
-                        }
-                        return RedirectToAction(nameof(Index));
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
                     }
                 }
-                else
-                {
-                    return BadRequest("You are not authorized to delete this car.");
-                }
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return BadRequest("You are not authorized to delete this car.");
             }
 
 
