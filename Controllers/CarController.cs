@@ -484,7 +484,7 @@ namespace Car_rental.Controllers
             }
             else
             {
-                return BadRequest("You are not authorized to delete this car.");
+                return BadRequest("You are not authorized to edit this car.");
             }
 
 
