@@ -22,7 +22,7 @@ namespace Car_rental.Controllers
         // GET: UserRole
         public async Task<IActionResult> Index()
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             var car_rentalContext = _context.userRole.Include(u => u.role).Include(u => u.user);
             return View(await car_rentalContext.ToListAsync());
         }
@@ -30,7 +30,7 @@ namespace Car_rental.Controllers
         // GET: UserRole/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (id == null || _context.userRole == null)
             {
                 return NotFound();
@@ -51,7 +51,7 @@ namespace Car_rental.Controllers
         // GET: UserRole/Create
         public IActionResult Create()
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             ViewData["roleId"] = new SelectList(_context.roles, "id", "role");
             ViewData["userId"] = new SelectList(_context.user, "id", "email");
             return View();
@@ -64,7 +64,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,userId,roleId")] userRole userRole)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (ModelState.IsValid)
             {
                 _context.Add(userRole);
@@ -79,7 +79,7 @@ namespace Car_rental.Controllers
         // GET: UserRole/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (id == null || _context.userRole == null)
             {
                 return NotFound();
@@ -91,7 +91,6 @@ namespace Car_rental.Controllers
                 return NotFound();
             }
             ViewData["roleId"] = new SelectList(_context.roles, "id", "role", userRole.roleId);
-            ViewData["userId"] = new SelectList(_context.user, "id", "email", userRole.userId);
             return View(userRole);
         }
 
@@ -102,7 +101,9 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,userId,roleId")] userRole userRole)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
+            var userRoleTemp = await _context.userRole.FindAsync(id);
+            _context.Entry(userRoleTemp).State = EntityState.Detached;
             if (id != userRole.id)
             {
                 return NotFound();
@@ -112,6 +113,7 @@ namespace Car_rental.Controllers
             {
                 try
                 {
+                    userRole.userId = userRoleTemp.userId;
                     _context.Update(userRole);
                     await _context.SaveChangesAsync();
                 }
@@ -136,7 +138,7 @@ namespace Car_rental.Controllers
         // GET: UserRole/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (id == null || _context.userRole == null)
             {
                 return NotFound();
@@ -159,7 +161,7 @@ namespace Car_rental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            ViewBag.layout="_AdminLayout";
+            ViewBag.layout = "_AdminLayout";
             if (_context.userRole == null)
             {
                 return Problem("Entity set 'Car_rentalContext.userRole'  is null.");
@@ -169,15 +171,15 @@ namespace Car_rental.Controllers
             {
                 _context.userRole.Remove(userRole);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool userRoleExists(int id)
         {
-            ViewBag.layout="_AdminLayout";
-          return (_context.userRole?.Any(e => e.id == id)).GetValueOrDefault();
+            ViewBag.layout = "_AdminLayout";
+            return (_context.userRole?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }

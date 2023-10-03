@@ -4,7 +4,7 @@
 	@using Car_rental.Data;
 	@inject Car_rentalContext _context
 	var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
-	
+
 
 }
 
@@ -42,7 +42,7 @@
 												var slideIndex = 1; // Initialize the slide index with 1
 												if (ViewBag.listImages.Count > 1)
 												{
-													for (var j = 1; j < ViewBag.listImages.Count ; j++)
+													for (var j = 1; j < ViewBag.listImages.Count; j++)
 													{
 														<li data-target="#carouselExampleIndicators" data-slide-to="@slideIndex"
 															style="background-color: #01d28e;"></li>
@@ -119,8 +119,8 @@
 											class="btn btn-secondary py-2 mr-1">Chat with owner</a>
 									}
 								}
-
 							</div>
+
 						</div>
 					</div>
 				</div>
@@ -530,7 +530,8 @@
 						<div class="img rounded d-flex align-items-end"
 							style="background-image: url(/images/@backgroundImage"></div>
 						<div class="text">
-							<h2 class="mb-0"><a href="/car/Details/@ViewBag.relatedCars[i].id">@ViewBag.relatedCars[i].model</a></h2>
+							<h2 class="mb-0"><a
+									href="/car/Details/@ViewBag.relatedCars[i].id">@ViewBag.relatedCars[i].model</a></h2>
 							<div class="d-flex mb-3">
 								<span class="cat">@ViewBag.relatedCars[i].brand</span>
 								<p class="price ml-auto">$@ViewBag.relatedCars[i].Price <span>/day</span></p>

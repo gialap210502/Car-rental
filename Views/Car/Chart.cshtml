@@ -10,6 +10,7 @@
         </div>
       </div>
     </div>
+    @* each *@
     <div class="col-6">
       <div class="card">
         <div class="card-header">
@@ -20,6 +21,30 @@
         </div>
       </div>
     </div>
+    @* each *@
+    <div class="col-6">
+      <div class="card">
+        <div class="card-header">
+          <h6 style="text-align:center; weight: bold; color: rgb(113, 107, 107);">Car brand count</h6>
+        </div>
+        <div style="display: flex; justify-content: center; align-items: center; height: 450px;">
+          <canvas id="carBrandManager"></canvas>
+        </div>
+      </div>
+    </div>
+    @* each *@
+    <div class="col-6">
+      <div class="card">
+        <div class="card-header">
+          <h6 style="text-align:center; weight: bold; color: rgb(113, 107, 107);">Car brand order</h6>
+        </div>
+        <div style="display: flex; justify-content: center; align-items: center; height: 450px;">
+          <canvas id="bookingSuccessChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 </div>
 
@@ -65,6 +90,58 @@
       }
     }
   });
+  //car brand manager
+  const carBrandManager = document.getElementById('carBrandManager');
+  var brandLabelsManager = @Html.Raw(Json.Serialize(ViewBag.BrandLabelsManager));
+  var brandDataManager = @Html.Raw(Json.Serialize(ViewBag.BrandDataManager));
+  var backgroundColorsManager = generateBackgroundColors(brandLabelsManager.length);
+  new Chart(carBrandManager, {
+    type: 'pie',
+    data: {
+      labels: brandLabelsManager,
+      datasets: [{
+        label: 'Quantity: ',
+        data: brandDataManager,
+        backgroundColor: backgroundColorsManager,
+      }]
+    },
+    options: {
+      scales: {
+      }
+    }
+  });
+
+  ///car order successful
+
+  var carOrderSuccessful = document.getElementById('bookingSuccessChart').getContext('2d');
+  var models = @Html.Raw(Json.Serialize(ViewBag.models));
+  var counts = @Html.Raw(Json.Serialize(ViewBag.counts));
+  var backgroundColorsManager = generateBackgroundColors(models.length);
+
+  var chart = new Chart(carOrderSuccessful, {
+    type: 'bar',
+    data: {
+      labels: models,
+      datasets: [{
+        label: "Số lượng đặt chỗ thành công",
+        data: counts,
+        backgroundColor: backgroundColorsManager
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        }
+      }
+    }
+  });
+
+
+
+
+
+
   // create background color
   function generateBackgroundColors(count) {
     var colors = [];
@@ -85,9 +162,5 @@
     }
     return color;
   }
-
-
-
-
 
 </script>

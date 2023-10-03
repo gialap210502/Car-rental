@@ -554,10 +554,12 @@ namespace Car_rental.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Chart()
+        public async Task<IActionResult> Chart(int userId)
         {
             ViewBag.Layout = "_AdminLayout";
-
+            // var getUserRole = _context.userRole.Include(u => u.role).FirstOrDefault(u => u.userId == userId);
+            // var userRoleName = _context.roles.FirstOrDefault(i => i.id == getUserRole.roleId).role;
+            var user = _context.user.Find(userId);
             var roleList = _context.roles.GroupBy(r => r.role)
             .Select(g => new
             {
@@ -592,17 +594,46 @@ namespace Car_rental.Controllers
                 labels[i] = data[i].RoleName;
                 count[i] = data[i].Percentage; // Use roleStatistics instead of listUserRole
             }
-            //brand count
+
+
+            ///////brand count
             var brandCounts = await _context.Car
-    .GroupBy(c => c.brand)
-    .Select(g => new { Brand = g.Key, Count = g.Count() })
-    .ToListAsync();
+                                    .GroupBy(c => c.brand)
+                                    .Select(g => new { Brand = g.Key, Count = g.Count() })
+                                    .ToListAsync();
 
             var labelsCarBrand = brandCounts.Select(bc => bc.Brand).ToList();
             var dataCarBrand = brandCounts.Select(bc => bc.Count).ToList();
 
             ViewBag.BrandLabels = labelsCarBrand;
             ViewBag.BrandData = dataCarBrand;
+
+            /////brand count manager
+            var brandCountsManager = await _context.Car.Where(c => c.user_id == user.id)
+                                    .GroupBy(c => c.brand)
+                                    .Select(g => new { Brand = g.Key, Count = g.Count() })
+                                    .ToListAsync();
+
+            var labelsCarBrandManager = brandCountsManager.Select(bc => bc.Brand).ToList();
+            var dataCarBrandManager = brandCountsManager.Select(bc => bc.Count).ToList();
+
+            ViewBag.BrandLabelsManager = labelsCarBrandManager;
+            ViewBag.BrandDataManager = dataCarBrandManager;
+
+            ///// car order
+            // Truy vấn cơ sở dữ liệu để lấy số lượng đặt chỗ thành công của mỗi xe
+            var query = from car in _context.Car.Where(c => c.user_id == user.id)
+                        join payment in _context.payment on car.id equals payment.carId
+                        where payment.status == 3 // Điều kiện để xác định đặt chỗ thành công
+                        group car by car.model into modelGroup
+                        select new { Model = modelGroup.Key, Count = modelGroup.Count() };
+
+            var models = query.Select(item => item.Model).ToList();
+            var counts = query.Select(item => item.Count).ToList();
+
+            //ViewData["models"] = String.Format("'{0}'", String.Join("','", models));
+            ViewBag.models = models;
+            ViewBag.counts = counts;
 
             ViewData["labels"] = String.Format("'{0}'", String.Join("','", labels));
             ViewData["Percent"] = String.Join(",", count);
