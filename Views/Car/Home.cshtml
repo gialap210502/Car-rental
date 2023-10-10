@@ -34,7 +34,7 @@
         <div class="row no-gutters">
           <div class="col-md-4 flex align-items-center " style="max-height: 400px; overflow-y: auto;">
             <form asp-controller="Car" asp-action="SearchforUser" class="request-form ftco-animate bg-primary"
-              onsubmit="return validateForm()">
+              onsubmit="return validateForms()">
               <h2>Make your trip</h2>
               <div class="form-group">
                 <label for="" class="label">Pick-up location</label>
@@ -66,11 +66,11 @@
               </div>
               <div class="form-group">
                 <label for="" class="label">Start Date</label>
-                <input type="date" name="startDate" id="startDate" class="form-control">
+                <input type="date" name="startDate1" id="startDate1" class="form-control">
               </div>
               <div class="form-group">
                 <label for="" class="label">End Date</label>
-                <input type="date" name="endDate" id="endDate" class="form-control">
+                <input type="date" name="endDate1" id="endDate1" class="form-control">
               </div>
               <div class="form-group">
                 <input type="submit" value="Filter" class="btn btn-secondary py-3 px-4">
@@ -150,8 +150,7 @@
                     <p class="price ml-auto">$@item.Price <span>/day</span></p>
                   </div>
                   <p class="d-flex mb-0 d-block">
-                    <a onclick="showInPopup('@Url.Action("Book","bookings",new {cardId=@item.Id, totalAmount=@item.Price, userId=@Id},Context.Request.Scheme)','Book')"
-                      class="btn btn-primary py-2 mr-1">book now</a>
+                    <a onclick="showInPopup('@Url.Action("Book","bookings",new {cardId=@item.Id, totalAmount=@item.Price, userId=@Id},Context.Request.Scheme)','Book')" class="btn btn-primary py-2 mr-1">book now</a> 
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary py-2 ml-1">Details</a>
                   </p>
                 </div>
@@ -374,9 +373,9 @@
   </div>
 </section>
 <script>
-  function validateForm() {
-    var startDate = document.getElementById("startDate").value;
-    var endDate = document.getElementById("endDate").value;
+  function validateForms() {
+    var startDate = document.getElementById("startDate1").value;
+    var endDate = document.getElementById("endDate1").value;
 
     if (!startDate && !endDate) {
       // Case 1: Both fields are empty, continue
@@ -394,5 +393,3 @@
     return true;
   }
 </script>
-
-

@@ -20,26 +20,6 @@ showInPopup = (url, title) => {
             $('#form-modal .modal-body').html(res);
             $('#form-modal .modal-title').html(title);
             $('#form-modal').modal('show');
-            // to make popup draggable
-            $('.modal-dialog').draggable({
-                handle: ".modal-header"
-            });
-            // $(function() {
-            //     $(".modal-dialog").mousedown(function(e) {
-            //         var offset = $(this).offset();
-            //         var xPos = e.pageX - offset.left;
-            //         var yPos = e.pageY - offset.top;
-            //         $(document).mousemove(function(e) {
-            //             var newX = e.pageX - xPos;
-            //             var newY = e.pageY - yPos;
-            //             $(".modal-dialog").css("left", newX + "px");
-            //             $(".modal-dialog").css("top", newY + "px");
-            //         });
-            //     });
-            //     $(document).mouseup(function() {
-            //         $(document).unbind("mousemove");
-            //     });
-            // });
         }
     })
 }

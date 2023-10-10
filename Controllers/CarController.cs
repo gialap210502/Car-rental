@@ -102,7 +102,7 @@ namespace Car_rental.Controllers
             }
             return View(car_rentalContext);
         }
-        public ActionResult SearchforUser(string query, string model, string location, double? minPrice, double? maxPrice, int? minSeat, int? maxSeat, DateTime? startDate, DateTime? endDate, int pg = 1)
+        public ActionResult SearchforUser(string query, string model, string location, double? minPrice, double? maxPrice, int? minSeat, int? maxSeat, DateTime? startDate1, DateTime? endDate1, int pg = 1)
         {
             ViewBag.Layout = "_Layout";
             const int pageSize = 12;
@@ -150,13 +150,13 @@ namespace Car_rental.Controllers
                 queryable = queryable.Where(d => d.seat <= maxSeat);
             }
 
-            if (startDate.HasValue && endDate.HasValue)
+            if (startDate1.HasValue && endDate1.HasValue)
             {
                 queryable = queryable.Where(c =>
                     !c.payments.Any(p =>
-                        (p.booking.startDate >= startDate && p.booking.startDate <= endDate && (p.status == 0 || p.status == 1 || p.status == 2)) ||
-                        (p.booking.endDate >= startDate && p.booking.endDate <= endDate && (p.status == 0 || p.status == 1 || p.status == 2)) ||
-                        (p.booking.startDate <= startDate && p.booking.endDate >= endDate && (p.status == 0 || p.status == 1 || p.status == 2))
+                        (p.booking.startDate >= startDate1 && p.booking.startDate <= endDate1 && (p.status == 0 || p.status == 1 || p.status == 2)) ||
+                        (p.booking.endDate >= startDate1 && p.booking.endDate <= endDate1 && (p.status == 0 || p.status == 1 || p.status == 2)) ||
+                        (p.booking.startDate <= startDate1 && p.booking.endDate >= endDate1 && (p.status == 0 || p.status == 1 || p.status == 2))
                     )
                 );
             }

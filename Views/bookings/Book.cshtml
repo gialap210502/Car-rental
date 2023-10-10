@@ -166,13 +166,15 @@
       <div class="row">
         <div class="col-sm-6">
           Start-days
-          <input placeholder="&#xf073; Departing" id="date-picker-example" class="form-control datepicker mb-4"
-            style="font-family:Arial, FontAwesome" asp-for="startDate" class="form-control" required />
+          <input placeholder="&#xf073; Departing" id="startDate" class="form-control datepicker mb-4"
+            style="font-family: Arial, FontAwesome" asp-for="startDate" class="form-control" required
+            onblur="calculateDays()" />
         </div>
         <div class="col-sm-6">
           End-day
-          <input placeholder="&#xf073; Arriving" id="date-picker-example" class="form-control datepicker"
-            style="font-family:Arial, FontAwesome" asp-for="endDate" class="form-control" required />
+          <input placeholder="&#xf073; Arriving" id="endDate" class="form-control datepicker"
+            style="font-family: Arial, FontAwesome" asp-for="endDate" class="form-control" required
+            onblur="calculateDays()" />
           <span asp-validation-for="endDate" class="text-danger"></span>
         </div>
       </div>
@@ -196,15 +198,25 @@
         </div>
       </div>
 
-
+      <div class="form-group">
+        <label class="control-label">Price per day</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text bg-primary text-white">$</span>
+          </div>
+          <input type="text" class="form-control" value="@ViewBag.totalAmount"
+            aria-label="Amount (to the nearest dollar)" readonly />
+        </div>
+        <span asp-validation-for="totalAmount" class="text-danger"></span>
+      </div>
       <div class="form-group">
         <label class="control-label">Totals</label>
         <div class="input-group">
           <div class="input-group-prepend">
             <span class="input-group-text bg-primary text-white">$</span>
           </div>
-          <input name="totalAmount" type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
-            value="@ViewBag.totalAmount" readonly />
+          <input id="totalAmount" name="totalAmount" type="text" class="form-control"
+            aria-label="Amount (to the nearest dollar)" readonly />
         </div>
         <span asp-validation-for="totalAmount" class="text-danger"></span>
       </div>
@@ -241,7 +253,7 @@
       (startDate.getFullYear() === currentDateTime.getFullYear() &&
         startDate.getMonth() === currentDateTime.getMonth() &&
         startDate.getDate() < currentDateTime.getDate())) {
-      errorMessage = "Start date must be at least 3 hours from now.";
+      errorMessage = "Start date must be equal or before from now.";
     }
 
     if (errorMessage) {
@@ -253,14 +265,39 @@
 
     return true; // Allow form submission
   }
+  // Hàm tính số ngày giữa hai ngày
+  function calculateDays() {
+    var startDate = new Date(document.getElementById("startDate").value);
+    var endDate = new Date(document.getElementById("endDate").value);
+
+    // Tính số mili giây giữa hai ngày và chuyển đổi thành số ngày
+    var timeDiff = endDate - startDate;
+    var daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    if(daysDiff <= 0){
+      daysDiff = 1;
+    }
+    // Lấy giá trị của totalAmount từ ViewBag
+    var totalAmount = parseInt('@ViewBag.totalAmount');
+
+    // Tính tổng giá trị dựa trên số ngày
+    var calculatedAmount = daysDiff * totalAmount;
+    console.log(timeDiff)
+    console.log(daysDiff)
+    console.log(totalAmount)
+    console.log(calculatedAmount)
+    console.log(startDate)
+    console.log(endDate)
+    // Hiển thị giá trị tính toán trong trường totalAmount
+    document.getElementById("totalAmount").value = calculatedAmount.toFixed(2);
+  }
   // Attach event listeners to the relevant form fields to recheck when values change
-  document.querySelector('[name="startDate"]').addEventListener('change', validateForm);
-  document.querySelector('[name="endDate"]').addEventListener('change', validateForm);
+  document.querySelector('[name="startDate"]').addEventListener('change', validateForm, calculateDays);
+  document.querySelector('[name="endDate"]').addEventListener('change', validateForm, calculateDays);
   document.querySelector('[name="TakeCar"]').addEventListener('change', validateForm);
   document.querySelector('[name="CarBack"]').addEventListener('change', validateForm);
 
-  
-  
+
+
 
 
 
