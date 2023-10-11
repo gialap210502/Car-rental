@@ -17,28 +17,28 @@
             <input type="hidden" name="userID" value=@Id />
             <div class="form-group">
                 Image 1
-                <br/>
-                <input type="file" name="myfile1" class="form-control" accept="image/*"/>
+                <br />
+                <input type="file" name="myfile1" class="form-control" accept="image/*" />
             </div>
             <div class="form-group">
                 Image 2
-                <br/>
-                <input type="file" name="myfile2" class="form-control" accept="image/*"/>
+                <br />
+                <input type="file" name="myfile2" class="form-control" accept="image/*" />
             </div>
             <div class="form-group">
                 Image 3
-                <br/>
-                <input type="file" name="myfile3" class="form-control" accept="image/*"/>
+                <br />
+                <input type="file" name="myfile3" class="form-control" accept="image/*" />
             </div>
             <div class="form-group">
                 Image 4
-                <br/>
-                <input type="file" name="myfile4" class="form-control" accept="image/*"/>
+                <br />
+                <input type="file" name="myfile4" class="form-control" accept="image/*" />
             </div>
             <div class="form-group">
                 Image 5
-                <br/>
-                <input type="file" name="myfile5" class="form-control" accept="image/*"/>
+                <br />
+                <input type="file" name="myfile5" class="form-control" accept="image/*" />
             </div>
             <div class="form-group">
                 <label asp-for="model" class="control-label"></label>
@@ -52,7 +52,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="seat" class="control-label"></label>
-                <input asp-for="seat" class="form-control" />
+                <select asp-for="seat" class="form-control">
+                    <option value="4">4</option>
+                    <option value="7">7</option>
+                    <option value="16">16</option>
+                    <option value="29">29</option>
+                </select>
                 <span asp-validation-for="seat" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -75,11 +80,7 @@
                 <input asp-for="address" class="form-control" />
                 <span asp-validation-for="address" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="available" class="control-label"></label>
-                <input asp-for="available" class="form-control" />
-                <span asp-validation-for="available" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="available" class="form-control" value="1" />
             <div class="form-group">
                 <label asp-for="ReleaseDate" class="control-label"></label>
                 <input asp-for="ReleaseDate" class="form-control" />
@@ -102,12 +103,14 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="AirConditioning" /> @Html.DisplayNameFor(model => model.AirConditioning)
+                    <input class="form-check-input" asp-for="AirConditioning" /> @Html.DisplayNameFor(model =>
+                    model.AirConditioning)
                 </label>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="ChildSeat" /> @Html.DisplayNameFor(model => model.ChildSeat)
+                    <input class="form-check-input" asp-for="ChildSeat" /> @Html.DisplayNameFor(model =>
+                    model.ChildSeat)
                 </label>
             </div>
             <div class="form-group form-check">
@@ -132,7 +135,8 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="SleepingBed" /> @Html.DisplayNameFor(model => model.SleepingBed)
+                    <input class="form-check-input" asp-for="SleepingBed" /> @Html.DisplayNameFor(model =>
+                    model.SleepingBed)
                 </label>
             </div>
             <div class="form-group form-check">
@@ -142,22 +146,26 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Bluetooth" /> @Html.DisplayNameFor(model => model.Bluetooth)
+                    <input class="form-check-input" asp-for="Bluetooth" /> @Html.DisplayNameFor(model =>
+                    model.Bluetooth)
                 </label>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="OnboardComputer" /> @Html.DisplayNameFor(model => model.OnboardComputer)
+                    <input class="form-check-input" asp-for="OnboardComputer" /> @Html.DisplayNameFor(model =>
+                    model.OnboardComputer)
                 </label>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="AudioInput" /> @Html.DisplayNameFor(model => model.AudioInput)
+                    <input class="form-check-input" asp-for="AudioInput" /> @Html.DisplayNameFor(model =>
+                    model.AudioInput)
                 </label>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="LongTermTrips" /> @Html.DisplayNameFor(model => model.LongTermTrips)
+                    <input class="form-check-input" asp-for="LongTermTrips" /> @Html.DisplayNameFor(model =>
+                    model.LongTermTrips)
                 </label>
             </div>
             <div class="form-group form-check">
@@ -167,17 +175,19 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="RemoteCentralLocking" /> @Html.DisplayNameFor(model => model.RemoteCentralLocking)
+                    <input class="form-check-input" asp-for="RemoteCentralLocking" /> @Html.DisplayNameFor(model =>
+                    model.RemoteCentralLocking)
                 </label>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="ClimateControl" /> @Html.DisplayNameFor(model => model.ClimateControl)
+                    <input class="form-check-input" asp-for="ClimateControl" /> @Html.DisplayNameFor(model =>
+                    model.ClimateControl)
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="category_id" class="control-label"></label>
-                <select asp-for="category_id" class ="form-control" asp-items="ViewBag.category_id"></select>
+                Booking Type
+                <select asp-for="category_id" class="form-control" asp-items="ViewBag.category_id"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -191,5 +201,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

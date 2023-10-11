@@ -81,22 +81,19 @@ namespace Car_rental.Controllers
                 return BadRequest("Access denied: You don't have permission to perform this action.");
             }
             var userRoleName = _context.roles.FirstOrDefault(i => i.id == userRole.roleId)?.role;
-
             if (payment == null)
             {
                 // Xử lý khi không tìm thấy 
                 return NotFound();
             }
-
             var booking = _context.bookings.Find(payment.booking_id);
-
             var car = _context.Car.Find(payment.carId);
             var user = _context.user.Find(userId);
             var owner = _context.user.Find(car.user_id);
             // check payment match with user id
-            if (booking.userId == userId || userRoleName == "Admin" || userRoleName == "Owner" && booking.payments.FirstOrDefault().carId == car.id)
+            if (booking.userId == userId || userId == car.user_id && booking.payments.FirstOrDefault().carId == car.id)
             {
-                if (status >= 0 && status <= 4 && userRoleName == "Owner" && booking.payments.FirstOrDefault().carId == car.id)
+                if (status >= 0 && status <= 4 && userId == car.user_id && booking.payments.FirstOrDefault().carId == car.id)
                 {
                     // 0. waiting
                     // 1. accepted
@@ -106,11 +103,6 @@ namespace Car_rental.Controllers
                     payment.status = status;
                     _context.Update(payment);
                     _context.SaveChanges();
-
-                    user.coins = user.coins + car.Price;
-                    _context.Update(user);
-                    _context.SaveChanges();
-
                     //send mail
                     if (status == 1)
                     {
@@ -142,6 +134,10 @@ namespace Car_rental.Controllers
                     }
                     if (status == 4)
                     {
+                        user.coins = user.coins + payment.amount;
+                        _context.Update(user);
+                        _context.SaveChanges();
+
                         Send send = new Send();
                         var email = user.email.ToString();
                         var subject = "Your car rental request has been canceled!";
@@ -154,22 +150,34 @@ namespace Car_rental.Controllers
                         send.SendEmail(email, subject, body);
                         send.SendEmail(emailOwner, subjectOwner, bodyOwner);
                     }
-
-
                     return RedirectToAction("OrderList", "Payment", new { UserId = userId });
                 }
-                else if (status >= 0 && status <= 4)
+                else if (status >= 0 && status <= 4 && booking.userId == userId)
                 {
                     // 0. waiting
                     // 1. accepted
                     // 2. in progress
                     // 3. completed
                     // 4. Cancel
+                    var date = DateTime.Now;
                     if (status == 4)
                     {
                         car.available = 1;
                         _context.Update(car);
                         _context.SaveChanges();
+
+                        if (payment.paymentDate <= date.AddHours(-1) && payment.paymentDate >= date.AddHours(5))
+                        {
+                            user.coins = user.coins + payment.amount;
+                            _context.Update(user);
+                            _context.SaveChanges();
+                        }
+                        else
+                        {
+                            user.coins = user.coins + (payment.amount * 0.9);
+                            _context.Update(user);
+                            _context.SaveChanges();
+                        }
 
                         Send send = new Send();
                         var email = user.email.ToString();
@@ -185,10 +193,6 @@ namespace Car_rental.Controllers
                     }
                     payment.status = status;
                     _context.Update(payment);
-                    _context.SaveChanges();
-
-                    user.coins = user.coins + car.Price;
-                    _context.Update(user);
                     _context.SaveChanges();
 
                     return RedirectToAction("BookingHistory", "bookings", new { id = userId });

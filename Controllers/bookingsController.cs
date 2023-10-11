@@ -109,9 +109,12 @@ namespace Car_rental.Controllers
                 var paymentsWithCarId = _context.payment
                                         .Where(p => p.carId == cardId) // Filter payments by carId
                                         .Where(p =>
-                                                    (p.booking.startDate <= endDate && p.booking.endDate >= startDate && (p.status == 0 || p.status == 1 || p.status == 2)) ||
-                                                    (p.booking.startDate >= startDate && p.booking.startDate <= endDate && (p.status == 0 || p.status == 1 || p.status == 2)) ||
-                                                    (p.booking.endDate >= startDate && p.booking.endDate <= endDate && (p.status == 0 || p.status == 1 || p.status == 2))
+                                                    (p.booking.startDate <= endDate && p.booking.endDate >= startDate &&
+                                                    (p.status == 0 || p.status == 1 || p.status == 2)) ||
+                                                    (p.booking.startDate >= startDate && p.booking.startDate <= endDate &&
+                                                    (p.status == 0 || p.status == 1 || p.status == 2)) ||
+                                                    (p.booking.endDate >= startDate && p.booking.endDate <= endDate &&
+                                                    (p.status == 0 || p.status == 1 || p.status == 2))
                                                 )
                                         .ToList();
                 var car = _context.Car.Find(cardId);
@@ -121,10 +124,6 @@ namespace Car_rental.Controllers
                 {
                     if (car.user_id != userId && user.coins >= car.Price)
                     {
-                        user.coins = user.coins - car.Price;
-                        _context.Update(user);
-                        await _context.SaveChangesAsync();
-
                         // If all input is valid, proceed with booking
                         var bookings = new bookings();
                         bookings.userId = userId;
@@ -147,10 +146,12 @@ namespace Car_rental.Controllers
                         payment.paymentDate = DateTime.Now;
                         payment.paymentMethod = "Coin";
 
-
-
                         // Add the payment record to the context and save changes
                         _context.payment.Add(payment);
+                        await _context.SaveChangesAsync();
+
+                        user.coins = user.coins - payment.amount;
+                        _context.Update(user);
                         await _context.SaveChangesAsync();
 
                         //send mail
@@ -195,8 +196,6 @@ namespace Car_rental.Controllers
             // If there are validation errors or ModelState is not valid, return to the view
             return RedirectToAction("BookingHistory", "bookings", new { id = userId });
         }
-
-
 
         // GET: bookings/Edit/5
         public async Task<IActionResult> Edit(int? id)

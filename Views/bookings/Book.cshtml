@@ -273,7 +273,7 @@
     // Tính số mili giây giữa hai ngày và chuyển đổi thành số ngày
     var timeDiff = endDate - startDate;
     var daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    if(daysDiff <= 0){
+    if (daysDiff <= 0) {
       daysDiff = 1;
     }
     // Lấy giá trị của totalAmount từ ViewBag
@@ -281,12 +281,6 @@
 
     // Tính tổng giá trị dựa trên số ngày
     var calculatedAmount = daysDiff * totalAmount;
-    console.log(timeDiff)
-    console.log(daysDiff)
-    console.log(totalAmount)
-    console.log(calculatedAmount)
-    console.log(startDate)
-    console.log(endDate)
     // Hiển thị giá trị tính toán trong trường totalAmount
     document.getElementById("totalAmount").value = calculatedAmount.toFixed(2);
   }
@@ -295,10 +289,5 @@
   document.querySelector('[name="endDate"]').addEventListener('change', validateForm, calculateDays);
   document.querySelector('[name="TakeCar"]').addEventListener('change', validateForm);
   document.querySelector('[name="CarBack"]').addEventListener('change', validateForm);
-
-
-
-
-
 
 </script>

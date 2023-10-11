@@ -282,12 +282,10 @@ namespace Car_rental.Controllers
             var listImages = _context.Images.Where(i => i.carId == id).ToList();
             ViewBag.listImages = listImages;
 
-
-
             //random related cars base on category 
             // Random random = new Random();
             var carid = _context.Car.Find(id);
-            var relatedCars = _context.Car.Include(c => c.category).Where(i => i.category_id == carid.category_id && i.id != carid.id);
+            var relatedCars = _context.Car.Include(c => c.category).Where(i => i.seat == carid.seat && i.id != carid.id);
             ViewBag.relatedCars = relatedCars.ToList();
 
             //showing rating
@@ -436,7 +434,7 @@ namespace Car_rental.Controllers
             // Check if the userId matches the user associated with the car
             if (car.user_id != userId && userRoleName.role != "Admin")
             {
-                return BadRequest("You are not authorized to delete this car.");
+                return BadRequest("You are not authorized to Edit this car.");
             }
             if (car == null)
             {
@@ -480,7 +478,7 @@ namespace Car_rental.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("CarListForManager", new { UserId = car.user_id });
             }
             else
             {
