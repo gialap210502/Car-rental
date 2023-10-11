@@ -37,7 +37,7 @@ namespace Car_rental.Controllers
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
             this.ViewBag.Pager = pager;
-            var car_rentalContext = _context.bookings.Include(b => b.user).Include(b => b.payments).ThenInclude(p => p.car).Where(d => d.userId == id).Skip(recSkip).Take(pager.PageSize);
+            var car_rentalContext = _context.bookings.Include(b => b.user).Include(b => b.payments).ThenInclude(p => p.car).Where(d => d.userId == id).OrderByDescending(b => b.id).Skip(recSkip).Take(pager.PageSize);
             return View(await car_rentalContext.ToListAsync());
         }
 

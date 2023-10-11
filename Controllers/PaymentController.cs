@@ -166,7 +166,7 @@ namespace Car_rental.Controllers
                         _context.Update(car);
                         _context.SaveChanges();
 
-                        if (payment.paymentDate <= date.AddHours(-1) && payment.paymentDate >= date.AddHours(5))
+                        if (car.category_id == 1 && payment.paymentDate >= date.AddHours(-1) && payment.paymentDate >= date.AddHours(5))
                         {
                             user.coins = user.coins + payment.amount;
                             _context.Update(user);
