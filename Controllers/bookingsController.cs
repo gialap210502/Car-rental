@@ -87,6 +87,9 @@ namespace Car_rental.Controllers
 
         public IActionResult Book(int? cardId, double? totalAmount, int? userId)
         {
+            var car = _context.Car.Find(cardId);
+
+            ViewBag.carCategory = car.category_id;
             ViewBag.cardId = cardId;
             ViewBag.totalAmount = totalAmount;
             ViewBag.userId = userId;

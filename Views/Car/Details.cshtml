@@ -109,16 +109,23 @@
 								<span class="subheading">@Html.DisplayFor(model => model.brand)</span>
 								<h2>@Html.DisplayFor(model => model.model)</h2>
 								<p>Price: $@Html.DisplayFor(model => model.Price)</p>
-								<a onclick="showInPopup('@Url.Action("Book","bookings",new {cardId=@Model.id, totalAmount=@Model.Price, userId=@Id},Context.Request.Scheme)','Book')"
-									class="btn btn-primary py-2 mr-1">Book Now</a>
-								@{
-									if (Id != Model.user_id)
-									{
-										<a id="chatButton" asp-controller="user" asp-action="CreateChatRoom"
-											asp-route-UserId1="@Id" asp-route-UserId2="@Model.user_id"
-											class="btn btn-secondary py-2 mr-1">Chat with owner</a>
-									}
+								@if (Model.category_id == 1)
+								{
+									<span class="badge badge-danger">10% DEPOSIT!</span>
 								}
+								<div class="row">
+									<a onclick="showInPopup('@Url.Action("Book","bookings",new {cardId=@Model.id, totalAmount=@Model.Price, userId=@Id},Context.Request.Scheme)','Book')"
+										class="btn btn-primary py-2 mr-1">Book Now</a>
+									@{
+										if (Id != Model.user_id)
+										{
+											<a id="chatButton" asp-controller="user" asp-action="CreateChatRoom"
+												asp-route-UserId1="@Id" asp-route-UserId2="@Model.user_id"
+												class="btn btn-secondary py-2 mr-1">Chat with owner</a>
+										}
+									}
+								</div>
+
 							</div>
 
 						</div>
@@ -536,6 +543,7 @@
 								<span class="cat">@ViewBag.relatedCars[i].brand</span>
 								<p class="price ml-auto">$@ViewBag.relatedCars[i].Price <span>/day</span></p>
 							</div>
+
 							<p class="d-flex mb-0 d-block">
 								<a onclick="showInPopup('@Url.Action("Book","bookings",new {cardId=@ViewBag.relatedCars[i].id, totalAmount=@ViewBag.relatedCars[i].Price, userId=@Id},Context.Request.Scheme)','Book')"
 									class="btn btn-primary py-2 mr-1">Book now</a>
