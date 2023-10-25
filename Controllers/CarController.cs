@@ -340,12 +340,21 @@ namespace Car_rental.Controllers
 
             if (ModelState.IsValid)
             {
+                if (car.Price < 100)
+                {
+                    ViewBag.errMsg = "Car Price should >= 100!";
+                    return View(car);
+                }
+                if (car.ReleaseDate >= DateTime.Now.AddMonths(-2))
+                {
+                    ViewBag.errMsg = "Vehicle release date must be 2 months before current date!";
+                    return View(car);
+                }
                 car.user_id = userId;
                 _context.Add(car);
                 await _context.SaveChangesAsync();
                 if (myfile1 != null)
                 {
-
                     string filename = Path.GetFileName(myfile1.FileName);
                     string replacedString = filename.Replace(" ", "");
                     var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
