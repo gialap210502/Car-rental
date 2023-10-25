@@ -19,7 +19,7 @@
             <div class="form-group">
                 Image 1
                 <br />
-                <input type="file" name="myfile1" class="form-control" accept="image/*" required/>
+                <input type="file" name="myfile1" class="form-control" accept="image/*" required />
             </div>
             <div class="form-group">
                 Image 2
@@ -43,12 +43,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="model" class="control-label"></label>
-                <input asp-for="model" class="form-control" required/>
+                <input asp-for="model" class="form-control" required />
                 <span asp-validation-for="model" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="brand" class="control-label"></label>
-                <input asp-for="brand" class="form-control" required/>
+                <input asp-for="brand" class="form-control" required />
                 <span asp-validation-for="brand" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -68,38 +68,69 @@
             </div>
             <div class="form-group">
                 <label asp-for="Transmission" class="control-label"></label>
-                <input asp-for="Transmission" class="form-control" required/>
+                <input asp-for="Transmission" class="form-control" required />
                 <span asp-validation-for="Transmission" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="color" class="control-label"></label>
-                <input asp-for="color" class="form-control" required/>
+                <input asp-for="color" class="form-control" required />
                 <span asp-validation-for="color" class="text-danger"></span>
             </div>
+            @* <div class="form-group">
+            <label asp-for="address" class="control-label"></label>
+            <input asp-for="address" class="form-control" required/>
+            <span asp-validation-for="address" class="text-danger"></span>
+            </div> *@
+            <input type="hidden" id="hidden-address" asp-for="address" class="form-control" required />
             <div class="form-group">
-                <label asp-for="address" class="control-label"></label>
-                <input asp-for="address" class="form-control" required/>
-                <span asp-validation-for="address" class="text-danger"></span>
+                <label for="street-number" class="control-label">street-number</label>
+                <input type="text" id="street-number" class="form-control" required />
             </div>
+
+            <div class="form-group">
+                <label for="street-name" class="control-label">street-name</label>
+                <input type="text" id="street-name" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label for="ward" class="control-label">Ward</label>
+                <input type="text" id="ward" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label for="district" class="control-label">District</label>
+                <input type="text" id="district" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label for="city" class="control-label">City</label>
+                <input type="text" id="city" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label for="province" class="control-label">Province</label>
+                <input type="text" id="province" class="form-control" required />
+            </div>
+
             <input type="hidden" asp-for="available" class="form-control" value="1" />
             <div class="form-group">
                 <label asp-for="ReleaseDate" class="control-label"></label>
-                <input asp-for="ReleaseDate" class="form-control" required/>
+                <input asp-for="ReleaseDate" class="form-control" required />
                 <span asp-validation-for="ReleaseDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>
-                <input asp-for="Type" class="form-control" required/>
+                <input asp-for="Type" class="form-control" required />
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" required/>
+                <input asp-for="Price" class="form-control" required />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" required/>
+                <input asp-for="Description" class="form-control" required />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -200,6 +231,28 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+<script>
+    function updateHiddenAddress() {
+        const streetNumberInput = document.getElementById("street-number").value;
+        const streetNameInput = document.getElementById("street-name").value;
+        const wardInput = document.getElementById("ward").value;
+        const districtInput = document.getElementById("district").value;
+        const cityInput = document.getElementById("city").value;
+        const provinceInput = document.getElementById("province").value;
+
+        const fullAddress = streetNumberInput + ", " + streetNameInput + ", " + wardInput + ", " + districtInput + ", " + cityInput + ", " + provinceInput;
+
+        const hiddenAddress = document.getElementById("hidden-address");
+        hiddenAddress.value = fullAddress;
+    }
+    document.getElementById("street-number").addEventListener("input", updateHiddenAddress);
+    document.getElementById("street-name").addEventListener("input", updateHiddenAddress);
+    document.getElementById("ward").addEventListener("input", updateHiddenAddress);
+    document.getElementById("district").addEventListener("input", updateHiddenAddress);
+    document.getElementById("city").addEventListener("input", updateHiddenAddress);
+    document.getElementById("province").addEventListener("input", updateHiddenAddress);
+</script>
+
 
 @section Scripts {
     @{

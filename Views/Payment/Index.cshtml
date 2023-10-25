@@ -53,6 +53,9 @@
                             <th>
                                 Return
                             </th>
+                            <th>
+                                Location
+                            </th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -111,6 +114,9 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.booking.CarBack)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.car.address)
                                 </td>
                                 <td>
                                     <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |

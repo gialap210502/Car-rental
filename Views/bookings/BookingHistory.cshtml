@@ -56,6 +56,15 @@
                         End Date
                       </th>
                       <th>
+                        Take Car
+                      </th>
+                      <th>
+                        Car Back
+                      </th>
+                      <th>
+                        Location
+                      </th>
+                      <th>
                         Total Amount
                       </th>
                       <th></th>
@@ -113,6 +122,18 @@
                             @Html.DisplayFor(modelItem => item.endDate)
                           </td>
                           <td>
+                            @Html.DisplayFor(modelItem => item.TakeCar)
+                          </td>
+                          <td>
+                            @Html.DisplayFor(modelItem => item.CarBack)
+                          </td>
+                          <td>
+                            @foreach (var paymentItem in item.payments)
+                            {
+                              @Html.DisplayFor(modelItem => paymentItem.car.address)
+                            }
+                          </td>
+                          <td>
                             @Html.DisplayFor(modelItem => item.totalAmount)
                           </td>
                           <td>
@@ -131,7 +152,7 @@
                               {
                                 if (paymentItem.status == 0)
                                 {
-                                  <a class="btn btn-danger"  asp-controller="Payment" asp-action="SetStatus"
+                                  <a class="btn btn-danger" asp-controller="Payment" asp-action="SetStatus"
                                     asp-route-userId="@Id" asp-route-paymentId="@paymentItem.id" asp-route-status="4">
                                     Cancel
                                   </a>
@@ -202,11 +223,11 @@
             <form method="post" asp-controller="rating" asp-action="Rate">
               <!-- Add a select element for the status if needed -->
               <!--
-                    <select name="status" style="margin-bottom:20px">
-                        <option value="0">Public</option>
-                        <option value="1">Stay anonymous</option>
-                    </select>
-                    -->
+                      <select name="status" style="margin-bottom:20px">
+                          <option value="0">Public</option>
+                          <option value="1">Stay anonymous</option>
+                      </select>
+                      -->
               <input type="hidden" name="Carid" value="" data-carid-input />
               <div class="form-group">
                 <label for="star">Rating</label>

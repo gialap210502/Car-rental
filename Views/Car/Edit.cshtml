@@ -4,6 +4,13 @@
     ViewData["Title"] = "Edit";
     var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
 }
+@{
+    // Define the GetAddressPart function in a Razor code block
+    Func<string, int, string> GetAddressPart = (fullAddress, partIndex) => {
+        var parts = fullAddress.Split(new[] { ", " }, StringSplitOptions.None);
+        return (partIndex >= 0 && partIndex < parts.Length) ? parts[partIndex] : "";
+    };
+}
 
 <h1>Edit</h1>
 
@@ -14,7 +21,7 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="id" />
-            <input type="hidden" name="userId" value="@Id"/>
+            <input type="hidden" name="userId" value="@Id" />
             <div class="form-group">
                 <label asp-for="model" class="control-label"></label>
                 <input asp-for="model" class="form-control" />
@@ -45,10 +52,44 @@
                 <input asp-for="color" class="form-control" />
                 <span asp-validation-for="color" class="text-danger"></span>
             </div>
+            @* <div class="form-group">
+            <label asp-for="address" class="control-label"></label>
+            <input asp-for="address" class="form-control" />
+            <span asp-validation-for="address" class="text-danger"></span>
+            </div> *@
+            <input type="hidden" id="hidden-address" asp-for="address" class="form-control" required />
             <div class="form-group">
-                <label asp-for="address" class="control-label"></label>
-                <input asp-for="address" class="form-control" />
-                <span asp-validation-for="address" class="text-danger"></span>
+                <label for="street-number" class="control-label">street-number</label>
+                <input type="text" id="street-number" class="form-control" required
+                    value="@GetAddressPart(Model.address, 0)" />
+            </div>
+
+            <div class="form-group">
+                <label for="street-name" class="control-label">street-name</label>
+                <input type="text" id="street-name" class="form-control" required
+                    value="@GetAddressPart(Model.address, 1)" />
+            </div>
+
+            <div class="form-group">
+                <label for="ward" class="control-label">Ward</label>
+                <input type="text" id="ward" class="form-control" required value="@GetAddressPart(Model.address, 2)" />
+            </div>
+
+            <div class="form-group">
+                <label for="district" class="control-label">District</label>
+                <input type="text" id="district" class="form-control" required
+                    value="@GetAddressPart(Model.address, 3)" />
+            </div>
+
+            <div class="form-group">
+                <label for="city" class="control-label">City</label>
+                <input type="text" id="city" class="form-control" required value="@GetAddressPart(Model.address, 4)" />
+            </div>
+
+            <div class="form-group">
+                <label for="province" class="control-label">Province</label>
+                <input type="text" id="province" class="form-control" required
+                    value="@GetAddressPart(Model.address, 5)" />
             </div>
             <div class="form-group">
                 <label asp-for="available" class="control-label"></label>
@@ -175,7 +216,36 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+<script>
+    // Define the GetAddressPart function in the global scope
+    function GetAddressPart(fullAddress, partIndex) {
+        const parts = fullAddress.split(', ');
+        return parts[partIndex] || ''; // Return the corresponding element or an empty string if it doesn't exist
+    }
+    function updateHiddenAddress() {
+        const streetNumberInput = document.getElementById("street-number").value;
+        const streetNameInput = document.getElementById("street-name").value;
+        const wardInput = document.getElementById("ward").value;
+        const districtInput = document.getElementById("district").value;
+        const cityInput = document.getElementById("city").value;
+        const provinceInput = document.getElementById("province").value;
 
+        const fullAddress = streetNumberInput + ", " + streetNameInput + ", " + wardInput + ", " + districtInput + ", " + cityInput + ", " + provinceInput;
+
+        const hiddenAddress = document.getElementById("hidden-address");
+        hiddenAddress.value = fullAddress;
+    }
+
+    document.getElementById("street-number").addEventListener("input", updateHiddenAddress);
+    document.getElementById("street-name").addEventListener("input", updateHiddenAddress);
+    document.getElementById("ward").addEventListener("input", updateHiddenAddress);
+    document.getElementById("district").addEventListener("input", updateHiddenAddress);
+    document.getElementById("city").addEventListener("input", updateHiddenAddress);
+    document.getElementById("province").addEventListener("input", updateHiddenAddress);
+
+
+
+</script>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

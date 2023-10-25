@@ -109,6 +109,7 @@
 								<span class="subheading">@Html.DisplayFor(model => model.brand)</span>
 								<h2>@Html.DisplayFor(model => model.model)</h2>
 								<p>Price: $@Html.DisplayFor(model => model.Price)</p>
+								<p>Address: @Html.DisplayFor(model => model.address)</p>
 								@if (Model.category_id == 1)
 								{
 									<span class="badge badge-danger">10% DEPOSIT!</span>
