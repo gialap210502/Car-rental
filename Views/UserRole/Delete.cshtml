@@ -2,6 +2,15 @@
 
 @{
     ViewData["Title"] = "Delete";
+    var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
+    string message = "You are not authorized to access this page!";
+    if (role != "Admin")
+    {
+        <script>
+            alert("@message");
+            window.location.href = "/Car/Home";
+        </script>
+    }
 }
 
 <h1>Delete</h1>
@@ -11,20 +20,20 @@
     <h4>userRole</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.user)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.user.email)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.role)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.role.role)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |

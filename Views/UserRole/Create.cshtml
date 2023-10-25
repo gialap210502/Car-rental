@@ -2,6 +2,15 @@
 
 @{
     ViewData["Title"] = "Create";
+    var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
+    string message = "You are not authorized to access this page!";
+    if (role != "Admin")
+    {
+        <script>
+            alert("@message");
+            window.location.href = "/Car/Home";
+        </script>
+    }
 }
 
 <h1>Create</h1>
@@ -14,11 +23,11 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="userId" class="control-label"></label>
-                <select asp-for="userId" class ="form-control" asp-items="ViewBag.userId"></select>
+                <select asp-for="userId" class="form-control" asp-items="ViewBag.userId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="roleId" class="control-label"></label>
-                <select asp-for="roleId" class ="form-control" asp-items="ViewBag.roleId"></select>
+                <select asp-for="roleId" class="form-control" asp-items="ViewBag.roleId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -32,5 +41,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

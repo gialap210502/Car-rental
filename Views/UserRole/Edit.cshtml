@@ -2,6 +2,15 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
+    string message = "You are not authorized to access this page!";
+    if (role != "Admin")
+    {
+        <script>
+            alert("@message");
+            window.location.href = "/Car/Home";
+        </script>
+    }
 }
 
 <h1>Edit</h1>
@@ -30,5 +39,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

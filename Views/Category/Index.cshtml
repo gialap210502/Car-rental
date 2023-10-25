@@ -2,6 +2,15 @@
 
 @{
     ViewData["Title"] = "Index";
+    var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
+    string message = "You are not authorized to access this page!";
+    if (role != "Admin")
+    {
+        <script>
+            alert("@message");
+            window.location.href = "/Car/Home";
+        </script>
+    }
 }
 
 <h1>Index</h1>
@@ -22,25 +31,29 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.type)
-            </td>
-            <td>
-            @{
-                if(item.Status == 1){
-                    @Html.Raw("<span class='badge badge-success'>Available</span>")
-                }else{
-                    @Html.Raw("<span class='badge badge-danger'>Unavailable</span>")
-                }
-            }
-            </td>
-            <td>
-                <a class="badge badge-warning" asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a class="badge badge-danger" asp-action="Delete" asp-route-id="@item.id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.type)
+                </td>
+                <td>
+                    @{
+                        if (item.Status == 1)
+                        {
+                            @Html.Raw("<span class='badge badge-success'>Available</span>")
+                        }
+                        else
+                        {
+                            @Html.Raw("<span class='badge badge-danger'>Unavailable</span>")
+                        }
+                    }
+                </td>
+                <td>
+                    <a class="badge badge-warning" asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                    <a class="badge badge-danger" asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
