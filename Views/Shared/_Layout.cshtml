@@ -129,11 +129,11 @@ var conversationsOfUser = _context.Conversation
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background: rgba(53, 114, 62, 0.5);">
                   @if (role == "Admin")
                   {
-                    <a class="dropdown-item" href="/user/index">Admin</a>
+                    <a class="dropdown-item" href="/Car/Chart?userId=@Id">Admin</a>
                   }
                   @if (role == "Owner")
                   {
-                    <a class="dropdown-item" href="/Car/CarListForManager?UserId=@Id">Manager</a>
+                    <a class="dropdown-item" href="/Car/Chart?userId=@Id">Manager</a>
                   }
                   <a class="dropdown-item" asp-controller="User" asp-action="Profile" asp-route-id="@Id">Profile</a>
                   <a class="dropdown-item" asp-controller="User" asp-action="GetCoinsHistory" asp-route-userId="@Id">Get Coins History</a>
@@ -150,24 +150,6 @@ var conversationsOfUser = _context.Conversation
                   style="font-weight: bold;">Login</a></li>
             }
           }
-          @* <li class="nav-item dropdown" style="margin-left: 10px;">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fa-solid fa-message" style="color: #ffffff;"></i>
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background: rgba(222, 255, 227, 0.5);">
-          @foreach (var item in conversationsOfUser)
-          {
-          <a href="/user/Chat?conversationId=@item.ConversationID" class="dropdown-item">
-          <div>
-          <h6>
-          @item.Name
-          </h6>
-          </div>
-          </a>
-          }
-          </div>
-          </li> *@
         </ul>
       </div>
     </div>

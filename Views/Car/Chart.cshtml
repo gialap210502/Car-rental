@@ -1,15 +1,28 @@
+@{
+  var name = Context.Session.GetString("_Name") != null ? Context.Session.GetString("_Name") : null;
+  var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
+  var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
+}
+<p style="margin-bottom: 15px;">
+  <a asp-area="" asp-controller="User" asp-action="ExportExcel" class="btn btn-success">Export Excel</a>
+  <span class="text-danger">@ViewBag.ErrorMessage</span>
+</p>
 <div class="container">
   <div class="row">
-    <div class="col-6">
-      <div class="card">
-        <div class="card-header">
-          <h6 style="text-align:center; weight: bold; color: rgb(113, 107, 107);">Percent of account in role</h6>
-        </div>
-        <div style="display: flex; justify-content: center; align-items: center; height: 450px;">
-          <canvas id="userPercent"></canvas>
+    @if (role == "Admin")
+    {
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header">
+            <h6 style="text-align:center; weight: bold; color: rgb(113, 107, 107);">Percent of account in role</h6>
+          </div>
+          <div style="display: flex; justify-content: center; align-items: center; height: 450px;">
+            <canvas id="userPercent"></canvas>
+          </div>
         </div>
       </div>
-    </div>
+    }
+
     @* each *@
     <div class="col-6">
       <div class="card">

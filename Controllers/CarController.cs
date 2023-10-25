@@ -551,6 +551,7 @@ namespace Car_rental.Controllers
             ViewBag.Layout = "_AdminLayout";
             // var getUserRole = _context.userRole.Include(u => u.role).FirstOrDefault(u => u.userId == userId);
             // var userRoleName = _context.roles.FirstOrDefault(i => i.id == getUserRole.roleId).role;
+
             var user = _context.user.Find(userId);
             var roleList = _context.roles.GroupBy(r => r.role)
             .Select(g => new
@@ -599,7 +600,6 @@ namespace Car_rental.Controllers
 
             ViewBag.BrandLabels = labelsCarBrand;
             ViewBag.BrandData = dataCarBrand;
-
             /////brand count manager
             var brandCountsManager = await _context.Car.Where(c => c.user_id == user.id)
                                     .GroupBy(c => c.brand)

@@ -14,6 +14,9 @@ using System.Drawing.Imaging;
 using MySignalRApp.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
+using System.Globalization;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 
 
@@ -647,6 +650,92 @@ namespace Car_rental.Controllers
             var data = _context.paymentHistory.Include(c => c.user).Where(u => u.UserID == userId).Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
             return View(data);
+        }
+        public IActionResult ExportExcel()
+        {
+            CultureInfo provider = CultureInfo.InvariantCulture;
+            var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
+            if (userId == 0)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            var user = _context.user.FirstOrDefault(u => u.id == userId);
+
+            Console.WriteLine(user.id + "----" + userId);
+
+            var excel = _context.Car.Include(i => i.category).Include(i => i.user).Include(c => c.ratings).Include(c => c.payments).ThenInclude(c => c.booking).Where(c => c.user_id == userId).OrderByDescending(i => i.id);
+            foreach (var item in excel)
+            {
+                Console.WriteLine(item.model + "-" + item.payments.Count);
+            }
+            var stream = new MemoryStream();
+            using (var xlPackage = new ExcelPackage(stream))
+            {
+                var worksheet = xlPackage.Workbook.Worksheets.Add("Car");
+                var namedStyle = xlPackage.Workbook.Styles.CreateNamedStyle("HyperLink");
+                namedStyle.Style.Font.UnderLine = true;
+                const int startRow = 5;
+                var row = startRow;
+
+                //Create Headers and format them
+                using (var r = worksheet.Cells["A1:C1"])
+                {
+                    r.Merge = true;
+                    r.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.CenterContinuous;
+                }
+
+                worksheet.Cells["A2"].Value = "Car id";
+                worksheet.Cells["B2"].Value = "Car model";
+                worksheet.Cells["C2"].Value = "Deposit";
+                worksheet.Cells["D2"].Value = "Total number of rentals";
+                worksheet.Cells["E2"].Value = "Average number of stars reviewed";
+
+                worksheet.Cells["A2:E2"].Style.Font.Bold = true;
+                worksheet.Cells["A2:E2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells["A2:E2"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Orange);
+
+                row = 3;
+                int totalStars = 0;
+                foreach (var data in excel)
+                {
+                    foreach (var item in data.ratings)
+                    {
+                        totalStars += item.Star;
+                    }
+                }
+                foreach (var data in excel)
+                {
+                    if (user.id == data.user_id)
+                    {
+                        worksheet.Cells[row, 1].Value = data.id;
+                        worksheet.Cells[row, 2].Value = data.model;
+                        worksheet.Cells[row, 3].Value = data.category.type;
+                        worksheet.Cells[row, 4].Value = data.payments.Count;
+                        if (data.ratings.Count == 0)
+                        {
+                            worksheet.Cells[row, 5].Value = 0;
+                        }
+                        else
+                        {
+                            worksheet.Cells[row, 5].Value = (double)totalStars / data.ratings.Count;
+                        }
+
+                        row++;
+                    }
+                }
+                row--;
+                String range = "A2:G" + row.ToString();
+                var modelTable = worksheet.Cells[range];
+                modelTable.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                modelTable.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                modelTable.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                modelTable.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                modelTable.AutoFitColumns();
+                xlPackage.Save();
+            }
+            stream.Position = 0;
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "BussinessRecord.xlsx");
         }
         private bool userExists(int id)
         {
