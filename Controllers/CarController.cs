@@ -40,6 +40,10 @@ namespace Car_rental.Controllers
         public async Task<IActionResult> Home()
         {
             ViewBag.Layout = "_Layout";
+            ViewBag.carCount = _context.Car.ToList().Count;
+            List<string> distinctBrands = _context.Car.ToList().Select(car => car.brand).Distinct().ToList();
+            ViewBag.carBrandCount = distinctBrands.Count;
+            ViewBag.userCount = _context.user.ToList().Count;
             var car_rentalContext = _context.Car.Include(c => c.category).Include(c => c.user).Include(c => c.images).Where(c => c.available == 1).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
             {
                 Id = c.id,
