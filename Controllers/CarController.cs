@@ -289,7 +289,15 @@ namespace Car_rental.Controllers
             //random related cars base on category 
             // Random random = new Random();
             var carid = _context.Car.Find(id);
-            var relatedCars = _context.Car.Include(c => c.category).Where(i => i.seat == carid.seat && i.id != carid.id);
+            //var relatedCars = _context.Car.Include(c => c.category).Where(i => i.seat == carid.seat && i.id != carid.id);
+            var relatedCars = _context.Car.Include(c => c.category).Where(i => i.id != carid.id);
+
+            if (relatedCars.Count() < 3)
+            {
+                relatedCars = relatedCars.Where(i => i.seat == carid.seat);
+            }
+
+
             ViewBag.relatedCars = relatedCars.ToList();
 
             //showing rating
