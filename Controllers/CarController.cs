@@ -40,10 +40,28 @@ namespace Car_rental.Controllers
         public async Task<IActionResult> Home()
         {
             ViewBag.Layout = "_Layout";
-            ViewBag.carCount = _context.Car.ToList().Count;
-            List<string> distinctBrands = _context.Car.ToList().Select(car => car.brand).Distinct().ToList();
-            ViewBag.carBrandCount = distinctBrands.Count;
-            ViewBag.userCount = _context.user.ToList().Count;
+            ViewBag.carCount = 0;
+            if (_context.Car.ToList().Count > 0)
+            {
+                ViewBag.carCount = _context.Car.ToList().Count;
+            }
+            if (_context.user.ToList().Count > 0)
+            {
+                ViewBag.userCount = _context.user.ToList().Count;
+            }
+
+            // List<string> distinctBrands = _context.Car.ToList().Select(car => car.brand).Distinct().ToList();
+            // ViewBag.carBrandCount = distinctBrands.Count;
+            try
+            {
+                List<string> distinctBrands = _context.Car.ToList().Select(car => car.brand).Distinct().ToList();
+                ViewBag.carBrandCount = distinctBrands.Count;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.carBrandCount = 0;
+                // Xử lý lỗi ở đây nếu cần thiết
+            }
             var car_rentalContext = _context.Car.Include(c => c.category).Include(c => c.user).Include(c => c.images).Where(c => c.available == 1).Select(c => new CarViewModel // Tạo một ViewModel mới để lưu trữ dữ liệu cần thiết
             {
                 Id = c.id,
