@@ -301,21 +301,26 @@ namespace Car_rental.Controllers
         {
 
             ViewBag.Layout = "_Layout";
+            if (id == null || _context.Car == null)
+            {
+                return NotFound();
+            }
             var listImages = _context.Images.Where(i => i.carId == id).ToList();
             ViewBag.listImages = listImages;
 
-            //random related cars base on category 
-            // Random random = new Random();
-            var carid = _context.Car.Find(id);
-            //var relatedCars = _context.Car.Include(c => c.category).Where(i => i.seat == carid.seat && i.id != carid.id);
-            var relatedCars = _context.Car.Include(c => c.category).Where(i => i.id != carid.id);
 
-            if (relatedCars.Count() < 3)
+            var car = await _context.Car
+                .Include(c => c.category)
+                .Include(c => c.user)
+                .FirstOrDefaultAsync(m => m.id == id);
+
+            if (car == null)
             {
-                relatedCars = relatedCars.Where(i => i.seat == carid.seat);
+                return NotFound();
             }
 
-
+            // Retrieve related cars efficiently
+            var relatedCars = _context.Car.Include(c => c.category).Where(i => i.id != car.id);
             ViewBag.relatedCars = relatedCars.ToList();
 
             //showing rating
@@ -327,25 +332,30 @@ namespace Car_rental.Controllers
             ViewBag.rating2 = rating.Where(r => r.Star == 2).ToList();
             ViewBag.rating1 = rating.Where(r => r.Star == 1).ToList();
 
-            foreach (var carList in relatedCars)
-            {
-                var carListId = _context.Car.Find(carList.id);
-                var img = _context.Images.FirstOrDefault(i => i.carId == carListId.id);
-            }
 
-            if (id == null || _context.Car == null)
-            {
-                return NotFound();
-            }
+            // Retrieve related images for related cars
+            var relatedCarIds = relatedCars.Select(c => c.id).ToList();
+            var relatedImages = _context.Images.Where(i => relatedCarIds.Contains(i.carId)).ToList();
 
-            var car = await _context.Car
-                .Include(c => c.category)
-                .Include(c => c.user)
-                .FirstOrDefaultAsync(m => m.id == id);
-            if (car == null)
+            // Create a dictionary to map car IDs to their images
+            Dictionary<int, Images> carIdToImageMap = relatedImages.ToDictionary(i => i.carId);
+            List<Images> relatedCarImages = new List<Images>();
+            foreach (var relatedCar in relatedCars)
             {
-                return NotFound();
+                if (carIdToImageMap.TryGetValue(relatedCar.id, out Images img))
+                {
+                    relatedCarImages.Add(img);
+                }
+                else
+                {
+                    // Handle the case where there's no image associated with the car
+                    // For example, you might add a default image or set img to null
+                    relatedCarImages.Add(null); // Placeholder for no image
+                }
             }
+            ViewBag.relatedCarImages = relatedCarImages;
+
+
 
             return View(car);
         }
