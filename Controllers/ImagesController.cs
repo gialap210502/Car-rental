@@ -155,14 +155,45 @@ namespace Car_rental.Controllers
             {
                 _context.Images.Remove(images);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ImagesExists(int id)
         {
-          return _context.Images.Any(e => e.id == id);
+            return _context.Images.Any(e => e.id == id);
+        }
+        public async Task<IActionResult> AddImg()
+        {
+            ViewBag.Layout = "_AdminLayout";
+            _context.Images.Add(new Images { nameFile = "1.jpg", carId = 1 });
+            _context.Images.Add(new Images { nameFile = "2.jpg", carId = 1 });
+            _context.Images.Add(new Images { nameFile = "3.png", carId = 2 });
+            _context.Images.Add(new Images { nameFile = "4.jpg", carId = 3 });
+            _context.Images.Add(new Images { nameFile = "5.png", carId = 3 });
+            _context.Images.Add(new Images { nameFile = "6.jpg", carId = 4 });
+            _context.Images.Add(new Images { nameFile = "7.jpg", carId = 5 });
+            _context.Images.Add(new Images { nameFile = "8.jpg", carId = 5 });
+
+            _context.Images.Add(new Images { nameFile = "9.jpg", carId = 6 });
+            _context.Images.Add(new Images { nameFile = "11.jpg", carId = 7 });
+            _context.Images.Add(new Images { nameFile = "12.jpg", carId = 7 });
+            _context.Images.Add(new Images { nameFile = "13.jpeg", carId = 8 });
+            _context.Images.Add(new Images { nameFile = "14.jpg", carId = 9 });
+            _context.Images.Add(new Images { nameFile = "15.jpg", carId = 9 });
+            _context.Images.Add(new Images { nameFile = "16.jpg", carId = 10 });
+
+            _context.Images.Add(new Images { nameFile = "17.jpg", carId = 11 });
+            _context.Images.Add(new Images { nameFile = "18.jpg", carId = 11 });
+            _context.Images.Add(new Images { nameFile = "19.jpg", carId = 12 });
+            _context.Images.Add(new Images { nameFile = "20.jpg", carId = 13 });
+            _context.Images.Add(new Images { nameFile = "21.jpg", carId = 14 });
+            _context.Images.Add(new Images { nameFile = "22.jpg", carId = 15 });
+
+
+            _context.SaveChanges();
+            return RedirectToAction("Home", "car");
         }
     }
 }

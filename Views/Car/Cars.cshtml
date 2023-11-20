@@ -52,8 +52,11 @@
           <div class="col text-center">
                 @if (pager.TotalPages > 0)
                 {
-                    var pre = 1;
+                    var pre = pager.CurrentPage - 1;
                     var next = pager.CurrentPage + 1;
+                    if(pre == 1 || pre == 0){
+                      pre = 1;
+                    }
                   <div class="block-27">
                     <ul>
                         <li><a type="button" class="button break-page" asp-controller="Car" asp-action="Cars" asp-route-pg="@pre">&lt;</a></li>
@@ -72,6 +75,7 @@
                             if(next >= pager.EndPage){
                                 next = pager.EndPage;
                             }
+
                         }
                         <li><a type="button" class="button break-page" asp-controller="Car" asp-action="Cars" asp-route-pg="@next">&gt;</a></li>
                     </ul>

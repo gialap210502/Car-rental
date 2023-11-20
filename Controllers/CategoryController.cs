@@ -187,5 +187,6 @@ namespace Car_rental.Controllers
             ViewBag.layout="_AdminLayout";
             return (_context.category?.Any(e => e.id == id)).GetValueOrDefault();
         }
+        
     }
 }

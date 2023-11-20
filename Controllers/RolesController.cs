@@ -190,10 +190,44 @@ namespace Car_rental.Controllers
                     image = "@@@@.png",
                     coins = 3000000
                 };
+                var user2 = new user
+                {
+                    name = "Lap Duong",
+                    citizen_identification = "123456789",
+                    driver_license = "ABC123",
+                    phone = "123456789",
+                    dob = new DateTime(1990, 1, 1),
+                    email = "lap358@gmail.com",
+                    address = "AnPhu,AnGiang",
+                    password = Encode.encode("123"),
+                    flag = 1,
+                    image = "@@@@.png",
+                    coins = 3000000
+                };
+                var user3 = new user
+                {
+                    name = "Lap Duong",
+                    citizen_identification = "123456789",
+                    driver_license = "ABC123",
+                    phone = "123456789",
+                    dob = new DateTime(1990, 1, 1),
+                    email = "lap888@gmail.com",
+                    address = "AnPhu,AnGiang",
+                    password = Encode.encode("123"),
+                    flag = 1,
+                    image = "@@@@.png",
+                    coins = 3000000
+                };
 
                 var category1 = new category
                 {
-                    type = "Sedan",
+                    type = "Refund",
+                    Status = 1,
+                    Deleted_Status = 0
+                };
+                var category2 = new category
+                {
+                    type = "No refund",
                     Status = 1,
                     Deleted_Status = 0
                 };
@@ -201,9 +235,10 @@ namespace Car_rental.Controllers
                 _context.roles.Add(new roles { role = "Owner" });
                 _context.roles.Add(new roles { role = "User" });
                 _context.user.Add(user1);
-
+                _context.user.Add(user2);
+                _context.user.Add(user3);
                 _context.category.Add(category1);
-
+                _context.category.Add(category2);
                 await _context.SaveChangesAsync();
 
                 var setRole = new userRole
@@ -211,7 +246,19 @@ namespace Car_rental.Controllers
                     userId = 1,
                     roleId = 1
                 };
+                var setRole2 = new userRole
+                {
+                    userId = 2,
+                    roleId = 2
+                };
+                var setRole3 = new userRole
+                {
+                    userId = 3,
+                    roleId = 3
+                };
                 _context.userRole.Add(setRole);
+                _context.userRole.Add(setRole2);
+                _context.userRole.Add(setRole3);
                 await _context.SaveChangesAsync();
 
 
@@ -219,5 +266,6 @@ namespace Car_rental.Controllers
             }
             return View();
         }
+        
     }
 }

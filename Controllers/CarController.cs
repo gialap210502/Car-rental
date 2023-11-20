@@ -251,23 +251,24 @@ namespace Car_rental.Controllers
         {
             ViewBag.Layout = "_AdminLayout";
             var cars = new List<car>();
+            string[] modelNames = { "Innova", "Vios", "Camry", "Corolla Altis", "Fortuner", "Raize" };
 
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 5; i++)
             {
                 var car = new car
                 {
-                    model = "Model " + i,
-                    brand = "Brand " + i,
-                    seat = i,
+                    model = modelNames[i],
+                    brand = "Toyota",
+                    seat = 4,
                     Mileage = 1000 * i,
-                    Transmission = "Transmission " + i,
-                    color = "Color " + i,
-                    address = "Address " + i,
+                    Transmission = "Auto",
+                    color = "White",
+                    address = "NinhKieu, Cantho",
                     available = 1,
                     ReleaseDate = DateTime.Now.AddDays(i),
-                    Type = "Type " + i,
+                    Type = "SUV",
                     Price = 1000 * (i + 1),
-                    Description = "Description " + i,
+                    Description = "Powerful yet smooth, classy yet comfortable, endlessly exciting yet exceptionally safe, the Honda CR-V powerfully breaks through with its owner on every journey.",
                     AirConditioning = i % 2 == 0,
                     ChildSeat = i % 2 == 0,
                     GPS = i % 2 == 0,
@@ -283,7 +284,84 @@ namespace Car_rental.Controllers
                     CarKit = i % 2 == 0,
                     RemoteCentralLocking = i % 2 == 0,
                     ClimateControl = i % 2 == 0,
-                    user_id = 1, // Set the appropriate user ID
+                    user_id = 2, // Set the appropriate user ID
+                    category_id = 1,
+                };
+
+                cars.Add(car);
+            }
+            string[] modelNames2 = { "BR-V", "HR-v", "City", "Civic", "Accord", "CT-V" };
+            for (int i = 0; i < 5; i++)
+            {
+                var car = new car
+                {
+                    model = modelNames2[i],
+                    brand = "Honda",
+                    seat = 4,
+                    Mileage = 1000 * i,
+                    Transmission = "Auto",
+                    color = "Black",
+                    address = "NinhKieu, Cantho",
+                    available = 1,
+                    ReleaseDate = DateTime.Now.AddDays(i),
+                    Type = "SUV",
+                    Price = 1000 * (i + 1),
+                    Description = "Powerful yet smooth, classy yet comfortable, endlessly exciting yet exceptionally safe, the Honda CR-V powerfully breaks through with its owner on every journey.",
+                    AirConditioning = i % 2 == 0,
+                    ChildSeat = i % 2 == 0,
+                    GPS = i % 2 == 0,
+                    Luggage = i % 2 == 0,
+                    Music = i % 2 == 0,
+                    SeatBelt = i % 2 == 0,
+                    SleepingBed = i % 2 == 0,
+                    Water = i % 2 == 0,
+                    Bluetooth = i % 2 == 0,
+                    OnboardComputer = i % 2 == 0,
+                    AudioInput = i % 2 == 0,
+                    LongTermTrips = i % 2 == 0,
+                    CarKit = i % 2 == 0,
+                    RemoteCentralLocking = i % 2 == 0,
+                    ClimateControl = i % 2 == 0,
+                    user_id = 2, // Set the appropriate user ID
+                    category_id = 1,
+
+                };
+
+                cars.Add(car);
+            }
+            string[] modelNames3 = { "Explorer", "Everest Wildtrak", "Territory", "Ranger Raptor", "Ranger", "Ecosport" };
+            for (int i = 0; i < 5; i++)
+            {
+                var car = new car
+                {
+                    model = modelNames3[i],
+                    brand = "Ford",
+                    seat = 7,
+                    Mileage = 1000 * i,
+                    Transmission = "Auto",
+                    color = "Red",
+                    address = "NinhKieu, CanTho",
+                    available = 1,
+                    ReleaseDate = DateTime.Now.AddDays(i),
+                    Type = "SUV",
+                    Price = 1000 * (i + 1),
+                    Description = "Powerful yet smooth, classy yet comfortable, endlessly exciting yet exceptionally safe, the Honda CR-V powerfully breaks through with its owner on every journey.",
+                    AirConditioning = i % 2 == 0,
+                    ChildSeat = i % 2 == 0,
+                    GPS = i % 2 == 0,
+                    Luggage = i % 2 == 0,
+                    Music = i % 2 == 0,
+                    SeatBelt = i % 2 == 0,
+                    SleepingBed = i % 2 == 0,
+                    Water = i % 2 == 0,
+                    Bluetooth = i % 2 == 0,
+                    OnboardComputer = i % 2 == 0,
+                    AudioInput = i % 2 == 0,
+                    LongTermTrips = i % 2 == 0,
+                    CarKit = i % 2 == 0,
+                    RemoteCentralLocking = i % 2 == 0,
+                    ClimateControl = i % 2 == 0,
+                    user_id = 2, // Set the appropriate user ID
                     category_id = 1,
 
                 };
@@ -291,9 +369,10 @@ namespace Car_rental.Controllers
                 cars.Add(car);
             }
 
+
             _context.Car.AddRange(cars);
             _context.SaveChanges();
-            return RedirectToAction("index");
+            return RedirectToAction("AddImg", "images");
         }
 
         // GET: Car/Details/5
@@ -333,27 +412,54 @@ namespace Car_rental.Controllers
             ViewBag.rating1 = rating.Where(r => r.Star == 1).ToList();
 
 
+            // // Retrieve related images for related cars
+            // var relatedCarIds = relatedCars.Select(c => c.id).ToList();
+            // var relatedImages = _context.Images.Where(i => relatedCarIds.Contains(i.carId)).ToList();
+
+            // // Create a dictionary to map car IDs to their images
+            // Dictionary<int, Images> carIdToImageMap = relatedImages.ToDictionary(i => i.carId);
+            // List<Images> relatedCarImages = new List<Images>();
+            // foreach (var relatedCar in relatedCars)
+            // {
+            //     if (carIdToImageMap.TryGetValue(relatedCar.id, out Images img))
+            //     {
+            //         relatedCarImages.Add(img);
+            //     }
+            //     else
+            //     {
+            //         // Handle the case where there's no image associated with the car
+            //         // For example, you might add a default image or set img to null
+            //         relatedCarImages.Add(null); // Placeholder for no image
+            //     }
+            // }
+            // ViewBag.relatedCarImages = relatedCarImages;
             // Retrieve related images for related cars
             var relatedCarIds = relatedCars.Select(c => c.id).ToList();
             var relatedImages = _context.Images.Where(i => relatedCarIds.Contains(i.carId)).ToList();
 
             // Create a dictionary to map car IDs to their images
-            Dictionary<int, Images> carIdToImageMap = relatedImages.ToDictionary(i => i.carId);
-            List<Images> relatedCarImages = new List<Images>();
+            Dictionary<int, List<Images>> carIdToImageMap = relatedImages
+                .GroupBy(i => i.carId)
+                .ToDictionary(
+                    group => group.Key,
+                    group => group.ToList()
+                );
+
+            List<List<Images>> relatedCarImages = new List<List<Images>>();
             foreach (var relatedCar in relatedCars)
             {
-                if (carIdToImageMap.TryGetValue(relatedCar.id, out Images img))
+                if (carIdToImageMap.TryGetValue(relatedCar.id, out List<Images> carImages))
                 {
-                    relatedCarImages.Add(img);
+                    relatedCarImages.Add(carImages);
                 }
                 else
                 {
-                    // Handle the case where there's no image associated with the car
-                    // For example, you might add a default image or set img to null
-                    relatedCarImages.Add(null); // Placeholder for no image
+                    // Handle the case where there are no images associated with the car
+                    relatedCarImages.Add(new List<Images>()); // Empty list for no images
                 }
             }
             ViewBag.relatedCarImages = relatedCarImages;
+
 
 
 
