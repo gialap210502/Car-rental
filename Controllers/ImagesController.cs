@@ -185,8 +185,8 @@ namespace Car_rental.Controllers
             _context.Images.Add(new Images { nameFile = "16.jpg", carId = 10 });
 
             _context.Images.Add(new Images { nameFile = "17.jpg", carId = 11 });
-            _context.Images.Add(new Images { nameFile = "18.jpg", carId = 11 });
-            _context.Images.Add(new Images { nameFile = "19.jpg", carId = 12 });
+            _context.Images.Add(new Images { nameFile = "18.png", carId = 11 });
+            _context.Images.Add(new Images { nameFile = "19.png", carId = 12 });
             _context.Images.Add(new Images { nameFile = "20.jpg", carId = 13 });
             _context.Images.Add(new Images { nameFile = "21.jpg", carId = 14 });
             _context.Images.Add(new Images { nameFile = "22.jpg", carId = 15 });
