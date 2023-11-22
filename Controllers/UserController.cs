@@ -620,7 +620,7 @@ namespace Car_rental.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmAccount(String email)
         {
-            ViewBag.layout = "_AdminLayout";
+            ViewBag.layout = "_Layout";
             var user = await _context.user.FirstOrDefaultAsync(u => u.email == email);
             string message = "";
             if (user != null && user.flag == 0)
