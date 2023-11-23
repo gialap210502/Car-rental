@@ -25,6 +25,7 @@ namespace Car_rental.Controllers
         // GET: Rating
         public async Task<IActionResult> Index()
         {
+            ViewBag.layout = "_AdminLayout";
             var car_rentalContext = _context.rating.Include(r => r.car).Include(r => r.user);
             return View(await car_rentalContext.ToListAsync());
         }

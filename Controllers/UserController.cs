@@ -491,6 +491,8 @@ namespace Car_rental.Controllers
             ViewBag.layout = "_Layout";
             var userTempImage = _context.user.Find(id).image;
             _context.Entry(_context.user.Find(id)).State = EntityState.Detached;
+            var userTempCoins = _context.user.Find(id).coins;
+            _context.Entry(_context.user.Find(id)).State = EntityState.Detached;
             var userTempID = _context.user.Find(id).citizen_identification;
             _context.Entry(_context.user.Find(id)).State = EntityState.Detached;
             var userTempDrive = _context.user.Find(id).driver_license;
@@ -504,7 +506,8 @@ namespace Car_rental.Controllers
             {
                 try
                 {
-
+                    user.flag = 1;
+                    user.coins = userTempCoins;
                     if (myfile == null)
                     {
                         user.image = userTempImage;

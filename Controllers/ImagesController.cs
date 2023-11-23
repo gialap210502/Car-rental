@@ -160,6 +160,32 @@ namespace Car_rental.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> DeleteImg(int? id, int userId)
+        {
+            if (id == null || _context.Images == null)
+            {
+                return NotFound();
+            }
+
+            var images = await _context.Images
+                .Include(i => i.car)
+                .FirstOrDefaultAsync(m => m.id == id);
+            var carId = images.carId;
+            if (images == null)
+            {
+                return NotFound();
+            }
+
+            if (images != null)
+            {
+                _context.Images.Remove(images);
+            }
+            await _context.SaveChangesAsync();
+            string url = "https://localhost:7160/Car/Edit/1?userId="+userId;
+
+            return Redirect(url);
+        }
+
         private bool ImagesExists(int id)
         {
             return _context.Images.Any(e => e.id == id);

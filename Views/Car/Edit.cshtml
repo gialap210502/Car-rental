@@ -1,12 +1,16 @@
 @model Car_rental.Models.car
+@using Car_rental.Data;
+@inject Car_rentalContext _context
 
 @{
     ViewData["Title"] = "Edit";
     var Id = Context.Session.GetInt32("_ID") != null ? Context.Session.GetInt32("_ID") : null;
+
 }
 @{
     // Define the GetAddressPart function in a Razor code block
-    Func<string, int, string> GetAddressPart = (fullAddress, partIndex) => {
+    Func<string, int, string> GetAddressPart = (fullAddress, partIndex) =>
+    {
         var parts = fullAddress.Split(new[] { ", " }, StringSplitOptions.None);
         return (partIndex >= 0 && partIndex < parts.Length) ? parts[partIndex] : "";
     };
@@ -16,9 +20,55 @@
 
 <h4>car</h4>
 <hr />
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card" style="width: 100px; overflow-x: auto;">
+        <div class="card-body">
+            <ul class="list-group list-group-horizontal">
+                @foreach (var item in ViewBag.imgList)
+                {
+                    <li class="list-group-item border-0">
+                        <div class="d-flex flex-column align-items-center">
+                            <img src="/images/@item.nameFile" style="height: 200px; width: auto;" class="mb-2" />
+                            <a class="btn btn-danger" asp-controller="Images" asp-action="DeleteImg" asp-route-id="@item.id"
+                                asp-route-userId="@Id">Delete</a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+<hr />
+
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div class="form-group">
+                Image 1
+                <br />
+                <input type="file" name="myfile1" class="form-control" accept="image/*" />
+            </div>
+            <div class="form-group">
+                Image 2
+                <br />
+                <input type="file" name="myfile2" class="form-control" accept="image/*" />
+            </div>
+            <div class="form-group">
+                Image 3
+                <br />
+                <input type="file" name="myfile3" class="form-control" accept="image/*" />
+            </div>
+            <div class="form-group">
+                Image 4
+                <br />
+                <input type="file" name="myfile4" class="form-control" accept="image/*" />
+            </div>
+            <div class="form-group">
+                Image 5
+                <br />
+                <input type="file" name="myfile5" class="form-control" accept="image/*" />
+            </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="id" />
             <input type="hidden" name="userId" value="@Id" />
@@ -242,10 +292,8 @@
     document.getElementById("district").addEventListener("input", updateHiddenAddress);
     document.getElementById("city").addEventListener("input", updateHiddenAddress);
     document.getElementById("province").addEventListener("input", updateHiddenAddress);
-
-
-
 </script>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

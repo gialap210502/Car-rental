@@ -171,6 +171,10 @@ namespace Car_rental.Controllers
                             user.coins = user.coins + payment.amount;
                             _context.Update(user);
                             _context.SaveChanges();
+                        } else if(car.category_id == 2){
+                            user.coins = user.coins + payment.amount;
+                            _context.Update(user);
+                            _context.SaveChanges();
                         }
                         else
                         {

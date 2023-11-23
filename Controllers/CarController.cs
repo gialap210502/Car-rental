@@ -595,6 +595,8 @@ namespace Car_rental.Controllers
             {
                 return NotFound();
             }
+            var imgList = _context.Images.Where(i => i.carId == id);
+            ViewBag.imgList = imgList;
 
             ViewData["category_id"] = new SelectList(_context.category, "id", "type", car.category_id);
             return View(car);
@@ -605,7 +607,7 @@ namespace Car_rental.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, int userId, [Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,Description,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
+        public async Task<IActionResult> Edit(int id, int userId, IFormFile myfile1, IFormFile myfile2, IFormFile myfile3, IFormFile myfile4, IFormFile myfile5, [Bind("id,model,brand,seat,Mileage,Transmission,color,address,available,ReleaseDate,Type,Price,Description,AirConditioning,ChildSeat,GPS,Luggage,Music,SeatBelt,SleepingBed,Water,Bluetooth,OnboardComputer,AudioInput,LongTermTrips,CarKit,RemoteCentralLocking,ClimateControl,discount_id,user_id,category_id")] car car)
         {
             ViewBag.layout = "_AdminLayout";
             if (id != car.id)
@@ -614,10 +616,76 @@ namespace Car_rental.Controllers
             }
             var carTemp = await _context.Car.FindAsync(id);
             _context.Entry(carTemp).State = EntityState.Detached;
+
             if (ModelState.IsValid && userId == carTemp.user_id)
             {
                 try
                 {
+                    if (myfile1 != null)
+                    {
+                        string filename = Path.GetFileName(myfile1.FileName);
+                        string replacedString = filename.Replace(" ", "");
+                        var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                        string fullPath = filePath + "\\" + replacedString;
+                        // Copy files to FileSystem using Streams
+                        using (var stream = new FileStream(fullPath, FileMode.Create))
+                        {
+                            await myfile1.CopyToAsync(stream);
+                        }
+                        _context.Images.Add(new Images { nameFile = replacedString, carId = id });
+                    }
+                    if (myfile2 != null)
+                    {
+                        string filename = Path.GetFileName(myfile2.FileName);
+                        string replacedString = filename.Replace(" ", "");
+                        var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                        string fullPath = filePath + "\\" + replacedString;
+                        // Copy files to FileSystem using Streams
+                        using (var stream = new FileStream(fullPath, FileMode.Create))
+                        {
+                            await myfile2.CopyToAsync(stream);
+                        }
+                        _context.Images.Add(new Images { nameFile = replacedString, carId = id });
+                    }
+                    if (myfile3 != null)
+                    {
+                        string filename = Path.GetFileName(myfile3.FileName);
+                        string replacedString = filename.Replace(" ", "");
+                        var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                        string fullPath = filePath + "\\" + replacedString;
+                        // Copy files to FileSystem using Streams
+                        using (var stream = new FileStream(fullPath, FileMode.Create))
+                        {
+                            await myfile3.CopyToAsync(stream);
+                        }
+                        _context.Images.Add(new Images { nameFile = replacedString, carId = id });
+                    }
+                    if (myfile4 != null)
+                    {
+                        string filename = Path.GetFileName(myfile4.FileName);
+                        string replacedString = filename.Replace(" ", "");
+                        var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                        string fullPath = filePath + "\\" + replacedString;
+                        // Copy files to FileSystem using Streams
+                        using (var stream = new FileStream(fullPath, FileMode.Create))
+                        {
+                            await myfile4.CopyToAsync(stream);
+                        }
+                        _context.Images.Add(new Images { nameFile = replacedString, carId = id });
+                    }
+                    if (myfile5 != null)
+                    {
+                        string filename = Path.GetFileName(myfile5.FileName);
+                        string replacedString = filename.Replace(" ", "");
+                        var filePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                        string fullPath = filePath + "\\" + replacedString;
+                        // Copy files to FileSystem using Streams
+                        using (var stream = new FileStream(fullPath, FileMode.Create))
+                        {
+                            await myfile5.CopyToAsync(stream);
+                        }
+                        _context.Images.Add(new Images { nameFile = replacedString, carId = id });
+                    }
                     car.user_id = carTemp.user_id;
                     _context.Update(car);
                     await _context.SaveChangesAsync();
