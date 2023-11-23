@@ -27,7 +27,7 @@
     <div class="col-6">
       <div class="card">
         <div class="card-header">
-          <h6 style="text-align:center; weight: bold; color: rgb(113, 107, 107);">Car brand count</h6>
+          <h6 style="text-align:center; weight: bold; color: rgb(113, 107, 107);">Vehicle brands on the system</h6>
         </div>
         <div style="display: flex; justify-content: center; align-items: center; height: 450px;">
           <canvas id="carBrand"></canvas>
@@ -35,27 +35,33 @@
       </div>
     </div>
     @* each *@
-    <div class="col-6">
-      <div class="card">
-        <div class="card-header">
-          <h6 style="text-align:center; weight: bold; color: rgb(113, 107, 107);">Car brand count</h6>
-        </div>
-        <div style="display: flex; justify-content: center; align-items: center; height: 450px;">
-          <canvas id="carBrandManager"></canvas>
+    @if (role == "Owner")
+    {
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header">
+            <h6 style="text-align:center; weight: bold; color: rgb(113, 107, 107);">My car brands</h6>
+          </div>
+          <div style="display: flex; justify-content: center; align-items: center; height: 450px;">
+            <canvas id="carBrandManager"></canvas>
+          </div>
         </div>
       </div>
-    </div>
+    }
     @* each *@
-    <div class="col-6">
-      <div class="card">
-        <div class="card-header">
-          <h6 style="text-align:center; weight: bold; color: rgb(113, 107, 107);">Car brand order</h6>
-        </div>
-        <div style="display: flex; justify-content: center; align-items: center; height: 450px;">
-          <canvas id="bookingSuccessChart"></canvas>
+    @if (role == "Owner")
+    {
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header">
+            <h6 style="text-align:center; weight: bold; color: rgb(113, 107, 107);">My order</h6>
+          </div>
+          <div style="display: flex; justify-content: center; align-items: center; height: 450px;">
+            <canvas id="bookingSuccessChart"></canvas>
+          </div>
         </div>
       </div>
-    </div>
+    }
 
 
   </div>
@@ -136,7 +142,7 @@
     data: {
       labels: models,
       datasets: [{
-        label: "Số lượng đặt chỗ thành công",
+        label: "Quantity of the booking successful",
         data: counts,
         backgroundColor: backgroundColorsManager
       }]
