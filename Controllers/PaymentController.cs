@@ -111,7 +111,7 @@ namespace Car_rental.Controllers
                         var subject = "Your booking request has been accepted!";
                         string body = "Your booking request has been accepted, please click the link below to see the details: " + "\n\n" + "https://localhost:7160/bookings/BookingHistory/" + user.id; ;
 
-                        var emailOwner = user.email.ToString();
+                        var emailOwner = owner.email.ToString();
                         var subjectOwner = "You have accepted the car rental request!";
                         string bodyOwner = "You have accepted the car rental request, please click the link below to see the details: " + "\n\n" + "https://localhost:7160//Payment/OrderList?userId=" + car.user_id; ;
 
@@ -120,12 +120,16 @@ namespace Car_rental.Controllers
                     }
                     if (status == 3)
                     {
+                        owner.coins = owner.coins + payment.amount;
+                        _context.Update(owner);
+                        _context.SaveChanges();
+
                         Send send = new Send();
                         var email = user.email.ToString();
                         var subject = "You have just completed the car rental service!";
                         string body = "You have just completed the car rental service, please click the link below to see the details: " + "\n\n" + "https://localhost:7160/bookings/BookingHistory/" + user.id; ;
 
-                        var emailOwner = user.email.ToString();
+                        var emailOwner = owner.email.ToString();
                         var subjectOwner = "Your customer has just completed a car rental service!";
                         string bodyOwner = "Your customer has just completed a car rental service, please click the link below to see the details: " + "\n\n" + "https://localhost:7160//Payment/OrderList?userId=" + car.user_id; ;
 
@@ -171,7 +175,9 @@ namespace Car_rental.Controllers
                             user.coins = user.coins + payment.amount;
                             _context.Update(user);
                             _context.SaveChanges();
-                        } else if(car.category_id == 2){
+                        }
+                        else if (car.category_id == 2)
+                        {
                             user.coins = user.coins + payment.amount;
                             _context.Update(user);
                             _context.SaveChanges();
