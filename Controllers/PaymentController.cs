@@ -89,6 +89,7 @@ namespace Car_rental.Controllers
             var booking = _context.bookings.Find(payment.booking_id);
             var car = _context.Car.Find(payment.carId);
             var user = _context.user.Find(userId);
+            var customer = _context.user.Find(booking.userId);
             var owner = _context.user.Find(car.user_id);
             // check payment match with user id
             if (booking.userId == userId || userId == car.user_id && booking.payments.FirstOrDefault().carId == car.id)
@@ -138,12 +139,12 @@ namespace Car_rental.Controllers
                     }
                     if (status == 4)
                     {
-                        user.coins = user.coins + payment.amount;
-                        _context.Update(user);
+                        customer.coins = customer.coins + payment.amount;
+                        _context.Update(customer);
                         _context.SaveChanges();
 
                         Send send = new Send();
-                        var email = user.email.ToString();
+                        var email = customer.email.ToString();
                         var subject = "Your car rental request has been canceled!";
                         string body = "Your car rental request has been canceled, please click the link below to see the details: " + "\n\n" + "https://localhost:7160/bookings/BookingHistory/" + user.id; ;
 
